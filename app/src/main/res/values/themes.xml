@@ -1,0 +1,78 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.CloudBridge" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/shrine_pink_900</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+
+
+    <style name="TextAppearance.App.Button" parent="TextAppearance.MaterialComponents.Button">
+        <item name="fontFamily">@font/rubik_bold</item>
+        <item name="android:fontFamily">@font/rubik_bold</item>
+        <item name="android:textColor">@color/shrine_pink_900</item>
+    </style>
+
+    <!--activity_sign_or_login.xml!-->
+    <style name="Widget.App.MyTabLayout" parent="Widget.Material3.TabLayout">
+        <item name="tabIndicatorColor">@color/shrine_pink_900</item>
+        <item name="tabSelectedTextColor">@color/blue_grey</item>
+    </style>
+
+    <style name="Widget.App.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <!--FilledBox일 경우 밑줄 색상, OutlinedBox일 경우 테두리 색상-->
+        <item name="boxStrokeColor">@color/blue_grey</item>
+        <!--EditText에 있을때의 Hint-->
+        <item name="android:textColorHint">@color/blue_grey</item>
+        <!--Counter-->
+        <item name="counterTextAppearance">@style/CounterTextAppearance</item>
+        <!--상단에 있을때의 Hint-->
+        <item name="hintTextColor">@color/blue_grey</item>
+        <item name="hintTextAppearance">@style/HintTextAppearance</item>
+        <!--Helper-->
+        <!--Error-->
+        <item name="errorEnabled">true</item>
+        <item name="colorError">@color/orange_red</item>
+        <item name="errorIconDrawable">@android:color/transparent</item>
+        <item name="errorTextAppearance">@style/ErrorTextAppearance</item>
+        <item name="iconTint">@color/black</item>
+    </style>
+    <style name="CounterTextAppearance">
+        <item name="android:textStyle">normal</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+    <style name="ErrorTextAppearance">
+        <item name="android:textStyle">normal</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="HintTextAppearance">
+        <item name="android:textStyle">normal</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="TextInputEditTextStyle">
+        <item name="android:textStyle">normal</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:textSize">16sp</item>
+        <item name="strokeColor">@color/blue_grey</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+
+
+</resources>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+   엄격 모드(strict mode) : API Level 24 부터 file:// 프로토콜로 구성된 URI의 외부 노출 막음
+   앱끼리 파일 공유를 위해 content:// 프로토콜을 이용하고
+   이 URI에 임시로 접근할 수 있는 권한을 부여해야 한다. <- 이 때 Provider 클래스 이용!
+    => FileProvider를 이용하려면 공유할 파일의 URI 값을 만들어야 한다.
+
+    path : getExternalFileDir() 함수로 파일을 만들었을 때 파일이 저장되는 위치
+!-->
+<paths xmlns:android="http://schemas.android.com/apk/res/android">
+    <external-path
+        name="myfiles"
+        path="Android/data/com.myproject.cloudbridge/files/Pictures"/>
+
+</paths>

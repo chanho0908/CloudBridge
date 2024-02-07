@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/update_store_nav"
+    app:startDestination="@id/updateFragment1">
+
+
+    <fragment
+        android:id="@+id/updateFragment1"
+        android:name="com.myproject.cloudbridge.view.intro.myStore.UpdateFragment1"
+        android:label="fragment_update1"
+        tools:layout="@layout/fragment_update1">
+
+        <action
+            android:id="@+id/action_updateFragment1_to_updateFragment2"
+            app:destination="@id/updateFragment2"
+            app:popExitAnim="@android:anim/slide_out_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/updateFragment2"
+        android:name="com.myproject.cloudbridge.view.intro.myStore.UpdateFragment2"
+        android:label="fragment_update2"
+        tools:layout="@layout/fragment_update2">
+        <action
+            android:id="@+id/action_updateFragment2_to_updateFragment1"
+            app:destination="@id/updateFragment1" />
+    </fragment>
+
+</navigation>

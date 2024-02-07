@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/shrine_pink_100"
+    android:layout_gravity="center_vertical"
+    android:orientation="vertical">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/materialToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/shrine_pink_100"
+        android:minHeight="?attr/actionBarSize"
+        app:navigationIcon="@drawable/arrow_back_24px"
+        android:theme="?attr/actionBarTheme" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="매장 정보 수정"
+            android:textSize="23sp"
+            android:textColor="@android:color/black"
+            android:textStyle="bold" />
+
+    </com.google.android.material.appbar.MaterialToolbar>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/registactivity_top_round"
+        android:elevation="15dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="250dp"
+            android:layout_height="2.5dp"
+            android:layout_marginTop="10dp"
+            android:background="#c8c8c8" />
+
+        <LinearLayout
+            android:id="@+id/inputContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="100dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="사업자 등록 번호 확인"
+                android:textColor="@color/shrine_pink_900"
+                android:textSize="28sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10sp"
+                android:text="등록된 사업자 등록번호를 입력해 주세요"
+                android:textColor="#6A7487"
+                android:textSize="17sp" />
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/cpr_Layout"
+                style="@style/Widget.App.TextInputLayout"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                app:boxStrokeColor="@color/blue_grey"
+                app:counterEnabled="true"
+                app:counterMaxLength="10"
+                app:errorEnabled="true"
+                app:helperTextTextColor="@color/orange_red">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/cpr_edit"
+                    style="@style/TextInputEditTextStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="사업자등록번호"
+                    android:inputType="number" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <android.widget.Button
+                android:id="@+id/searchBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:background="@drawable/search_btn"
+                android:text="조회"
+                android:textColor="@color/shrine_pink_900"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

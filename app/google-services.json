@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "330364211924",
+    "project_id": "cloudbridge-5d98b",
+    "storage_bucket": "cloudbridge-5d98b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:330364211924:android:c67a9c2f1467535ae0e141",
+        "android_client_info": {
+          "package_name": "com.myproject.cloudbridge"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "330364211924-r0t3n9pdkn6jfu3pkosd70icsrq3l1a7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.myproject.cloudbridge",
+            "certificate_hash": "49fded1948be71deabb3b8cb756900b637abe1c2"
+          }
+        },
+        {
+          "client_id": "330364211924-9ispr6706e92irh8k4fa4lb2bi5v3sv2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDFii2Stf3lwtVYD09Oib9tRi0XxON7Qeo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "330364211924-9ispr6706e92irh8k4fa4lb2bi5v3sv2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

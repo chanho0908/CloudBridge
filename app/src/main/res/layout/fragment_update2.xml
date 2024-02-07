@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+
+    <data>
+        <variable
+            name="vm"
+            type="com.myproject.cloudbridge.viewModel.MyPageViewModel" />
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/shrine_pink_100"
+            android:orientation="vertical">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/materialToolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/shrine_pink_100"
+                android:minHeight="?attr/actionBarSize"
+                app:navigationIcon="@drawable/arrow_back_24px"
+                android:theme="?attr/actionBarTheme" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="매장 정보 수정"
+                    android:textSize="23sp"
+                    android:textColor="@android:color/black"
+                    android:textStyle="bold" />
+
+            </com.google.android.material.appbar.MaterialToolbar>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/registactivity_top_round"
+                android:elevation="15dp"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <View
+                    android:layout_width="250dp"
+                    android:layout_height="2.5dp"
+                    android:layout_marginTop="10dp"
+                    android:background="#c8c8c8" />
+
+                <LinearLayout
+                    android:id="@+id/inputContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="50dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="50dp"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/storeName_Layout"
+                        style="@style/Widget.App.TextInputLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        app:boxStrokeColor="@color/blue_grey"
+                        app:errorEnabled="true"
+                        app:helperTextTextColor="@color/orange_red"
+                        app:startIconDrawable="@drawable/baseline_store_24"
+                        app:startIconTint="#000">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/storeName_edit"
+                            style="@style/TextInputEditTextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@{vm.myStore.storeName}" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/representative_name_Layout"
+                        style="@style/Widget.App.TextInputLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        app:boxStrokeColor="@color/blue_grey"
+                        app:errorEnabled="true"
+                        app:helperTextTextColor="@color/orange_red"
+                        app:startIconDrawable="@drawable/baseline_drive_file_rename_outline_24"
+                        app:startIconTint="#000">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/ceo_name_edit"
+                            style="@style/TextInputEditTextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@{vm.myStore.ceoName}" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/phone_Layout"
+                        style="@style/Widget.App.TextInputLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        app:boxStrokeColor="@color/blue_grey"
+                        app:errorEnabled="true"
+                        app:helperTextTextColor="@color/orange_red"
+                        app:startIconDrawable="@drawable/baseline_call_24"
+                        app:startIconTint="#000">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/phone_edit"
+                            style="@style/TextInputEditTextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="phone"
+                            android:text="@{vm.myStore.contact}" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+
+                    <android.widget.Button
+                        android:id="@+id/btnAddr"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_marginTop="5dp"
+                        android:drawableStart="@drawable/ic_search"
+                        android:gravity="center"
+                        android:text="@string/findAddr"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/addr_Layout"
+                        style="@style/Widget.App.TextInputLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        app:boxStrokeColor="@color/blue_grey"
+                        app:errorEnabled="true"
+                        app:helperTextTextColor="@color/orange_red">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/addr_edit"
+                            style="@style/TextInputEditTextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@{vm.myStore.address}" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:hint="@string/storeKind"
+                        android:textColorHint="@color/blue_grey"
+                        app:boxStrokeColor="@color/blue_grey"
+                        app:endIconTint="@color/black"
+                        app:hintTextColor="@color/blue_grey">
+
+                        <AutoCompleteTextView
+                            android:id="@+id/kind_edit"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:inputType="none"
+                            android:paddingTop="16dp"
+                            android:paddingBottom="16dp"
+                            android:text="@{vm.myStore.kind}"
+                            android:textColor="@color/blue_grey" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="240dp"
+                        android:layout_marginTop="15dp"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/main_imgView"
+                            myStoreImage="@{vm.myStore.image}"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/insert_photo_256" />
+                    </LinearLayout>
+
+                    <android.widget.Button
+                        android:id="@+id/img_load_button"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/shrine_pink_900"
+                        android:text="@string/setStoreImage"
+                        android:textColor="@color/white"
+                        android:textSize="17sp" />
+
+
+                    <android.widget.Button
+                        android:id="@+id/submit_button"
+                        style="@style/TextAppearance.App.Button"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="25dp"
+                        android:layout_marginBottom="30dp"
+                        android:background="@drawable/search_btn"
+                        android:text="@string/storeModifyComplete"
+                        android:textSize="20sp" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</layout>

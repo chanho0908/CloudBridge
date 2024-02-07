@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.main.MyPageFragment"
+    android:background="@color/shrine_pink_100"
+    android:orientation="vertical"
+    >
+
+    <Button
+        android:id="@+id/btnMyInfo"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:textColor="@color/shrine_pink_900"
+        android:text="내 정보"
+        android:textSize="25sp"
+        android:fontFamily="@font/rubik_bold"/>
+
+    <Button
+        android:id="@+id/btnMyStoreInfo"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:textColor="@color/shrine_pink_900"
+        android:text="내 매장 정보"
+        android:textSize="25sp"
+        android:fontFamily="@font/rubik_bold"/>
+
+
+
+</LinearLayout>
