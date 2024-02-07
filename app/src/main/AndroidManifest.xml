@@ -32,7 +32,7 @@
             android:value="c23ff52edb54dc254d59ac484a8d6a2f" />
 
         <activity
-            android:name=".view.intro.StartActivity"
+            android:name=".view.intro.user.StartActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -68,7 +68,7 @@
             android:name=".view.intro.myPage.MyInfoActivity"
             android:exported="true" />
         <activity
-            android:name=".view.intro.SignOrLoginActivity"
+            android:name=".view.intro.user.SignOrLoginActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustPan" />
         <activity

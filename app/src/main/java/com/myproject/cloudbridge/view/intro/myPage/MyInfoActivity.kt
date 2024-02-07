@@ -6,14 +6,13 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.myproject.cloudbridge.R
 import com.myproject.cloudbridge.databinding.ActivityMyInfoBinding
-import com.myproject.cloudbridge.view.intro.SignOrLoginActivity
+import com.myproject.cloudbridge.view.intro.user.SignOrLoginActivity
 import com.myproject.cloudbridge.viewModel.MainViewModel
 import kotlinx.coroutines.launch
 

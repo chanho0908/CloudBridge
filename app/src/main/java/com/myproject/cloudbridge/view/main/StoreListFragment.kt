@@ -15,12 +15,13 @@ import com.myproject.cloudbridge.R
 import com.myproject.cloudbridge.adapter.rv.adapter.SelectStoreInfoAdapter
 import com.myproject.cloudbridge.databinding.FragmentStoreListBinding
 import com.myproject.cloudbridge.viewModel.MainViewModel
+import com.myproject.cloudbridge.viewModel.StoreManagementViewModel
 import kotlinx.coroutines.launch
 
 class StoreListFragment : Fragment() {
     private var _binding: FragmentStoreListBinding ?= null
     private val binding get() = _binding!!
-    private val viewModel: MainViewModel by viewModels()
+    private val viewModel: StoreManagementViewModel by viewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentStoreListBinding.inflate(inflater, container, false)

@@ -32,6 +32,7 @@ import com.myproject.cloudbridge.util.Constants.Companion.isAllPermissionsGrante
 import com.myproject.cloudbridge.util.locationProvider.FusedLocationProvider
 import com.myproject.cloudbridge.util.locationProvider.OnLocationUpdateListener
 import com.myproject.cloudbridge.viewModel.MainViewModel
+import com.myproject.cloudbridge.viewModel.StoreManagementViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -44,7 +45,7 @@ class MapFragment : Fragment(), OnLocationUpdateListener, View.OnClickListener {
     private lateinit var launcherForPermission: ActivityResultLauncher<Array<String>>
     private lateinit var fusedLocationProvider: FusedLocationProvider
 
-    private val viewModel: MainViewModel by viewModels()
+    private val viewModel: StoreManagementViewModel by viewModels()
 
     // MapCoordType.WGS84 을 나타내는 좌표 클래스
     // WGS84 : 경위도, GPS가 사용하는 좌표계
@@ -167,16 +168,12 @@ class MapFragment : Fragment(), OnLocationUpdateListener, View.OnClickListener {
 
         viewModel.showAllStoreFromRoom()
         viewLifecycleOwner.lifecycleScope.launch {
-            Log.d("sdaszzzz","코루틴 시작")
+
             repeatOnLifecycle(Lifecycle.State.STARTED){
                 viewModel.list.collect{
-                    Log.d("sdaszzzz","storesEntity: $it")
                     it.map { store->
-                        Log.d("sdaszzzz","latitude: ${store.latitude}")
-                        Log.d("sdaszzzz","latitude: ${store.longitude}")
-
                         latLng = LatLng.from(store.latitude.toDouble(), store.longitude.toDouble())
-                        Log.d("sdaszzzz", latLng.toString())
+
                         // 2. LabelOptions 생성하기
                         val options = LabelOptions.from(latLng)
                             .setStyles(styles)
@@ -190,8 +187,6 @@ class MapFragment : Fragment(), OnLocationUpdateListener, View.OnClickListener {
         // 3. LodLabelLayer 가져오기 (또는 커스텀 LodLabelLayer 생성)
 
         // 4. LabelLayer 에 LabelOptions 을 넣어 Label 생성하기
-
-        //
     }
 
     override fun onLocationUpdated(location: Location) {

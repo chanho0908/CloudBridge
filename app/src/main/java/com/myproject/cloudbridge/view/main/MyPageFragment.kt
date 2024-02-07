@@ -7,7 +7,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.myproject.cloudbridge.R
 import com.myproject.cloudbridge.dataStore.MyDataStore
 import com.myproject.cloudbridge.databinding.FragmentMyPageBinding
@@ -35,25 +37,11 @@ class MyPageFragment : Fragment(), View.OnClickListener {
             btnMyStoreInfo.setOnClickListener(this@MyPageFragment)
         }
 
-        // 프래그먼트가 살아있을 때
-        // CoroutineScope(Dispatchers.IO) 처럼 직접 사용하는 것보다
-        // 생명주기를 따르는 스코프를 생성하는 것이 좋다
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             MyDataStore().getCrn().collect { crn ->
                 this@MyPageFragment.crn = crn
             }
         }
-
-//        CoroutineScope(Dispatchers.IO).launch {
-//            // crn 이 변경되는 값을 구독 시작
-//            // IO 스레드가 계속 값을 구독
-//            // 스레드가 계속 할일이있기 때문에 사라지지 않음
-//            // 프래그먼트나 액티비티 가 종료되도 계속 살아있을 가능성이 있다.
-//
-//            MyDataStore().getCrn().collect{ crn->
-//                this@MyPageFragment.crn = crn
-//            }
-//        }
     }
 
     override fun onClick(v: View?) {
@@ -65,6 +53,7 @@ class MyPageFragment : Fragment(), View.OnClickListener {
                 if (crn == ""){
                     startActivity(Intent(requireActivity(), NotRegistsedStoreActivity::class.java))
                 }else{
+                    Log.d("dasd", crn)
                     startActivity(Intent(requireActivity(), MyStoreActivity::class.java))
                 }
             }

@@ -23,6 +23,7 @@ import com.myproject.cloudbridge.util.Constants.Companion.setHelperTextGreenList
 import com.myproject.cloudbridge.util.Constants.Companion.setHelperTextRed
 import com.myproject.cloudbridge.util.Constants.Companion.setHelperTextRedList
 import com.myproject.cloudbridge.viewModel.MyPageViewModel
+import com.myproject.cloudbridge.viewModel.StoreManagementViewModel
 import kotlinx.coroutines.launch
 
 class UpdateFragment1 : Fragment(), View.OnClickListener {
@@ -30,13 +31,12 @@ class UpdateFragment1 : Fragment(), View.OnClickListener {
     private val binding: FragmentUpdate1Binding
         get() = _binding!!
 
-    private val viewModel: MyPageViewModel by viewModels()
+    private val viewModel: StoreManagementViewModel by viewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentUpdate1Binding.inflate(inflater, container, false)
         return binding.root
     }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
@@ -87,14 +87,8 @@ class UpdateFragment1 : Fragment(), View.OnClickListener {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
-    }
-
     override fun onClick(v: View?) {
         val isDifferCpr = resources.getString(R.string.is_differ_cpr)
-        val cprIs10 = resources.getString(R.string.cpr_is_10)
         val crnMax10 = resources.getString(R.string.crn_max_10).toInt()
 
         when(v?.id){
@@ -120,5 +114,10 @@ class UpdateFragment1 : Fragment(), View.OnClickListener {
                 }
             }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 }

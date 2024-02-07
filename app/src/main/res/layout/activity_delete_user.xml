@@ -56,7 +56,6 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/user_pwd_Layout"
-                    style="@style/Widget.App.TextInputLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:boxStrokeColor="@color/blue_grey"
@@ -67,7 +66,6 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/user_pwd_edit"
-                        style="@style/TextInputEditTextStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="비밀번호를 입력해 주세요"

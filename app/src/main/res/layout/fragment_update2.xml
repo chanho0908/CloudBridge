@@ -2,14 +2,12 @@
 
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
         <variable
             name="vm"
-            type="com.myproject.cloudbridge.viewModel.MyPageViewModel" />
+            type="com.myproject.cloudbridge.viewModel.StoreManagementViewModel" />
     </data>
 
     <ScrollView
@@ -71,7 +69,6 @@
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/storeName_Layout"
-                        style="@style/Widget.App.TextInputLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="15dp"
@@ -83,7 +80,6 @@
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/storeName_edit"
-                            style="@style/TextInputEditTextStyle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@{vm.myStore.storeName}" />
@@ -92,7 +88,6 @@
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/representative_name_Layout"
-                        style="@style/Widget.App.TextInputLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
@@ -104,7 +99,6 @@
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/ceo_name_edit"
-                            style="@style/TextInputEditTextStyle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@{vm.myStore.ceoName}" />
@@ -112,7 +106,6 @@
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/phone_Layout"
-                        style="@style/Widget.App.TextInputLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
@@ -124,10 +117,9 @@
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/phone_edit"
-                            style="@style/TextInputEditTextStyle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="phone"
+                            android:inputType="number"
                             android:text="@{vm.myStore.contact}" />
 
                     </com.google.android.material.textfield.TextInputLayout>
@@ -145,7 +137,6 @@
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/addr_Layout"
-                        style="@style/Widget.App.TextInputLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
@@ -155,7 +146,6 @@
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/addr_edit"
-                            style="@style/TextInputEditTextStyle"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@{vm.myStore.address}" />

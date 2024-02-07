@@ -32,11 +32,13 @@ import com.google.android.material.snackbar.Snackbar
 import com.myproject.cloudbridge.R
 import com.myproject.cloudbridge.databinding.FragmentUpdate2Binding
 import com.myproject.cloudbridge.util.Constants
+import com.myproject.cloudbridge.util.Constants.Companion.makeStoreMainImage
 import com.myproject.cloudbridge.util.Constants.Companion.requestPlzInputText
 import com.myproject.cloudbridge.view.storeRegistration.AddressActivity
 import com.myproject.cloudbridge.viewModel.MyPageViewModel
 import com.myproject.cloudbridge.viewModel.StoreManagementViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Locale
@@ -44,8 +46,7 @@ import java.util.Locale
 class UpdateFragment2 : Fragment(), View.OnClickListener {
     private var _binding: FragmentUpdate2Binding? = null
     private val binding get() = _binding!!
-    private val myPageViewModel: MyPageViewModel by viewModels()
-    private val storeManagementViewModel: StoreManagementViewModel by viewModels()
+    private val viewModel: StoreManagementViewModel by viewModels()
 
     private var imgUrl: Uri ?= null
 
@@ -59,10 +60,10 @@ class UpdateFragment2 : Fragment(), View.OnClickListener {
         val adapter = ArrayAdapter(requireActivity(), R.layout.array_list_item, items)
         binding.kindEdit.setAdapter(adapter)
 
-        binding.vm = myPageViewModel
+        binding.vm = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
-        myPageViewModel.getMyStoreInfo()
+        viewModel.getMyStoreInfo()
         return binding.root
     }
 
@@ -70,6 +71,19 @@ class UpdateFragment2 : Fragment(), View.OnClickListener {
         super.onViewCreated(view, savedInstanceState)
         initView()
         initActivityProcess()
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.flag.collectLatest{
+                if (it){
+                    val intent = Intent(activity, MyStoreActivity::class.java)
+
+                    startActivity(intent)
+
+                    // 부모 액티비티 종료
+                    activity?.finish()
+                }
+            }
+        }
     }
 
     private fun initView(){
@@ -94,23 +108,16 @@ class UpdateFragment2 : Fragment(), View.OnClickListener {
                 else representativeNameLayout.helperText = "대표자명을 입력해 주세요."
             }
 
-            phoneEdit.addTextChangedListener( object: TextWatcher {
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    if(!isNumeric(s.toString())) phoneLayout.helperText = "숫자만 입력해 주세요"
-
-                }
-                override fun afterTextChanged(s: Editable?) {
-                    if (isNumeric(s.toString())) phoneLayout.helperText = ""
-                }
-            })
+            phoneEdit.addTextChangedListener {
+                if (it.toString().isNotEmpty()) phoneLayout.helperText = ""
+                else phoneLayout.helperText = "전화번호를 입력해 주세요"
+            }
 
             addrEdit.addTextChangedListener {
-                if (it != null) {
-                    addrLayout.helperText = ""
-                }
+                if (it.toString().isNotEmpty()) addrLayout.helperText = ""
+                else phoneLayout.helperText = "주소를 입력해 주세요"
             }
+
         }
     }
 
@@ -210,13 +217,6 @@ class UpdateFragment2 : Fragment(), View.OnClickListener {
         }
     }
 
-    fun isNumeric(s: String): Boolean = try {
-        s.toDouble()
-        true
-    } catch (e: NumberFormatException) {
-        false
-    }
-
     override fun onClick(v: View?) {
         when(v?.id){
             R.id.submit_button -> {
@@ -242,32 +242,32 @@ class UpdateFragment2 : Fragment(), View.OnClickListener {
                     } else {
                         Toast.makeText(requireActivity(), "통과", Toast.LENGTH_SHORT).show()
 
-                        // 코루틴을 사용하여 백그라운드 작업 수행
-                        lifecycleScope.launch(Dispatchers.IO) {
-
-                            // TranslateGeo와 같은 시간이 많이 소요되는 작업 수행
                             val location = translateGeo(addr)
 
                             val lat = location.latitude
                             val lng = location.longitude
 
                             if(lat == 0.0 || lng == 0.0){
-                                withContext(Dispatchers.Main){
-                                    requestPlzInputText("올바른 주소를 입력해 주세요", addrLayout)
-                                }
-
+                                requestPlzInputText("올바른 주소를 입력해 주세요", addrLayout)
                             }else{
-                                storeManagementViewModel.updateMyStore(
-                                    requireContext(), imgUrl, storeName, representativeName,
-                                    phone, addr, lat.toString(), lng.toString(), kind)
+                                if (imgUrl != null) {
 
-                                startActivity(Intent(requireContext(), MyStoreActivity::class.java))
+                                    val imgBody = makeStoreMainImage(requireActivity(), imgUrl!!)
 
-                                activity?.finish()
+                                    viewModel.updateMyStore(
+                                        imgBody, storeName, representativeName,
+                                        phone, addr, lat.toString(), lng.toString(), kind
+                                    )
+                                }else{
+                                    viewModel.updateMyStore(
+                                        null, storeName, representativeName,
+                                        phone, addr, lat.toString(), lng.toString(), kind
+                                    )
+                                }
                             }
                         }
                     }
-                }
+
             }
             R.id.btnAddr -> {
                 val intent = Intent(requireContext(), AddressActivity::class.java)

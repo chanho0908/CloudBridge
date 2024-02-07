@@ -52,9 +52,9 @@ class Constants {
             return text.toRequestBody("text/plain".toMediaTypeOrNull())
         }
 
-        fun createMultipartBodyPart(imgUri: Uri, name: String, context: Context): MultipartBody.Part {
+        fun createMultipartBodyPart(context: Context, imgUri: Uri, name: String): MultipartBody.Part {
             // 이미지 절대경로 반환 후 파일 객체 생성
-            val file = File(absolutelyPath(imgUri, context))
+            val file = File(absolutelyPath(context, imgUri))
             // 파일 객체를 RequestBody Type으로 변환
             val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
             // MultipartBody.Part Type으로 변환
@@ -63,7 +63,7 @@ class Constants {
         }
 
         // 절대경로 변환
-        fun absolutelyPath(path: Uri, context : Context): String {
+        fun absolutelyPath(context: Context, path: Uri): String {
             val proj: Array<String> = arrayOf(MediaStore.Images.Media.DATA)
             val c: Cursor? = context.contentResolver.query(path!!, proj, null, null, null)
             val index = c?.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
@@ -72,6 +72,17 @@ class Constants {
             val result = c?.getString(index!!)
 
             return result!!
+        }
+
+        fun makeStoreMainImage(context: Context, imgUri: Uri): MultipartBody.Part {
+            // 이미지 절대경로 반환 후 파일 객체 생성
+            val file = File(absolutelyPath(context, imgUri))
+
+            // 파일 객체를 RequestBody Type으로 변환
+            val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
+
+            // MultipartBody.Part Type으로 변환
+            return MultipartBody.Part.createFormData("storeMainImage", file.name, requestFile)
         }
 
         fun isAllPermissionsGranted(context: Context, permissions: Array<String>): Boolean = permissions.all { permission->

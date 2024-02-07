@@ -20,7 +20,6 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/userID_Layout"
-            style="@style/Widget.App.TextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:boxStrokeColor="@color/blue_grey"
@@ -31,7 +30,6 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/user_ID_edit"
-                style="@style/TextInputEditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="아이디"
@@ -41,7 +39,6 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/user_pwd_Layout"
-            style="@style/Widget.App.TextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:boxStrokeColor="@color/blue_grey"
@@ -53,7 +50,6 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/user_pwd_edit"
-                style="@style/TextInputEditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="비밀번호"
@@ -65,7 +61,6 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/user_name_Layout"
-            style="@style/Widget.App.TextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -77,7 +72,6 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/user_name_edit"
-                style="@style/TextInputEditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="이름"
@@ -86,7 +80,6 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/phone_layout"
-            style="@style/Widget.App.TextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
@@ -98,7 +91,6 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/phone_edit"
-                style="@style/TextInputEditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="전화번호"

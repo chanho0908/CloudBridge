@@ -7,7 +7,7 @@
     <data>
         <variable
             name="vm"
-            type="com.myproject.cloudbridge.viewModel.MyPageViewModel" />
+            type="com.myproject.cloudbridge.viewModel.StoreManagementViewModel" />
     </data>
 
     <ScrollView

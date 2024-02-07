@@ -21,7 +21,6 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/user_id_layout"
-            style="@style/Widget.App.TextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:helperTextTextColor="@color/orange_red"
@@ -32,7 +31,6 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/user_id_edit"
-                style="@style/TextInputEditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
@@ -42,7 +40,6 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/user_pwd_layout"
-            style="@style/Widget.App.TextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:helperTextTextColor="@color/orange_red"
@@ -55,7 +52,6 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/user_pwd_edit"
-                style="@style/TextInputEditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"

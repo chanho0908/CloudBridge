@@ -55,7 +55,6 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/user_name_Layout"
-                    style="@style/Widget.App.TextInputLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:boxStrokeColor="@color/blue_grey"
@@ -65,7 +64,6 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/user_name_edit"
-                        style="@style/TextInputEditTextStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:maxLines="1" />
@@ -83,7 +81,6 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/user_phone_layout"
-                    style="@style/Widget.App.TextInputLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
@@ -94,7 +91,6 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/user_phone_edit"
-                        style="@style/TextInputEditTextStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:maxLines="1" />
@@ -110,7 +106,6 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/user_pwd_Layout"
-                    style="@style/Widget.App.TextInputLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:boxStrokeColor="@color/blue_grey"
@@ -121,7 +116,6 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/user_pwd_edit"
-                        style="@style/TextInputEditTextStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textPassword"
@@ -139,7 +133,6 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/user_update_pwd_Layout"
-                    style="@style/Widget.App.TextInputLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:boxStrokeColor="@color/blue_grey"
@@ -150,7 +143,6 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/user_update_pwd_edit"
-                        style="@style/TextInputEditTextStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="새로운 비밀번호"

@@ -11,7 +11,6 @@ import com.myproject.cloudbridge.util.Constants.Companion.ADDR_RESULT
 
 class AddressActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAddressBinding
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAddressBinding.inflate(layoutInflater)

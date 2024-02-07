@@ -7,8 +7,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.provider.Settings
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -20,6 +18,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
@@ -27,18 +26,22 @@ import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.snackbar.Snackbar
 import com.myproject.cloudbridge.R
 import com.myproject.cloudbridge.databinding.FragmentStoreInfoRegistrationBinding
+import com.myproject.cloudbridge.util.Constants
 import com.myproject.cloudbridge.util.Constants.Companion.ADDR_RESULT
 import com.myproject.cloudbridge.util.Constants.Companion.REQUEST_STORAGE_PERMISSIONS
+import com.myproject.cloudbridge.util.Constants.Companion.absolutelyPath
 import com.myproject.cloudbridge.util.Constants.Companion.isAllPermissionsGranted
+import com.myproject.cloudbridge.util.Constants.Companion.makeStoreMainImage
 import com.myproject.cloudbridge.util.Constants.Companion.requestPlzInputText
 import com.myproject.cloudbridge.util.Constants.Companion.showSoftInput
 import com.myproject.cloudbridge.view.intro.myStore.MyStoreActivity
 import com.myproject.cloudbridge.viewModel.StoreManagementViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import java.io.File
 import java.util.Locale
 
 
@@ -65,16 +68,18 @@ class StoreInfoRegistrationFragment : Fragment(), View.OnClickListener {
         initView()
         initActivityProcess()
 
-        viewModel.flag.observe(viewLifecycleOwner) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.flag.collectLatest{
+                if (it){
+                    val intent = Intent(activity, MyStoreActivity::class.java)
+                    intent.putExtra("FLAG", "REGISTER")
 
-            val intent = Intent(activity, MyStoreActivity::class.java)
-            intent.putExtra("FLAG", "REGISTER")
-            //intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
+                    startActivity(intent)
 
-            startActivity(intent)
-
-            // 부모 액티비티 종료
-            activity?.finish()
+                    // 부모 액티비티 종료
+                    activity?.finish()
+                }
+            }
         }
     }
 
@@ -110,10 +115,12 @@ class StoreInfoRegistrationFragment : Fragment(), View.OnClickListener {
 
             phoneEdit.addTextChangedListener {
                 if (it.toString().isNotEmpty()) phoneLayout.helperText = ""
+                else phoneLayout.helperText = "전화번호를 입력해 주세요"
             }
 
             addrEdit.addTextChangedListener {
                 if (it.toString().isNotEmpty()) addrLayout.helperText = ""
+                else phoneLayout.helperText = "주소를 입력해 주세요"
             }
 
         }
@@ -234,9 +241,6 @@ class StoreInfoRegistrationFragment : Fragment(), View.OnClickListener {
                     } else if (imgUrl == null) {
                         Toast.makeText(requireContext(), "대표 사진을 등록해 주세요", Toast.LENGTH_LONG).show()
                     } else {
-
-
-                        // TranslateGeo와 같은 시간이 많이 소요되는 작업 수행
                         val location = TranslateGeo(addr)
 
                         val lat = location.latitude
@@ -245,15 +249,11 @@ class StoreInfoRegistrationFragment : Fragment(), View.OnClickListener {
                         if (lat == 0.0 || lng == 0.0) {
                             requestPlzInputText("올바른 주소를 입력해 주세요", addrLayout)
                         } else {
-                            val uri: Uri? = imgUrl
-                            if (uri != null) {
+                            if (imgUrl != null) {
 
-                                // 비동기로 실행시작
-                                // 기존 : 동작도중 액티비티 실행, delay(200)
-                                // 문제점 : 네트워크 상황이 안좋을 시 200ms를 초과하는 시간이 걸릴 경우
-                                //         동작이 완료됏음을 보장할수없음
-                                viewModel.registrationStore(
-                                    requireContext(), uri, storeName, ceoName,
+                                val imgBody = makeStoreMainImage(requireActivity(), imgUrl!!)
+
+                                viewModel.registrationStore(imgBody, storeName, ceoName,
                                     crn, phone, addr, lat.toString(), lng.toString(), kind
                                 )
                             }

@@ -70,7 +70,6 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/cpr_Layout"
-                style="@style/Widget.App.TextInputLayout"
                 android:layout_width="320dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
@@ -81,7 +80,6 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/cpr_edit"
-                    style="@style/TextInputEditTextStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="사업자등록번호"
