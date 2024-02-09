@@ -6,7 +6,6 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.myproject.cloudbridge.util.App
@@ -15,18 +14,16 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import okio.IOException
 
+object MainDataStore {
+    private fun getContext(): Context = App.context()
 
-class MyDataStore {
-    private val context = App.context()
+    private val mDataStore: DataStore<Preferences>
+        get() = getContext().dataStore
 
-    companion object{
-        val Context.dataStore : DataStore<Preferences> by preferencesDataStore("user_pref")
-    }
+    private val Context.dataStore : DataStore<Preferences> by preferencesDataStore("user_pref")
     private val FIRST_FLAG = booleanPreferencesKey("FIRST_FLAG")
     private val USER_ID = stringPreferencesKey("USER_ID")
     private val CRN = stringPreferencesKey("CRN")
-
-    private val mDataStore = context.dataStore
 
     /**
      * DataStore의 값을 쓸때는 edit()
@@ -84,7 +81,7 @@ class MyDataStore {
         }.catch { e ->
             if (e is IOException) {
                 // Handle IOException
-                Log.e("MyDataStore", "IOException: ${e.message}")
+                Log.e("MainDataStore", "IOException: ${e.message}")
             }
         }
     }
