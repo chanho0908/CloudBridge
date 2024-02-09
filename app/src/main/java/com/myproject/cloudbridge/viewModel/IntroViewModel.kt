@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.myproject.cloudbridge.dataStore.MyDataStore
+import com.myproject.cloudbridge.dataStore.MainDataStore
 import com.myproject.cloudbridge.db.entity.UserEntity
 import com.myproject.cloudbridge.model.user.User
 import com.myproject.cloudbridge.repository.DBRepository
@@ -35,11 +35,11 @@ class IntroViewModel: ViewModel() {
         get() = _isUsingId
 
     fun setUpFirstFlag() = viewModelScope.launch {
-        MyDataStore().setupFirstData()
+        MainDataStore.setupFirstData()
     }
 
     fun setUserID(userID: String) = viewModelScope.launch {
-        MyDataStore().setUserID(userID)
+        MainDataStore.setUserID(userID)
     }
 
     fun isJoinUser(userKakaoEmail: String) = viewModelScope.launch(Dispatchers.IO) {
@@ -101,7 +101,7 @@ class IntroViewModel: ViewModel() {
 
     fun checkFistFlag() = viewModelScope.launch {
         delay(2000)
-        val getData = MyDataStore().getFirstFlag()
+        val getData = MainDataStore.getFirstFlag()
 
         _first.value = getData
     }

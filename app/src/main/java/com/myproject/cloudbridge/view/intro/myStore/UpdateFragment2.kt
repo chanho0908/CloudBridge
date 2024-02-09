@@ -10,8 +10,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.provider.Settings
-import android.text.Editable
-import android.text.TextWatcher
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -24,7 +23,9 @@ import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.Navigation
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -35,12 +36,9 @@ import com.myproject.cloudbridge.util.Constants
 import com.myproject.cloudbridge.util.Constants.Companion.makeStoreMainImage
 import com.myproject.cloudbridge.util.Constants.Companion.requestPlzInputText
 import com.myproject.cloudbridge.view.storeRegistration.AddressActivity
-import com.myproject.cloudbridge.viewModel.MyPageViewModel
 import com.myproject.cloudbridge.viewModel.StoreManagementViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.util.Locale
 
 class UpdateFragment2 : Fragment(), View.OnClickListener {
@@ -73,21 +71,23 @@ class UpdateFragment2 : Fragment(), View.OnClickListener {
         initActivityProcess()
 
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.flag.collectLatest{
-                if (it){
-                    val intent = Intent(activity, MyStoreActivity::class.java)
+            repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModel.flag.collectLatest{
+                    if (it){
+                        val intent = Intent(activity, MyStoreActivity::class.java)
 
-                    startActivity(intent)
+                        startActivity(intent)
 
-                    // 부모 액티비티 종료
-                    activity?.finish()
+                        // 부모 액티비티 종료
+                        activity?.finish()
+                    }
                 }
             }
         }
     }
 
     private fun initView(){
-        binding.apply{
+        with(binding){
 
             submitButton.setOnClickListener(this@UpdateFragment2)
             btnAddr.setOnClickListener(this@UpdateFragment2)
@@ -143,7 +143,6 @@ class UpdateFragment2 : Fragment(), View.OnClickListener {
                         }
                     }
                 }
-
             }
         }
 
@@ -156,7 +155,6 @@ class UpdateFragment2 : Fragment(), View.OnClickListener {
                         val data = callback.getStringExtra("data")
                         binding.addrEdit.setText(data)
                     }
-
                     else -> {
                         imgUrl = callback.data
 
@@ -169,7 +167,6 @@ class UpdateFragment2 : Fragment(), View.OnClickListener {
                 }
         }
     }
-
 
     private fun accessGallery(){
         val intent = Intent(Intent.ACTION_PICK)
@@ -220,7 +217,7 @@ class UpdateFragment2 : Fragment(), View.OnClickListener {
     override fun onClick(v: View?) {
         when(v?.id){
             R.id.submit_button -> {
-                binding.apply {
+                with(binding) {
                     val storeName = storeNameEdit.text.toString()
                     val representativeName = ceoNameEdit.text.toString()
                     val phone = phoneEdit.text.toString()
@@ -240,7 +237,6 @@ class UpdateFragment2 : Fragment(), View.OnClickListener {
                         requestPlzInputText("주소를 입력해 주세요", addrLayout)
 
                     } else {
-                        Toast.makeText(requireActivity(), "통과", Toast.LENGTH_SHORT).show()
 
                             val location = translateGeo(addr)
 
@@ -259,6 +255,7 @@ class UpdateFragment2 : Fragment(), View.OnClickListener {
                                         phone, addr, lat.toString(), lng.toString(), kind
                                     )
                                 }else{
+
                                     viewModel.updateMyStore(
                                         null, storeName, representativeName,
                                         phone, addr, lat.toString(), lng.toString(), kind

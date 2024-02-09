@@ -1,32 +1,27 @@
 package com.myproject.cloudbridge.viewModel
 
-import com.myproject.cloudbridge.util.Constants.Companion.Base64ToBitmaps
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.DocumentReference
 import com.kakao.sdk.user.UserApiClient
-import com.myproject.cloudbridge.dataStore.MyDataStore
-import com.myproject.cloudbridge.db.entity.StoreEntity
+import com.myproject.cloudbridge.dataStore.MainDataStore
 import com.myproject.cloudbridge.db.entity.UserEntity
 import com.myproject.cloudbridge.repository.DBRepository
 import com.myproject.cloudbridge.repository.NetworkRepository
 import com.myproject.cloudbridge.util.App
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import java.lang.Exception
 
-class MainViewModel: ViewModel() {
+class UserManagementViewModel: ViewModel() {
 
     private val db = App.db
     private val dbRepository = DBRepository()
     private val networkRepository = NetworkRepository()
 
     lateinit var userProfile: StateFlow<List<UserEntity>>
-
 
     fun getUserProfile() = viewModelScope.launch(Dispatchers.IO) {
         userProfile = dbRepository.getUserData().stateIn(viewModelScope)
@@ -52,7 +47,7 @@ class MainViewModel: ViewModel() {
                 Log.i("MainViewModel", "로그아웃 성공. SDK에서 토큰 삭제됨")
             }
         }
-        dbRepository.deleteUserData(MyDataStore().getUserId())
+        dbRepository.deleteUserData(MainDataStore.getUserId())
     }
 
     fun deleteUser() = viewModelScope.launch(Dispatchers.IO) {
@@ -66,17 +61,17 @@ class MainViewModel: ViewModel() {
         }
 
         // Room Data Delete
-        dbRepository.deleteUserData(MyDataStore().getUserId())
+        dbRepository.deleteUserData(MainDataStore.getUserId())
 
         // Firebase Data Delete
         firebaseReference(0).delete()
 
         // FirstFlag = false
-        MyDataStore().FalseFirstData()
+        MainDataStore.FalseFirstData()
     }
 
     private suspend fun firebaseReference(flag: Int): DocumentReference =
-        db.collection("USER").document(MyDataStore().getUserId())
+        db.collection("USER").document(MainDataStore.getUserId())
 
 
 }

@@ -174,7 +174,7 @@ class MyPageViewModel: ViewModel() {
 
     fun setMyStoreInfo() = viewModelScope.launch(Dispatchers.IO) {
         try {
-            MyDataStore().getCrn().collect{ crn->
+            MainDataStore.getCrn().collect{ crn->
                 val response = storeInfoApi.getMyStoreInfo(crn)
                 _myStore.postValue(response)
             }

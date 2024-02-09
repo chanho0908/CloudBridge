@@ -36,7 +36,8 @@ class NetworkRepository {
     suspend fun getCompanyRegistrationNumber() = storeInfoApiInstance.getCompanyRegistrationNumber()
 
     // 매장 업데이트
-    suspend fun updateStoreInfo(store: MyStoreInfoRequestModel) =
+    suspend fun updateStoreInfo(store: MyStoreInfoRequestModel){
+        Log.d("dasdsds", "NetworkRepository")
         storeInfoApiInstance.updateStoreInfo(
             store.storeImage,
             store.storeName,
@@ -48,6 +49,8 @@ class NetworkRepository {
             store.longitude,
             store.kind
         )
+    }
+
 
     // 매장 삭제
     suspend fun deleteMyStoreInfo(crn: String) = storeInfoApiInstance.deleteMyStoreInfo(crn)

@@ -9,10 +9,10 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.kakao.sdk.user.UserApiClient
-import com.myproject.cloudbridge.dataStore.MyDataStore
+import com.myproject.cloudbridge.dataStore.MainDataStore
 import com.myproject.cloudbridge.databinding.ActivityUpdateUserProfileBinding
 import com.myproject.cloudbridge.db.entity.UserEntity
-import com.myproject.cloudbridge.viewModel.MainViewModel
+import com.myproject.cloudbridge.viewModel.UserManagementViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -20,7 +20,7 @@ import java.util.regex.Pattern
 
 class UpdateUserProfileActivity : AppCompatActivity() {
     private lateinit var binding: ActivityUpdateUserProfileBinding
-    private val viewModel: MainViewModel by viewModels()
+    private val viewModel: UserManagementViewModel by viewModels()
     private lateinit var savedUserPassword: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,7 +40,7 @@ class UpdateUserProfileActivity : AppCompatActivity() {
             }
         }
 
-        binding.apply{
+        with(binding){
             materialToolbar.setNavigationOnClickListener { finish() }
 
             userNameEdit.addTextChangedListener {
@@ -92,7 +92,7 @@ class UpdateUserProfileActivity : AppCompatActivity() {
                             viewModel.updateUserProfile(
                                 UserEntity(
                                 email,
-                                MyDataStore().getUserId(),
+                                MainDataStore.getUserId(),
                                 userUpdatePassword,
                                 userName,
                                 userPhone

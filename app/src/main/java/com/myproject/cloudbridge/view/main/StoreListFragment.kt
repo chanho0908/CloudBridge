@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.myproject.cloudbridge.R
 import com.myproject.cloudbridge.adapter.rv.adapter.SelectStoreInfoAdapter
 import com.myproject.cloudbridge.databinding.FragmentStoreListBinding
-import com.myproject.cloudbridge.viewModel.MainViewModel
 import com.myproject.cloudbridge.viewModel.StoreManagementViewModel
 import kotlinx.coroutines.launch
 

@@ -94,9 +94,6 @@ class MenuManagementActivity : AppCompatActivity() {
 
                             }
                         }
-
-
-
                     }
                     true
                 }

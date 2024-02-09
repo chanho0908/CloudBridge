@@ -48,6 +48,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="100dp"
+            android:layout_marginBottom="5dp"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -93,6 +94,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="25dp"
+                android:layout_marginBottom="10dp"
                 android:background="@drawable/search_btn"
                 android:text="조회"
                 android:textColor="@color/shrine_pink_900"

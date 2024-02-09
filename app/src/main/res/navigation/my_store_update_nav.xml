@@ -15,7 +15,8 @@
         <action
             android:id="@+id/action_updateFragment1_to_updateFragment2"
             app:destination="@id/updateFragment2"
-            app:popExitAnim="@android:anim/slide_out_right" />
+            app:enterAnim="@anim/anim_slide_in_right"
+            app:exitAnim="@anim/anim_slide_out_left" />
     </fragment>
 
     <fragment
@@ -25,7 +26,8 @@
         tools:layout="@layout/fragment_update2">
         <action
             android:id="@+id/action_updateFragment2_to_updateFragment1"
-            app:destination="@id/updateFragment1" />
+            app:destination="@id/updateFragment1"
+            app:enterAnim="@android:anim/slide_in_left" />
     </fragment>
 
 </navigation>

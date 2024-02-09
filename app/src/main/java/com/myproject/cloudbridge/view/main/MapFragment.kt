@@ -5,7 +5,6 @@ import android.location.Location
 import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,7 +30,6 @@ import com.myproject.cloudbridge.util.Constants.Companion.REQUEST_LOCATION_PERMI
 import com.myproject.cloudbridge.util.Constants.Companion.isAllPermissionsGranted
 import com.myproject.cloudbridge.util.locationProvider.FusedLocationProvider
 import com.myproject.cloudbridge.util.locationProvider.OnLocationUpdateListener
-import com.myproject.cloudbridge.viewModel.MainViewModel
 import com.myproject.cloudbridge.viewModel.StoreManagementViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -112,12 +110,12 @@ class MapFragment : Fragment(), OnLocationUpdateListener, View.OnClickListener {
     }
 
     private fun showMapWithUserCurrentLocation(){
-        binding.apply {
+        with(binding) {
             // MapReadyCallback 을 통해 지도가 정상적으로 시작된 후에 수신할 수 있다.
             val KakaoMapReadyCallback = object : KakaoMapReadyCallback(){
                 override fun onMapReady(kakaoMap: KakaoMap) {
 
-                    kakaoMap.apply {
+                    with(kakaoMap){
                         // 나침반 설정
                         compass?.show()
 

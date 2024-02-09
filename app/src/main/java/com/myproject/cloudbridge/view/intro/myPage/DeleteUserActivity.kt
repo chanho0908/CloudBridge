@@ -12,13 +12,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.myproject.cloudbridge.databinding.ActivityDeleteUserBinding
 import com.myproject.cloudbridge.db.entity.UserEntity
-import com.myproject.cloudbridge.viewModel.MainViewModel
+import com.myproject.cloudbridge.viewModel.UserManagementViewModel
 import kotlinx.coroutines.launch
 
 class DeleteUserActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDeleteUserBinding
     private lateinit var userEntity: UserEntity
-    private val viewModel: MainViewModel by viewModels()
+    private val viewModel: UserManagementViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -26,7 +26,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun initView(){
-        binding.apply {
+        with(binding) {
 
             materialToolbar.setNavigationOnClickListener {
                 // 현재 Activity를 종료시킨다.

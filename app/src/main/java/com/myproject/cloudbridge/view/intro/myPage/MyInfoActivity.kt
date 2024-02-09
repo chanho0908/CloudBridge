@@ -13,13 +13,13 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.myproject.cloudbridge.R
 import com.myproject.cloudbridge.databinding.ActivityMyInfoBinding
 import com.myproject.cloudbridge.view.intro.user.SignOrLoginActivity
-import com.myproject.cloudbridge.viewModel.MainViewModel
+import com.myproject.cloudbridge.viewModel.UserManagementViewModel
 import kotlinx.coroutines.launch
 
 
 class MyInfoActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var binding: ActivityMyInfoBinding
-    private val viewModel: MainViewModel by viewModels()
+    private val viewModel: UserManagementViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

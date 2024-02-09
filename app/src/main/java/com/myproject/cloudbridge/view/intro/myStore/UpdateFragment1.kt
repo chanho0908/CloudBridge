@@ -18,11 +18,12 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.Navigation
 import com.myproject.cloudbridge.R
 import com.myproject.cloudbridge.databinding.FragmentUpdate1Binding
+import com.myproject.cloudbridge.util.Constants
 import com.myproject.cloudbridge.util.Constants.Companion.setHelperTextGreen
 import com.myproject.cloudbridge.util.Constants.Companion.setHelperTextGreenList
 import com.myproject.cloudbridge.util.Constants.Companion.setHelperTextRed
 import com.myproject.cloudbridge.util.Constants.Companion.setHelperTextRedList
-import com.myproject.cloudbridge.viewModel.MyPageViewModel
+import com.myproject.cloudbridge.util.Constants.Companion.showSoftInput
 import com.myproject.cloudbridge.viewModel.StoreManagementViewModel
 import kotlinx.coroutines.launch
 
@@ -37,16 +38,32 @@ class UpdateFragment1 : Fragment(), View.OnClickListener {
         _binding = FragmentUpdate1Binding.inflate(inflater, container, false)
         return binding.root
     }
+
+    private var isEqual = false
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModel.isEqualCrn.collect{
+                    isEqual = it
+                    if(it){
+                        val action = UpdateFragment1Directions.actionUpdateFragment1ToUpdateFragment2()
+                        Navigation.findNavController(view).navigate(action)
+                    }
+                }
+            }
+        }
     }
 
     private fun initView(){
-        val cprIs10 = resources.getString(R.string.cpr_is_10)
-        val crnMax10 = resources.getString(R.string.crn_max_10).toInt()
 
-        binding.apply{
+        with(binding){
+
+            cprLayout.requestFocus()
+            showSoftInput(requireActivity(), cprEdit)
 
             materialToolbar.setNavigationOnClickListener {
                 startActivity(Intent(requireContext(), MyStoreActivity::class.java))
@@ -55,7 +72,7 @@ class UpdateFragment1 : Fragment(), View.OnClickListener {
             cprEdit.addTextChangedListener{
                 val input = it.toString()
 
-                if (input.length < crnMax10 || input.length > crnMax10) setWarningBox(cprIs10)
+                if (input.length < 10 || input.length > 10) setWarningBox("사업자 등록번호는 10자리 입니다")
                 else setPermittedBox()
 
             }
@@ -66,7 +83,7 @@ class UpdateFragment1 : Fragment(), View.OnClickListener {
     }
 
     private fun setPermittedBox(){
-        binding.apply {
+        with(binding) {
             cprLayout.helperText = ""
             cprLayout.setStartIconDrawable(R.drawable.baseline_check_24)
             cprLayout.setStartIconTintList(setHelperTextGreenList(requireContext()))
@@ -76,7 +93,7 @@ class UpdateFragment1 : Fragment(), View.OnClickListener {
     }
 
     private fun setWarningBox(helperText: String){
-        binding.apply {
+        with(binding) {
             cprLayout.setStartIconDrawable(R.drawable.baseline_priority_high_24)
             cprLayout.setStartIconTintList(setHelperTextRedList(requireContext()))
             cprLayout.setHelperTextColor(
@@ -88,30 +105,15 @@ class UpdateFragment1 : Fragment(), View.OnClickListener {
     }
 
     override fun onClick(v: View?) {
-        val isDifferCpr = resources.getString(R.string.is_differ_cpr)
-        val crnMax10 = resources.getString(R.string.crn_max_10).toInt()
 
         when(v?.id){
             R.id.searchBtn -> {
-                binding.apply {
-                    if(cprEdit.length() == crnMax10){
-                    val crn = cprEdit.text.toString()
-                    viewModel.checkMyCrn(crn)
-
-                    viewLifecycleOwner.lifecycleScope.launch {
-                        repeatOnLifecycle(Lifecycle.State.STARTED){
-                            viewModel.isEqualCrn.collect{ isEqual->
-                                if(isEqual){
-                                    val action = UpdateFragment1Directions.actionUpdateFragment1ToUpdateFragment2()
-                                    Navigation.findNavController(v).navigate(action)
-                                }else{
-                                    setWarningBox(isDifferCpr)
-                                }
-                            }
-                        }
-                    }
-                  }
+                val input = binding.cprEdit.text.toString()
+                if(input.length == 10){
+                    viewModel.checkMyCrn(input)
+                    if (!isEqual) setWarningBox("등록된 정보가 일치하지 않습니다.")
                 }
+
             }
         }
     }

@@ -52,16 +52,6 @@ class Constants {
             return text.toRequestBody("text/plain".toMediaTypeOrNull())
         }
 
-        fun createMultipartBodyPart(context: Context, imgUri: Uri, name: String): MultipartBody.Part {
-            // 이미지 절대경로 반환 후 파일 객체 생성
-            val file = File(absolutelyPath(context, imgUri))
-            // 파일 객체를 RequestBody Type으로 변환
-            val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
-            // MultipartBody.Part Type으로 변환
-
-            return MultipartBody.Part.createFormData(name, file.name, requestFile)
-        }
-
         // 절대경로 변환
         fun absolutelyPath(context: Context, path: Uri): String {
             val proj: Array<String> = arrayOf(MediaStore.Images.Media.DATA)

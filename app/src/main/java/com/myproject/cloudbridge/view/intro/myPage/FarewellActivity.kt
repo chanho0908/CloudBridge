@@ -5,12 +5,12 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import com.myproject.cloudbridge.databinding.ActivityFarewellBinding
-import com.myproject.cloudbridge.viewModel.MainViewModel
+import com.myproject.cloudbridge.viewModel.UserManagementViewModel
 import kotlin.system.exitProcess
 
 class FarewellActivity : AppCompatActivity() {
     private lateinit var binding: ActivityFarewellBinding
-    private val viewModel: MainViewModel by viewModels()
+    private val viewModel: UserManagementViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

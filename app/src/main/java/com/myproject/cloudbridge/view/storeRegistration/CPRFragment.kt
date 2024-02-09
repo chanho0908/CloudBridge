@@ -52,7 +52,7 @@ class CPRFragment : Fragment() {
         val cprIs10 = resources.getString(R.string.cpr_is_10)
         val crnMax10 = resources.getString(R.string.crn_max_10).toInt()
 
-        binding.apply{
+        with(binding){
 
             cprLayout.requestFocus()
             showSoftInput(requireActivity(), cprEdit)
@@ -132,7 +132,7 @@ class CPRFragment : Fragment() {
     }
 
     private fun setPermittedBox(helperText: String){
-        binding.apply {
+        with(binding) {
             hideSoftInput(requireContext(), cprEdit)
 
             cprLayout.setStartIconDrawable(R.drawable.baseline_check_24)
@@ -145,7 +145,7 @@ class CPRFragment : Fragment() {
     }
 
     private fun setWarningBox(helperText: String){
-        binding.apply {
+        with(binding) {
             cprLayout.setStartIconDrawable(R.drawable.baseline_priority_high_24)
             cprLayout.setStartIconTintList(setHelperTextRedList(requireContext()))
             cprLayout.setHelperTextColor(
