@@ -3,7 +3,7 @@ package com.myproject.cloudbridge.viewModel
 import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.myproject.cloudbridge.dataStore.MyDataStore
+import com.myproject.cloudbridge.dataStore.MainDataStore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
@@ -26,7 +26,6 @@ class StoreManagementViewModel: ViewModel() {
 
     private val networkRepository = NetworkRepository()
     private val dbRepository = DBRepository()
-    private val dataStore = MyDataStore()
 
     // 사업자 등록번호 상태 조회
     private val _state = MutableStateFlow(CrnStateResponseModel(0, 0, "", emptyList()))
@@ -37,7 +36,6 @@ class StoreManagementViewModel: ViewModel() {
     val crnList: StateFlow<List<AllCrnResponseModel>> get() = _crnList
 
     // 나의 매장 정보
-
     private var _myStore: MutableStateFlow<StoreEntity> = MutableStateFlow(createFirstData())
     val myStore: StateFlow<StoreEntity> get() = _myStore
 
@@ -48,7 +46,7 @@ class StoreManagementViewModel: ViewModel() {
 
     // 나의 사업자 등록번호와 일치하는가 ?
 
-    private val _isEqualCrn = MutableStateFlow(true)
+    private val _isEqualCrn = MutableStateFlow(false)
     val isEqualCrn: StateFlow<Boolean> get() = _isEqualCrn
 
     // 모든 매장 정보
@@ -80,7 +78,7 @@ class StoreManagementViewModel: ViewModel() {
     fun getMyStoreInfo() = viewModelScope.launch(Dispatchers.IO) {
         try {
             // 1. Datastore에 저장된 사업자 등록번호를 가지고
-            dataStore.getCrn().collect{ crn->
+            MainDataStore.getCrn().collect{ crn->
                 // 2. Room에서 나의 매장 정보를 가져와
                 val response = dbRepository.getMyStoreInfo(crn)
 
@@ -97,74 +95,80 @@ class StoreManagementViewModel: ViewModel() {
     // 메장 정보 등록
      fun registrationStore(imgBody: MultipartBody.Part, storeName:String, ceoName: String, crn: String,
         phone:String, addr: String, lat:String, lng:String, kind:String) = viewModelScope.launch(Dispatchers.IO){
-
+        try {
             // 내부 코드 순차 실행
-            dataStore.setCrn(crn)
+            MainDataStore.setCrn(crn)
 
             // 매장 정보를 RequestBody Type으로 변환 후
             // Retrofit으로 전송할 MyStoreInfoRequestModel 객체 생성
             val myStoreInfoRequestModel = MyStoreInfoRequestModel(
                 imgBody,
-                 createRequestBody(storeName),
-                 createRequestBody(ceoName),
-                 createRequestBody(crn),
-                 createRequestBody(phone),
-                 createRequestBody(addr),
-                 createRequestBody(lat),
-                 createRequestBody(lng),
-                 createRequestBody(kind)
+                createRequestBody(storeName),
+                createRequestBody(ceoName),
+                createRequestBody(crn),
+                createRequestBody(phone),
+                createRequestBody(addr),
+                createRequestBody(lat),
+                createRequestBody(lng),
+                createRequestBody(kind)
             )
 
-             networkRepository.registrationStore(myStoreInfoRequestModel)
-             // flag가 변경 = 네트워크 통신 종료
+            networkRepository.registrationStore(myStoreInfoRequestModel)
+            // flag가 변경 = 네트워크 통신 종료
             _flag.value = true
+        }catch (e: Exception){
+            Log.d("MyPageViewModel","MyPageViewModel: $e")
+        }
     }
 
     fun updateMyStore(imgBody: MultipartBody.Part? = null, storeName:String, representativeName: String, phone:String,
                         addr: String, lat:String, lng:String, kind:String) = viewModelScope.launch(Dispatchers.IO) {
+        try {
+            MainDataStore.getCrn().collect{ crn ->
 
-        dataStore.getCrn().collect{ crn ->
+                myStoreInfoRequestModel = if (imgBody != null) {
+                    // 매장 정보를 RequestBody Type으로 변환 후
+                    // Retrofit으로 전송할 MyStoreInfoRequestModel 객체 생성
 
-            myStoreInfoRequestModel = if (imgBody != null) {
-                // 매장 정보를 RequestBody Type으로 변환 후
-                // Retrofit으로 전송할 MyStoreInfoRequestModel 객체 생성
-
-                MyStoreInfoRequestModel(
-                    imgBody,
-                    createRequestBody(storeName),
-                    createRequestBody(representativeName),
-                    createRequestBody(crn),
-                    createRequestBody(phone),
-                    createRequestBody(addr),
-                    createRequestBody(lat),
-                    createRequestBody(lng),
-                    createRequestBody(kind)
-                )
-            } else {
-                MyStoreInfoRequestModel(
-                    null,
-                    createRequestBody(storeName),
-                    createRequestBody(representativeName),
-                    createRequestBody(crn),
-                    createRequestBody(phone),
-                    createRequestBody(addr),
-                    createRequestBody(lat),
-                    createRequestBody(lng),
-                    createRequestBody(kind)
-                )
+                    MyStoreInfoRequestModel(
+                        imgBody,
+                        createRequestBody(storeName),
+                        createRequestBody(representativeName),
+                        createRequestBody(crn),
+                        createRequestBody(phone),
+                        createRequestBody(addr),
+                        createRequestBody(lat),
+                        createRequestBody(lng),
+                        createRequestBody(kind)
+                    )
+                } else {
+                    MyStoreInfoRequestModel(
+                        null,
+                        createRequestBody(storeName),
+                        createRequestBody(representativeName),
+                        createRequestBody(crn),
+                        createRequestBody(phone),
+                        createRequestBody(addr),
+                        createRequestBody(lat),
+                        createRequestBody(lng),
+                        createRequestBody(kind)
+                    )
+                }
+                networkRepository.updateStoreInfo(myStoreInfoRequestModel)
+                _flag.value = true
             }
+        }catch (e: Exception){
+            Log.d("MyPageViewModel","MyPageViewModel: $e")
         }
-        networkRepository.updateStoreInfo(myStoreInfoRequestModel)
-        _flag.value = true
     }
 
     // 매장 삭제
     fun deleteMyStore() = viewModelScope.launch(Dispatchers.IO) {
-        dataStore.getCrn().collect{ crn ->
+        MainDataStore.getCrn().collect{ crn ->
             // Local DB 삭제
             dbRepository.deleteStoreInfo(crn)
 
-            dataStore.setCrn("")
+            MainDataStore.setCrn("")
 
             // Remote DB 삭제
             networkRepository.deleteMyStoreInfo(crn)
@@ -184,7 +188,7 @@ class StoreManagementViewModel: ViewModel() {
             val localData = _list.value.toMutableList()
 
             serverData.forEach { serverEntity ->
-                Log.d("MAinViewModelData", "serverEntity : $serverEntity")
+
                 // find
                 // 조건을 만족하는지 여부를 반환하는 람다 함수
                 // element가 특정 조건을 만족하면 true를 반환
@@ -193,7 +197,6 @@ class StoreManagementViewModel: ViewModel() {
                 // crn이 같은 값이 있다면 그에 해당하는 StoreEntity
                 // 즉, Room에 저장된 Data를 가져옵니다.
                 val findEntity = localData.find { it.crn == serverEntity.crn }
-                Log.d("MAinViewModelData", "findEntity : $findEntity")
 
                 val newStoreEntity = StoreEntity(
                     serverEntity.crn,
@@ -229,11 +232,17 @@ class StoreManagementViewModel: ViewModel() {
         }
     }
 
-    fun checkMyCrn(crn: String) = viewModelScope.launch(Dispatchers.IO) {
-        dataStore.getCrn().collect{
+    fun checkMyCrn(crn: String) = viewModelScope.launch {
+        MainDataStore.getCrn().collect{
             _isEqualCrn.value = it == crn
         }
     }
+
+    // 나의 매장 정보
+    var _myModifyStoreInfo: MutableStateFlow<StoreEntity> = MutableStateFlow(createFirstData())
+    val myModifyStoreInfo: StateFlow<StoreEntity> get() = _myModifyStoreInfo
+
+
 
     private fun createFirstData() = StoreEntity("", Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888),
         "", "", "", "", "", "", "")

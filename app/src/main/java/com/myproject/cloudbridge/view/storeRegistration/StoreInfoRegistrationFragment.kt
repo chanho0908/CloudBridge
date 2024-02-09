@@ -7,6 +7,8 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.provider.Settings
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -18,7 +20,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
@@ -69,15 +73,17 @@ class StoreInfoRegistrationFragment : Fragment(), View.OnClickListener {
         initActivityProcess()
 
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.flag.collectLatest{
-                if (it){
-                    val intent = Intent(activity, MyStoreActivity::class.java)
-                    intent.putExtra("FLAG", "REGISTER")
+            repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModel.flag.collectLatest{
+                    if (it){
+                        val intent = Intent(activity, MyStoreActivity::class.java)
+                        intent.putExtra("FLAG", "REGISTER")
 
-                    startActivity(intent)
+                        startActivity(intent)
 
-                    // 부모 액티비티 종료
-                    activity?.finish()
+                        // 부모 액티비티 종료
+                        activity?.finish()
+                    }
                 }
             }
         }
@@ -90,7 +96,7 @@ class StoreInfoRegistrationFragment : Fragment(), View.OnClickListener {
     }
 
     private fun initView(){
-        binding.apply {
+        with(binding) {
             submitButton.setOnClickListener(this@StoreInfoRegistrationFragment)
             btnAddr.setOnClickListener(this@StoreInfoRegistrationFragment)
             imgLoadButton.setOnClickListener(this@StoreInfoRegistrationFragment)
@@ -122,7 +128,6 @@ class StoreInfoRegistrationFragment : Fragment(), View.OnClickListener {
                 if (it.toString().isNotEmpty()) addrLayout.helperText = ""
                 else phoneLayout.helperText = "주소를 입력해 주세요"
             }
-
         }
     }
 
@@ -221,7 +226,7 @@ class StoreInfoRegistrationFragment : Fragment(), View.OnClickListener {
         when(v?.id) {
             R.id.submit_button -> {
 
-                binding.apply {
+                with(binding){
 
                     val storeName = storeNameEdit.text.toString()
                     val crn = args.bno

@@ -11,7 +11,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.myproject.cloudbridge.R
-import com.myproject.cloudbridge.dataStore.MyDataStore
+import com.myproject.cloudbridge.dataStore.MainDataStore
 import com.myproject.cloudbridge.databinding.FragmentMyPageBinding
 import com.myproject.cloudbridge.view.intro.myPage.MyInfoActivity
 import com.myproject.cloudbridge.view.intro.myPage.NotRegistsedStoreActivity
@@ -32,13 +32,13 @@ class MyPageFragment : Fragment(), View.OnClickListener {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        binding.apply {
+        with(binding) {
             btnMyInfo.setOnClickListener(this@MyPageFragment)
             btnMyStoreInfo.setOnClickListener(this@MyPageFragment)
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            MyDataStore().getCrn().collect { crn ->
+            MainDataStore.getCrn().collect { crn ->
                 this@MyPageFragment.crn = crn
             }
         }
@@ -53,7 +53,6 @@ class MyPageFragment : Fragment(), View.OnClickListener {
                 if (crn == ""){
                     startActivity(Intent(requireActivity(), NotRegistsedStoreActivity::class.java))
                 }else{
-                    Log.d("dasd", crn)
                     startActivity(Intent(requireActivity(), MyStoreActivity::class.java))
                 }
             }

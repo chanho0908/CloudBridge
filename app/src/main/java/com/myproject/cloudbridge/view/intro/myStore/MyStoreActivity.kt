@@ -40,7 +40,7 @@ class MyStoreActivity : AppCompatActivity(), View.OnClickListener {
 
         viewModel.getMyStoreInfo()
 
-        binding.apply{
+        with(binding){
             vm = viewModel
             lifecycleOwner = this@MyStoreActivity
 
