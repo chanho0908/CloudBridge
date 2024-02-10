@@ -97,7 +97,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/rubik_bold"
-                            android:text="@{vm.myStore.storeName}"
+                            android:text="@{vm.myStore.ceoName}"
                             android:textColor="@color/shrine_pink_900"
                             android:textSize="18sp" />
 

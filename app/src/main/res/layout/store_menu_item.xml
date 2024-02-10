@@ -13,8 +13,8 @@
 
         <ImageView
             android:id="@+id/menu_imgView"
-            android:layout_width="130dp"
-            android:layout_height="130dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:scaleType="centerCrop"
             android:layout_gravity="center"
             android:src="@drawable/ic_add_photo_48px" />
@@ -24,10 +24,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="사진을 선택해 주세요"
-            android:textSize="12sp"
+            android:fontFamily="@font/binggrae_bold"
+            android:textSize="10sp"
             android:textColor="@color/red"
             android:layout_gravity="center"
-            android:visibility="invisible"
+            android:visibility="visible"
             />
 
         <LinearLayout
@@ -48,6 +49,8 @@
                     android:id="@+id/product_name_edit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/binggrae_bold"
+                    android:textSize="13sp"
                     />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -64,6 +67,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number"
+                    android:fontFamily="@font/binggrae_bold"
+                    android:textSize="13sp"
                     app:helperTextTextColor="@color/red" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -78,24 +83,27 @@
                     android:id="@+id/product_intro_edit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textSize="13sp"
                     android:gravity="top|start"
+                    android:fontFamily="@font/binggrae_bold"
                     android:lines="2"
                     />
             </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/del_button"
             style="@style/Widget.Material3.Button.ElevatedButton.Icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="5dp"
             android:gravity="center"
             android:text="항목 삭제"
-            android:textSize="18sp"
+            android:textSize="15sp"
             android:textStyle="bold"
+            android:fontFamily="@font/binggrae_bold"
             app:icon="@drawable/ic_delete_24px" />
     </LinearLayout>
 </LinearLayout>

@@ -66,7 +66,7 @@ class UpdateFragment1 : Fragment(), View.OnClickListener {
             showSoftInput(requireActivity(), cprEdit)
 
             materialToolbar.setNavigationOnClickListener {
-                startActivity(Intent(requireContext(), MyStoreActivity::class.java))
+                activity?.finish()
             }
 
             cprEdit.addTextChangedListener{

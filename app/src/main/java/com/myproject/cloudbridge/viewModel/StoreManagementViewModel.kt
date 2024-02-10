@@ -1,6 +1,7 @@
 package com.myproject.cloudbridge.viewModel
 
 import android.graphics.Bitmap
+import android.os.Bundle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.myproject.cloudbridge.dataStore.MainDataStore
@@ -13,6 +14,7 @@ import com.myproject.cloudbridge.db.entity.StoreEntity
 import com.myproject.cloudbridge.model.store.AllCrnResponseModel
 import com.myproject.cloudbridge.model.store.CrnStateResponseModel
 import com.myproject.cloudbridge.model.store.CrnStateRequestModel
+import com.myproject.cloudbridge.model.store.ModifyStoreStateSaveModel
 import com.myproject.cloudbridge.model.store.MyStoreInfoRequestModel
 import com.myproject.cloudbridge.repository.DBRepository
 import com.myproject.cloudbridge.repository.NetworkRepository
@@ -26,6 +28,11 @@ class StoreManagementViewModel: ViewModel() {
 
     private val networkRepository = NetworkRepository()
     private val dbRepository = DBRepository()
+
+    // 나의 매장 정보
+    private var _myModifyStoreInfo: MutableStateFlow<ModifyStoreStateSaveModel> = MutableStateFlow(
+        ModifyStoreStateSaveModel("", "", "", "", "",))
+    val myModifyStoreInfo: StateFlow<ModifyStoreStateSaveModel> get() = _myModifyStoreInfo
 
     // 사업자 등록번호 상태 조회
     private val _state = MutableStateFlow(CrnStateResponseModel(0, 0, "", emptyList()))
@@ -238,9 +245,33 @@ class StoreManagementViewModel: ViewModel() {
         }
     }
 
-    // 나의 매장 정보
-    var _myModifyStoreInfo: MutableStateFlow<StoreEntity> = MutableStateFlow(createFirstData())
-    val myModifyStoreInfo: StateFlow<StoreEntity> get() = _myModifyStoreInfo
+    // 사용자 입력 데이터를 업데이트하는 메서드
+    fun updateUserData(modifyData: ModifyStoreStateSaveModel) {
+        _myModifyStoreInfo.value = modifyData
+    }
+
+    // 상태를 Bundle에 저장하는 메서드
+    fun saveState(): Bundle {
+        val bundle = Bundle()
+        bundle.putString("storeName", _myModifyStoreInfo.value.storeName)
+        bundle.putString("ceoName", _myModifyStoreInfo.value.ceoName)
+        bundle.putString("contact", _myModifyStoreInfo.value.contact)
+        bundle.putString("address", _myModifyStoreInfo.value.address)
+        bundle.putString("kind", _myModifyStoreInfo.value.kind)
+        return bundle
+    }
+
+    // Bundle에서 상태를 복원하는 메서드
+    fun restoreState(bundle: Bundle?) {
+        bundle?.let {
+            val storeName = it.getString("storeName", "")
+            val ceoName = it.getString("ceoName", "")
+            val contact = it.getString("contact", "")
+            val address = it.getString("address", "")
+            val kind = it.getString("kind", "")
+            _myModifyStoreInfo.value = ModifyStoreStateSaveModel(storeName, ceoName, contact, address, kind)
+        }
+    }
 
 
 

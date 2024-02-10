@@ -148,8 +148,7 @@ class CPRFragment : Fragment() {
         with(binding) {
             cprLayout.setStartIconDrawable(R.drawable.baseline_priority_high_24)
             cprLayout.setStartIconTintList(setHelperTextRedList(requireContext()))
-            cprLayout.setHelperTextColor(
-                ColorStateList.valueOf(setHelperTextRed(requireContext())))
+            cprLayout.setHelperTextColor(ColorStateList.valueOf(setHelperTextRed(requireContext())))
             cprLayout.boxStrokeColor = setHelperTextRed(requireContext())
             cprLayout.helperText = helperText
             submitBtn.visibility = View.INVISIBLE

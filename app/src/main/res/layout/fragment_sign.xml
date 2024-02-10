@@ -68,6 +68,7 @@
             style="@style/TextAppearance.App.Button"
             android:textColor="@color/shrine_pink_50"
             android:layout_marginTop="12dp"
+            android:fontFamily="@font/binggrae_bold"
             android:textSize="20sp"
             android:text="로그인" />
 

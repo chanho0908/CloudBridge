@@ -32,6 +32,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.snackbar.Snackbar
 import com.myproject.cloudbridge.R
 import com.myproject.cloudbridge.databinding.FragmentUpdate2Binding
+import com.myproject.cloudbridge.model.store.ModifyStoreStateSaveModel
 import com.myproject.cloudbridge.util.Constants
 import com.myproject.cloudbridge.util.Constants.Companion.makeStoreMainImage
 import com.myproject.cloudbridge.util.Constants.Companion.requestPlzInputText
@@ -51,8 +52,39 @@ class UpdateFragment2 : Fragment(), View.OnClickListener {
     private lateinit var launcherForPermission: ActivityResultLauncher<Array<String>>
     private lateinit var launcherForActivity: ActivityResultLauncher<Intent>
 
+    override fun onPause() {
+        super.onPause()
+        Log.d("dasdsa", "onPause")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d("dasdsa", "onStop")
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        val modifyState = viewModel.saveState()
+        outState.putBundle("modifyState", modifyState)
+        Log.d("dasdsa", "onSaveInstanceState")
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        Log.d("dasdsa", "onViewStateRestored")
+
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_update2, container, false)
+        Log.d("dasdsa", "onCreateView")
+        Log.d("dasdsa", savedInstanceState.toString())
+        // 이전 상태 복원
+        if (savedInstanceState != null) {
+            val modifyState = savedInstanceState.getBundle("modifyState")
+            viewModel.restoreState(modifyState)
+            setSavedStateInstance()
+        }
 
         val items = resources.getStringArray(R.array.category)
         val adapter = ArrayAdapter(requireActivity(), R.layout.array_list_item, items)
@@ -69,6 +101,8 @@ class UpdateFragment2 : Fragment(), View.OnClickListener {
         super.onViewCreated(view, savedInstanceState)
         initView()
         initActivityProcess()
+        Log.d("dasdsa", "onViewCreated")
+        Log.d("dasdsa", "$savedInstanceState")
 
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED){
@@ -87,6 +121,7 @@ class UpdateFragment2 : Fragment(), View.OnClickListener {
     }
 
     private fun initView(){
+
         with(binding){
 
             submitButton.setOnClickListener(this@UpdateFragment2)
@@ -165,6 +200,33 @@ class UpdateFragment2 : Fragment(), View.OnClickListener {
                             .into(binding.mainImgView)
                     }
                 }
+        }
+    }
+
+    private fun setSavedStateInstance(){
+        with(binding){
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewModel.myModifyStoreInfo.collectLatest { state ->
+                    Log.d("dasdsa", state.toString())
+                    storeNameEdit.setText(state.storeName)
+                    ceoNameEdit.setText(state.ceoName)
+                    phoneEdit.setText(state.contact)
+                    addrEdit.setText(state.address)
+                }
+            }
+        }
+    }
+
+    private fun getSavedStateInstance(){
+        with(binding){
+            val modifyData = ModifyStoreStateSaveModel(
+                storeNameEdit.text.toString(),
+                ceoNameEdit.text.toString(),
+                phoneEdit.text.toString(),
+                addrEdit.text.toString(),
+                kindEdit.text.toString()
+            )
+            viewModel.updateUserData(modifyData)
         }
     }
 
@@ -272,7 +334,10 @@ class UpdateFragment2 : Fragment(), View.OnClickListener {
             }
 
             R.id.img_load_button -> {
-                if (isAllPermissionsGranted()) accessGallery()
+                if (isAllPermissionsGranted()){
+                    getSavedStateInstance()
+                    accessGallery()
+                }
                 else launcherForPermission.launch(REQUEST_STORAGE_PERMISSIONS)
             }
         }
