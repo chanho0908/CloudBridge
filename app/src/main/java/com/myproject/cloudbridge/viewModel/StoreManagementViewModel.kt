@@ -29,7 +29,7 @@ class StoreManagementViewModel: ViewModel() {
     private val networkRepository = NetworkRepository()
     private val dbRepository = DBRepository()
 
-    // 나의 매장 정보
+    // 나의 매장 수정 정보
     private var _myModifyStoreInfo: MutableStateFlow<ModifyStoreStateSaveModel> = MutableStateFlow(
         ModifyStoreStateSaveModel("", "", "", "", "",))
     val myModifyStoreInfo: StateFlow<ModifyStoreStateSaveModel> get() = _myModifyStoreInfo
@@ -218,11 +218,9 @@ class StoreManagementViewModel: ViewModel() {
                 )
 
                 if (findEntity != null) {
-                    Log.d("MAinViewModelData", "데이터 업데이트 ${newStoreEntity.crn}")
                     // Room 에 이미 있는 데이터면 업데이트
                     dbRepository.updateStoreInfo(newStoreEntity)
                 }else {
-                    Log.d("MAinViewModelData", "데이터 삽입 ${newStoreEntity.crn}")
                     // Room 에 없는 데이터면 추가
                     dbRepository.insertStoreInfo(newStoreEntity)
                 }
@@ -245,12 +243,12 @@ class StoreManagementViewModel: ViewModel() {
         }
     }
 
-    // 사용자 입력 데이터를 업데이트하는 메서드
-    fun updateUserData(modifyData: ModifyStoreStateSaveModel) {
+    // 사용자 입력 데이터 업데이트
+    fun updateSavedData(modifyData: ModifyStoreStateSaveModel) {
         _myModifyStoreInfo.value = modifyData
     }
 
-    // 상태를 Bundle에 저장하는 메서드
+    // 상태를 Bundle에 저장
     fun saveState(): Bundle {
         val bundle = Bundle()
         bundle.putString("storeName", _myModifyStoreInfo.value.storeName)
@@ -258,6 +256,7 @@ class StoreManagementViewModel: ViewModel() {
         bundle.putString("contact", _myModifyStoreInfo.value.contact)
         bundle.putString("address", _myModifyStoreInfo.value.address)
         bundle.putString("kind", _myModifyStoreInfo.value.kind)
+
         return bundle
     }
 

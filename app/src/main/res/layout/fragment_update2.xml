@@ -132,12 +132,13 @@
                     </com.google.android.material.textfield.TextInputLayout>
 
 
-                    <android.widget.Button
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/btnAddr"
                         android:layout_width="match_parent"
                         android:layout_height="60dp"
                         android:layout_marginTop="5dp"
                         android:drawableStart="@drawable/ic_search"
+                        android:backgroundTint="@color/blue_grey"
                         android:gravity="center"
                         android:text="@string/findAddr"
                         android:textStyle="bold" />
@@ -200,19 +201,17 @@
                             android:src="@drawable/insert_photo_256" />
                     </LinearLayout>
 
-                    <android.widget.Button
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/img_load_button"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:backgroundTint="@color/shrine_pink_900"
                         android:text="@string/setStoreImage"
                         android:textColor="@color/white"
                         android:textSize="17sp" />
 
 
-                    <android.widget.Button
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/submit_button"
-                        style="@style/TextAppearance.App.Button"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="25dp"
