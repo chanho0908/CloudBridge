@@ -79,7 +79,6 @@
                 app:boxStrokeColor="@color/blue_grey"
                 app:counterEnabled="true"
                 app:counterMaxLength="10"
-                app:errorEnabled="true"
                 app:helperTextTextColor="@color/orange_red">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -91,15 +90,15 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <android.widget.Button
-                android:id="@+id/searchBtn"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/searchButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="25dp"
                 android:layout_marginBottom="10dp"
                 android:background="@drawable/search_btn"
                 android:text="조회"
-                android:textColor="@color/shrine_pink_900"
+                android:textColor="@color/shrine_pink_50"
                 android:fontFamily="@font/binggrae_bold"
                 android:textSize="20sp"
                 android:textStyle="bold" />

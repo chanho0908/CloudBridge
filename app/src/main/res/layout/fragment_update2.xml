@@ -140,6 +140,7 @@
                         android:drawableStart="@drawable/ic_search"
                         android:backgroundTint="@color/blue_grey"
                         android:gravity="center"
+                        android:textSize="18sp"
                         android:text="@string/findAddr"
                         android:textStyle="bold" />
 

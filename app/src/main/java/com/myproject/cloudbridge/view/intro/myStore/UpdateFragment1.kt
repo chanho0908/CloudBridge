@@ -25,9 +25,10 @@ import com.myproject.cloudbridge.util.Constants.Companion.setHelperTextRed
 import com.myproject.cloudbridge.util.Constants.Companion.setHelperTextRedList
 import com.myproject.cloudbridge.util.Constants.Companion.showSoftInput
 import com.myproject.cloudbridge.viewModel.StoreManagementViewModel
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-class UpdateFragment1 : Fragment(), View.OnClickListener {
+class UpdateFragment1 : Fragment(){
     private var _binding: FragmentUpdate1Binding? = null
     private val binding: FragmentUpdate1Binding
         get() = _binding!!
@@ -38,20 +39,27 @@ class UpdateFragment1 : Fragment(), View.OnClickListener {
         _binding = FragmentUpdate1Binding.inflate(inflater, container, false)
         return binding.root
     }
-
-    private var isEqual = false
+    private var isSearched = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
 
-        viewLifecycleOwner.lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch{
             repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModel.isEqualCrn.collect{
-                    isEqual = it
-                    if(it){
+                // stateFlow 는 같은 값을 emit 하지 않는다.
+                viewModel.isEqualCrn.collectLatest {
+                    if (it == true){
                         val action = UpdateFragment1Directions.actionUpdateFragment1ToUpdateFragment2()
                         Navigation.findNavController(view).navigate(action)
+                    }
+                    else {
+                        Log.d("Sdasd","달라요")
+                        Log.d("Sdasd","$isSearched")
+                        if (isSearched){
+                            Log.d("Sdasd","검색됐어요")
+                            setWarningBox("등록된 정보가 일치 하지 않습니다.")
+                        }
                     }
                 }
             }
@@ -77,10 +85,22 @@ class UpdateFragment1 : Fragment(), View.OnClickListener {
 
             }
 
-            //1208147521
-            searchBtn.setOnClickListener(this@UpdateFragment1)
+            searchButton.setOnClickListener{
+                val input = binding.cprEdit.text.toString()
+
+                if(input.length == 10){
+                    isSearched = true
+                    viewModel.checkMyCompanyRegistrationNumber(input)
+
+                    Log.d("Sdasd","searchButton $isSearched")
+                }else{
+                    setWarningBox("사업자 등록 번호를 입력 해주세요.")
+                }
+            }
+
         }
     }
+
 
     private fun setPermittedBox(){
         with(binding) {
@@ -88,7 +108,6 @@ class UpdateFragment1 : Fragment(), View.OnClickListener {
             cprLayout.setStartIconDrawable(R.drawable.baseline_check_24)
             cprLayout.setStartIconTintList(setHelperTextGreenList(requireContext()))
             cprLayout.boxStrokeColor = setHelperTextGreen(requireContext())
-            searchBtn.isClickable = true
         }
     }
 
@@ -100,21 +119,6 @@ class UpdateFragment1 : Fragment(), View.OnClickListener {
                 ColorStateList.valueOf(setHelperTextRed(requireContext())))
             cprLayout.boxStrokeColor = setHelperTextRed(requireContext())
             cprLayout.helperText = helperText
-            searchBtn.isClickable = false
-        }
-    }
-
-    override fun onClick(v: View?) {
-
-        when(v?.id){
-            R.id.searchBtn -> {
-                val input = binding.cprEdit.text.toString()
-                if(input.length == 10){
-                    viewModel.checkMyCrn(input)
-                    if (!isEqual) setWarningBox("등록된 정보가 일치하지 않습니다.")
-                }
-
-            }
         }
     }
 

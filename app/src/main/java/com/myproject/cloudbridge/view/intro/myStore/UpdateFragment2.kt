@@ -1,44 +1,39 @@
 package com.myproject.cloudbridge.view.intro.myStore
 
-import com.myproject.cloudbridge.util.Constants.Companion.ADDR_RESULT
-import com.myproject.cloudbridge.util.Constants.Companion.REQUEST_STORAGE_PERMISSIONS
+import android.R.attr
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.location.Geocoder
-import android.location.Location
+import android.graphics.ImageDecoder
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import android.provider.Settings
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.Navigation
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
-import com.google.android.material.snackbar.Snackbar
 import com.myproject.cloudbridge.R
 import com.myproject.cloudbridge.databinding.FragmentUpdate2Binding
-import com.myproject.cloudbridge.model.store.ModifyStoreStateSaveModel
+import com.myproject.cloudbridge.util.Constants.Companion.ADDR_RESULT
 import com.myproject.cloudbridge.util.Constants.Companion.makeStoreMainImage
 import com.myproject.cloudbridge.util.Constants.Companion.requestPlzInputText
+import com.myproject.cloudbridge.util.Constants.Companion.translateGeo
+import com.myproject.cloudbridge.util.PermissionManagement
+import com.myproject.cloudbridge.util.PermissionManagement.Companion.REQUEST_IMAGE_PERMISSIONS
 import com.myproject.cloudbridge.view.storeRegistration.AddressActivity
 import com.myproject.cloudbridge.viewModel.StoreManagementViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import java.util.Locale
+
 
 class UpdateFragment2 : Fragment(), View.OnClickListener {
     private var _binding: FragmentUpdate2Binding? = null
@@ -49,13 +44,10 @@ class UpdateFragment2 : Fragment(), View.OnClickListener {
 
     private lateinit var launcherForPermission: ActivityResultLauncher<Array<String>>
     private lateinit var launcherForActivity: ActivityResultLauncher<Intent>
+    private lateinit var pm: PermissionManagement
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_update2, container, false)
-
-        val items = resources.getStringArray(R.array.category)
-        val adapter = ArrayAdapter(requireActivity(), R.layout.array_list_item, items)
-        binding.kindEdit.setAdapter(adapter)
 
         binding.vm = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
@@ -67,9 +59,13 @@ class UpdateFragment2 : Fragment(), View.OnClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
+        initListener()
         initActivityProcess()
 
         viewLifecycleOwner.lifecycleScope.launch {
+            // Activity가 포그라운드에 있을 때만 특정 라이프 사이클이 트리거 되어있을 때 동작
+            // onStop 일 때 Job을 취소
+            // https://kotlinworld.com/228
             repeatOnLifecycle(Lifecycle.State.STARTED){
 
                 viewModel.flag.collectLatest{
@@ -85,34 +81,17 @@ class UpdateFragment2 : Fragment(), View.OnClickListener {
             }
         }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED){
 
-                viewModel.myModifyStoreInfo.collectLatest{
-
-                    if (it.storeName.isNotEmpty()){
-                        setSavedStateInstance(it)
-                    }
-                }
-            }
-        }
-
-    }
-
-    override fun onStart() {
-        super.onStart()
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.myModifyStoreInfo.collectLatest{
-
-                if (it.storeName.isNotEmpty()){
-                    setSavedStateInstance(it)
-                }
-            }
-        }
     }
 
     private fun initView(){
+        pm = PermissionManagement(requireContext())
+        val items = resources.getStringArray(R.array.category)
+        val adapter = ArrayAdapter(requireActivity(), R.layout.array_list_item, items)
+        binding.kindEdit.setAdapter(adapter)
+    }
 
+    private fun initListener(){
         with(binding){
 
             submitButton.setOnClickListener(this@UpdateFragment2)
@@ -143,7 +122,6 @@ class UpdateFragment2 : Fragment(), View.OnClickListener {
                 if (it.toString().isNotEmpty()) addrLayout.helperText = ""
                 else phoneLayout.helperText = "주소를 입력해 주세요"
             }
-
         }
     }
 
@@ -160,12 +138,12 @@ class UpdateFragment2 : Fragment(), View.OnClickListener {
                             // 사용자가 이전에 해당 권한을 거부하고, "다시 묻지 않음"을 선택한 경우에 false를 반환
                             if(!shouldShowRequestPermissionRationale(permission)){
                                 // 사용자에게 왜 권한이 필요한지 설명하는 다이얼로그 또는 메시지를 표시
-                                showPermissionSnackBar()
+                                pm.showPermissionSnackBar(binding.root)
                             }
                         }
                         else -> {
                             // 사용자가 "다시 묻지 않음"을 선택한 경우 처리할 작업
-                            showPermissionSnackBar()
+                            pm.showPermissionSnackBar(binding.root)
                         }
                     }
                 }
@@ -182,37 +160,48 @@ class UpdateFragment2 : Fragment(), View.OnClickListener {
                         binding.addrEdit.setText(data)
                     }
                     else -> {
+                        // ctrl alt l : 줄맞춤
+                        // path나 uri를 삽입
                         imgUrl = callback.data
 
-                        Glide.with(requireContext())
-                            .load(imgUrl)
-                            .fitCenter()
-                            .apply(RequestOptions().override(800, 800))
-                            .into(binding.mainImgView)
+                        // 문제시 앱은 안죽는데 실행이 안된다. -> 메시지를 보내는 등
+                        // require, assert 등등 앱을 죽여 문제를 발생시킴
+                        // 상황에 따른 처리
+                        val context = context ?: return@registerForActivityResult
+
+                        val bitmap = if (Build.VERSION.SDK_INT < 28) {
+                            MediaStore.Images.Media.getBitmap(
+                                context.contentResolver,
+                                imgUrl
+                            )
+                        } else {
+                            val source: ImageDecoder.Source = ImageDecoder.createSource(
+                                requireContext().contentResolver,
+                                imgUrl!!
+                            )
+                            ImageDecoder.decodeBitmap(source)
+                        }
+                        viewModel.changeImage(bitmap)
+
+//                        Glide.with(requireContext())
+//                            .load(imgUrl)
+//                            .fitCenter()
+//                            .apply(RequestOptions().override(800, 800))
+//                            .into(binding.mainImgView)
                     }
                 }
         }
     }
 
-    private fun setSavedStateInstance(state: ModifyStoreStateSaveModel) {
-        with(binding){
-            storeNameEdit.setText(state.storeName)
-            ceoNameEdit.setText(state.ceoName)
-            phoneEdit.setText(state.contact)
-            addrEdit.setText(state.address)
-        }
-    }
-
     private fun getSavedStateInstance(){
         with(binding){
-            val modifyData = ModifyStoreStateSaveModel(
-                storeNameEdit.text.toString(),
-                ceoNameEdit.text.toString(),
-                phoneEdit.text.toString(),
-                addrEdit.text.toString(),
-                kindEdit.text.toString()
+            viewModel.updateSavedData(
+                storeName = storeNameEdit.text.toString(),
+                contact = phoneEdit.text.toString(),
+                ceoName = ceoNameEdit.text.toString(),
+                address = addrEdit.text.toString(),
+                kind = kindEdit.text.toString()
             )
-            viewModel.updateSavedData(modifyData)
         }
     }
 
@@ -223,43 +212,6 @@ class UpdateFragment2 : Fragment(), View.OnClickListener {
             "image/*"
         )
         launcherForActivity.launch(intent)
-    }
-
-    private fun showPermissionSnackBar() {
-        Snackbar.make(binding.root, "권한이 거부 되었습니다. 설정(앱 정보)에서 권한을 확인해 주세요.",
-            Snackbar.LENGTH_INDEFINITE
-        ).setAction("확인"){
-            //설정 화면으로 이동
-            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-            val packageName = requireActivity().packageName
-            val uri = Uri.fromParts("package", packageName, null)
-            intent.data = uri
-            startActivity(intent)
-        }.show()
-    }
-
-    private fun isAllPermissionsGranted(): Boolean = REQUEST_STORAGE_PERMISSIONS.all { permission->
-        ContextCompat.checkSelfPermission(requireContext(), permission) == PackageManager.PERMISSION_GRANTED
-    }
-
-    //주소로 위도,경도 구하는 GeoCoding
-    fun translateGeo(address: String): Location = try {
-        val locations = Geocoder(requireContext(), Locale.KOREA).getFromLocationName(address, 1)
-        if (!locations.isNullOrEmpty()) {
-            Location("").apply {
-                latitude = locations[0].latitude
-                longitude = locations[0].longitude
-            }
-        } else {
-            throw Exception("주소를 변환할 수 없습니다.")
-        }
-    } catch (e: Exception) {
-        e.printStackTrace()
-        // 예외 발생 시 빈 Location 객체를 반환
-        Location("").apply {
-            latitude = 0.0
-            longitude = 0.0
-        }
     }
 
     override fun onClick(v: View?) {
@@ -285,32 +237,31 @@ class UpdateFragment2 : Fragment(), View.OnClickListener {
                         requestPlzInputText("주소를 입력해 주세요", addrLayout)
 
                     } else {
+                        val location = translateGeo(requireContext(), addr)
 
-                            val location = translateGeo(addr)
+                        val lat = location.latitude
+                        val lng = location.longitude
 
-                            val lat = location.latitude
-                            val lng = location.longitude
+                        if(lat == 0.0 || lng == 0.0){
+                            requestPlzInputText("올바른 주소를 입력해 주세요", addrLayout)
+                        }else{
+                            if (imgUrl != null) {
 
-                            if(lat == 0.0 || lng == 0.0){
-                                requestPlzInputText("올바른 주소를 입력해 주세요", addrLayout)
+                                val imgBody = makeStoreMainImage(requireActivity(), imgUrl!!)
+
+                                viewModel.updateMyStore(
+                                    imgBody, storeName, representativeName,
+                                    phone, addr, lat.toString(), lng.toString(), kind
+                                )
                             }else{
-                                if (imgUrl != null) {
 
-                                    val imgBody = makeStoreMainImage(requireActivity(), imgUrl!!)
-
-                                    viewModel.updateMyStore(
-                                        imgBody, storeName, representativeName,
-                                        phone, addr, lat.toString(), lng.toString(), kind
-                                    )
-                                }else{
-
-                                    viewModel.updateMyStore(
-                                        null, storeName, representativeName,
-                                        phone, addr, lat.toString(), lng.toString(), kind
-                                    )
-                                }
+                                viewModel.updateMyStore(
+                                    null, storeName, representativeName,
+                                    phone, addr, lat.toString(), lng.toString(), kind
+                                )
                             }
                         }
+                    }
                     }
 
             }
@@ -320,12 +271,11 @@ class UpdateFragment2 : Fragment(), View.OnClickListener {
             }
 
             R.id.img_load_button -> {
-                if (isAllPermissionsGranted()){
+                if (pm.isImagePermissionGranted()){
                     getSavedStateInstance()
                     accessGallery()
-                }
-                else{
-                    launcherForPermission.launch(REQUEST_STORAGE_PERMISSIONS)
+                }else{
+                    launcherForPermission.launch(REQUEST_IMAGE_PERMISSIONS)
                 }
             }
         }

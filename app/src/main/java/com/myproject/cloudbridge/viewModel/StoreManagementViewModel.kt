@@ -1,6 +1,7 @@
 package com.myproject.cloudbridge.viewModel
 
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -30,9 +31,9 @@ class StoreManagementViewModel: ViewModel() {
     private val dbRepository = DBRepository()
 
     // 나의 매장 수정 정보
-    private var _myModifyStoreInfo: MutableStateFlow<ModifyStoreStateSaveModel> = MutableStateFlow(
-        ModifyStoreStateSaveModel("", "", "", "", "",))
-    val myModifyStoreInfo: StateFlow<ModifyStoreStateSaveModel> get() = _myModifyStoreInfo
+    //private var _myModifyStoreInfo: MutableStateFlow<ModifyStoreStateSaveModel> = MutableStateFlow(
+        //ModifyStoreStateSaveModel("", "", "", "", "",))
+    //val myModifyStoreInfo: StateFlow<ModifyStoreStateSaveModel> get() = _myModifyStoreInfo
 
     // 사업자 등록번호 상태 조회
     private val _state = MutableStateFlow(CrnStateResponseModel(0, 0, "", emptyList()))
@@ -52,13 +53,18 @@ class StoreManagementViewModel: ViewModel() {
     val flag: StateFlow<Boolean> get() = _flag
 
     // 나의 사업자 등록번호와 일치하는가 ?
-
-    private val _isEqualCrn = MutableStateFlow(false)
-    val isEqualCrn: StateFlow<Boolean> get() = _isEqualCrn
+    // false, true 일 경우 타입 추론이 가능하다
+    // null일 경우 타입을 명시해줘야 한다.
+    private val _isEqualCrn = MutableStateFlow<Boolean?>(null)
+    val isEqualCrn: StateFlow<Boolean?> get() = _isEqualCrn
 
     // 모든 매장 정보
     private var _list = MutableStateFlow<List<StoreEntity>>(emptyList())
     val list: StateFlow<List<StoreEntity>> get() = _list
+
+    // 모든 매장 정보
+    private var _myCompanyRegistrationNumber = MutableStateFlow<String>("")
+    val myCompanyRegistrationNumber: StateFlow<String> get() = _myCompanyRegistrationNumber
 
     // 사업자 등록 번호 상태 조회
     fun getCRNState(bno: String) = viewModelScope.launch(Dispatchers.IO) {
@@ -236,42 +242,35 @@ class StoreManagementViewModel: ViewModel() {
             _list.value = storeEntities
         }
     }
-
-    fun checkMyCrn(crn: String) = viewModelScope.launch {
+    fun checkMyCompanyRegistrationNumber(crn: String) = viewModelScope.launch {
         MainDataStore.getCrn().collect{
             _isEqualCrn.value = it == crn
         }
     }
 
-    // 사용자 입력 데이터 업데이트
-    fun updateSavedData(modifyData: ModifyStoreStateSaveModel) {
-        _myModifyStoreInfo.value = modifyData
-    }
-
-    // 상태를 Bundle에 저장
-    fun saveState(): Bundle {
-        val bundle = Bundle()
-        bundle.putString("storeName", _myModifyStoreInfo.value.storeName)
-        bundle.putString("ceoName", _myModifyStoreInfo.value.ceoName)
-        bundle.putString("contact", _myModifyStoreInfo.value.contact)
-        bundle.putString("address", _myModifyStoreInfo.value.address)
-        bundle.putString("kind", _myModifyStoreInfo.value.kind)
-
-        return bundle
-    }
-
-    // Bundle에서 상태를 복원하는 메서드
-    fun restoreState(bundle: Bundle?) {
-        bundle?.let {
-            val storeName = it.getString("storeName", "")
-            val ceoName = it.getString("ceoName", "")
-            val contact = it.getString("contact", "")
-            val address = it.getString("address", "")
-            val kind = it.getString("kind", "")
-            _myModifyStoreInfo.value = ModifyStoreStateSaveModel(storeName, ceoName, contact, address, kind)
+    suspend fun getMySavedCompanyRegistrationNumber() {
+        MainDataStore.getCrn().collect{
+            _myCompanyRegistrationNumber.value = it
         }
     }
 
+    fun changeImage(imgBitmap: Bitmap){
+        _myStore.value = _myStore.value.copy(
+            image = imgBitmap
+        )
+    }
+
+    // 사용자 입력 데이터 업데이트
+    fun updateSavedData(storeName: String, ceoName: String, contact: String, address: String, kind: String) {
+        // 바뀌지 않은 값은 유지
+        _myStore.value = _myStore.value.copy(
+            storeName = storeName,
+            contact = contact,
+            ceoName = ceoName,
+            address = address,
+            kind = kind
+        )
+    }
 
 
     private fun createFirstData() = StoreEntity("", Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888),
