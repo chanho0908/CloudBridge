@@ -22,13 +22,6 @@ class SelectStoreInfoAdapter(private val storeInfoList: List<StoreEntity>):
         val binding = holder.binding
         val bitmap =  storeInfoList[position].image
 
-//        binding.likeBtn.setOnClickListener { v->
-//            itemClick?.onClick(v, position)
-//        }
-
-        //if (selected) binding.likeBtn.setImageResource(R.drawable.like_red)
-        //else binding.likeBtn.setImageResource(R.drawable.like_grey)
-
         binding.storeImg.setImageBitmap(bitmap)
         binding.storenameTv.text = storeInfoList[position].storeName
     }

@@ -91,7 +91,7 @@ class CPRFragment : Fragment() {
                     cprLayout.helperText = ""
                     cprLayout.setStartIconDrawable(R.drawable.baseline_check_24)
                     cprLayout.setStartIconTintList(setHelperTextGreenList())
-                    cprLayout.boxStrokeColor = setHelperTextGreen()!!
+                    cprLayout.boxStrokeColor = setHelperTextGreen()
                 }
 
             }
@@ -144,8 +144,8 @@ class CPRFragment : Fragment() {
 
             cprLayout.setStartIconDrawable(R.drawable.baseline_check_24)
             cprLayout.setStartIconTintList(setHelperTextGreenList())
-            cprLayout.setHelperTextColor(ColorStateList.valueOf(setHelperTextGreen()!!))
-            cprLayout.boxStrokeColor = setHelperTextGreen()!!
+            cprLayout.setHelperTextColor(ColorStateList.valueOf(setHelperTextGreen()))
+            cprLayout.boxStrokeColor = setHelperTextGreen()
             cprLayout.helperText = helperText
             submitBtn.visibility = View.VISIBLE
         }
@@ -155,8 +155,8 @@ class CPRFragment : Fragment() {
         with(binding) {
             cprLayout.setStartIconDrawable(R.drawable.baseline_priority_high_24)
             cprLayout.setStartIconTintList(setHelperTextRedList())
-            cprLayout.setHelperTextColor(ColorStateList.valueOf(setHelperTextRed()!!))
-            cprLayout.boxStrokeColor = setHelperTextRed()!!
+            cprLayout.setHelperTextColor(ColorStateList.valueOf(setHelperTextRed()))
+            cprLayout.boxStrokeColor = setHelperTextRed()
             cprLayout.helperText = helperText
             submitBtn.visibility = View.INVISIBLE
             searchBtn.isClickable = false

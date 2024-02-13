@@ -20,8 +20,8 @@ class App: Application() {
 
         private var instance: App? = null
 
-        fun context(): Context? {
-            return instance?.applicationContext
+        fun context(): Context {
+            return instance?.applicationContext!!
         }
     }
 

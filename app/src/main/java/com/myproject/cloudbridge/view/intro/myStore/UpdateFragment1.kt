@@ -112,9 +112,9 @@ class UpdateFragment1 : Fragment() {
             cprLayout.setStartIconDrawable(R.drawable.baseline_priority_high_24)
             cprLayout.setStartIconTintList(setHelperTextRedList())
             cprLayout.setHelperTextColor(
-                ColorStateList.valueOf(setHelperTextRed()!!)
+                ColorStateList.valueOf(setHelperTextRed())
             )
-            cprLayout.boxStrokeColor = setHelperTextRed()!!
+            cprLayout.boxStrokeColor = setHelperTextRed()
             cprLayout.helperText = helperText
         }
     }

@@ -30,7 +30,7 @@ import java.io.File
 import java.util.Locale
 
 object Utils {
-    private fun getContext(): Context? = App.context()
+    private fun getContext(): Context = App.context()
 
     const val APP_KEY = "c23ff52edb54dc254d59ac484a8d6a2f"
     const val SECRETE_KEY = "t2ivQakqcZ/cvxzekT7Ra9Ja8J1N1lBKu6LqVkijMliEeoD1lLXU0Qei+V9AC8aMbNG+TjVkca70NqFB9akmSg=="
@@ -125,10 +125,10 @@ object Utils {
         v.requestFocus()
     }
 
-    fun setHelperBoxBlack() = getContext()?.let { ContextCompat.getColor(it, R.color.helper_box_color_black) }
-    fun setHelperTextRed(): Int? = getContext()?.let { ContextCompat.getColor(it, R.color.helper_text_color_red) }
-    fun setHelperTextRedList() = getContext()?.let { ContextCompat.getColorStateList(it, R.color.helper_text_color_red) }
-    fun setHelperTextGreen() = getContext()?.let { ContextCompat.getColor(it, R.color.helper_text_color_green) }
-    fun setHelperTextGreenList() = getContext()?.let { ContextCompat.getColorStateList(it, R.color.helper_text_color_green) }
+    fun setHelperBoxBlack() = ContextCompat.getColor(getContext(), R.color.helper_box_color_black)
+    fun setHelperTextRed() = ContextCompat.getColor(getContext(), R.color.helper_text_color_red)
+    fun setHelperTextRedList() = ContextCompat.getColorStateList(getContext(), R.color.helper_text_color_red)
+    fun setHelperTextGreen() = ContextCompat.getColor(getContext(), R.color.helper_text_color_green)
+    fun setHelperTextGreenList() = ContextCompat.getColorStateList(getContext(), R.color.helper_text_color_green)
 
 }

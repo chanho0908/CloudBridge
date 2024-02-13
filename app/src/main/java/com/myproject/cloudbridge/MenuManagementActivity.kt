@@ -28,7 +28,6 @@ class MenuManagementActivity : AppCompatActivity() {
     private val menuList = ArrayList<StoreMenuModel>()
     private var selectedItemPosition: Int? = null
     private val adapter = MenuRvAdapter(
-        this,
         menuList,
         { position ->
             if (isImagePermissionGranted()){ accessGallery(launcherForActivity) }

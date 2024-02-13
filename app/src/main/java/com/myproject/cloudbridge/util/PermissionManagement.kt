@@ -19,7 +19,7 @@ import com.google.android.material.snackbar.Snackbar
 // Manager 패턴
 // 자바에선 괜찮지만 코틀린에서 권장되는 패턴은 아니다.
 object PermissionManagement {
-    private fun getContext(): Context? = App.context()
+    private fun getContext(): Context = App.context()
 
     val REQUEST_IMAGE_PERMISSIONS =
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
@@ -36,7 +36,7 @@ object PermissionManagement {
     )
 
     fun isPermissionGranted(permission: String): Boolean {
-        return getContext()?.let { ContextCompat.checkSelfPermission(it, permission) } == PackageManager.PERMISSION_GRANTED
+        return ContextCompat.checkSelfPermission(getContext(), permission) == PackageManager.PERMISSION_GRANTED
     }
     fun isImagePermissionGranted(): Boolean =
         REQUEST_IMAGE_PERMISSIONS.any { isPermissionGranted(it) }
@@ -50,11 +50,11 @@ object PermissionManagement {
         ).setAction("확인"){
             //설정 화면으로 이동
             val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-            val packageName = getContext()?.packageName
+            val packageName = getContext().packageName
             val uri = Uri.fromParts("package", packageName, null)
             intent.data = uri
 
-            getContext()?.startActivity(intent)
+            getContext().startActivity(intent)
 
         }.show()
     }

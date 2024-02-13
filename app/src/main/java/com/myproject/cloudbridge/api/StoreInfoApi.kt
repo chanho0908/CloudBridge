@@ -39,7 +39,6 @@ interface StoreInfoApi {
     // 서버로부터 받은 응답을 처리하기 위한 Retrofit Call 객체를 반환
     // @Part로 나눠진 파라미터를 하나의 객체로 만들어 전송
 
-
     @GET("/db/storeInfo/{crn}")
     suspend fun getMyStoreInfo(@Path("crn") crn: String): MyStoreInfoResponseModel
 

@@ -27,7 +27,6 @@ class StoreManagementViewModel: ViewModel() {
     private val networkRepository = NetworkRepository()
     private val dbRepository = DBRepository()
 
-
     // 사업자 등록번호 상태 조회
     private val _state = MutableStateFlow(CrnStateResponseModel(0, 0, "", emptyList()))
     val state: StateFlow<CrnStateResponseModel> get() = _state
