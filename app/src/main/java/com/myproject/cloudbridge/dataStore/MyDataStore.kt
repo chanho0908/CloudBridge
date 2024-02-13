@@ -15,10 +15,10 @@ import kotlinx.coroutines.flow.map
 import okio.IOException
 
 object MainDataStore {
-    private fun getContext(): Context = App.context()
+    private fun getContext(): Context? = App.context()
 
-    private val mDataStore: DataStore<Preferences>
-        get() = getContext().dataStore
+    private val mDataStore: DataStore<Preferences>?
+        get() = getContext()?.dataStore
 
     private val Context.dataStore : DataStore<Preferences> by preferencesDataStore("user_pref")
     private val FIRST_FLAG = booleanPreferencesKey("FIRST_FLAG")
@@ -30,13 +30,13 @@ object MainDataStore {
      * DataStore에 값을 작성하기 위해서는 반드시 비동기로 동작해야하기에 suspend를 이용
      * */
     suspend fun setupFirstData(){
-        mDataStore.edit { pref ->
+        mDataStore?.edit { pref ->
             pref[FIRST_FLAG] = true
         }
     }
 
     suspend fun FalseFirstData(){
-        mDataStore.edit { pref ->
+        mDataStore?.edit { pref ->
             pref[FIRST_FLAG] = false
         }
     }
@@ -44,7 +44,7 @@ object MainDataStore {
     suspend fun getFirstFlag(): Boolean{
         var currentValue = false
 
-        mDataStore.edit { pref->
+        mDataStore?.edit { pref->
             currentValue = pref[FIRST_FLAG] ?: false
         }
 
@@ -52,7 +52,7 @@ object MainDataStore {
     }
 
     suspend fun setUserID(userID: String){
-        mDataStore.edit { pref->
+        mDataStore?.edit { pref->
             pref[USER_ID] = userID
         }
     }
@@ -60,7 +60,7 @@ object MainDataStore {
     suspend fun getUserId(): String{
         var userID = ""
 
-        mDataStore.edit { pref->
+        mDataStore?.edit { pref->
             userID = pref[USER_ID] ?: "default Value"
         }
 
@@ -68,21 +68,15 @@ object MainDataStore {
     }
 
     suspend fun setCrn(crn: String){
-        mDataStore.edit {pref->
+        mDataStore?.edit {pref->
             pref[CRN] = crn
         }
     }
 
     // 1.완전히 전역적으로 crn을 등록
-    //
-    fun getCrn(): Flow<String> {
-        return mDataStore.data.map { preferences ->
+    fun getCrn(): Flow<String>? {
+        return mDataStore?.data?.map { preferences ->
             preferences[CRN] ?: ""
-        }.catch { e ->
-            if (e is IOException) {
-                // Handle IOException
-                Log.e("MainDataStore", "IOException: ${e.message}")
-            }
         }
     }
 }

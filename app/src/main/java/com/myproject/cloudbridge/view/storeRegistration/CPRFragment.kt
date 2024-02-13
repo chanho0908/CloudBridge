@@ -1,5 +1,6 @@
 package com.myproject.cloudbridge.view.storeRegistration
 
+import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
@@ -16,12 +17,12 @@ import androidx.navigation.Navigation
 import com.myproject.cloudbridge.R
 import com.myproject.cloudbridge.databinding.FragmentCPRBinding
 import com.myproject.cloudbridge.model.store.AllCrnResponseModel
-import com.myproject.cloudbridge.util.Constants.Companion.hideSoftInput
-import com.myproject.cloudbridge.util.Constants.Companion.setHelperTextGreen
-import com.myproject.cloudbridge.util.Constants.Companion.setHelperTextGreenList
-import com.myproject.cloudbridge.util.Constants.Companion.setHelperTextRed
-import com.myproject.cloudbridge.util.Constants.Companion.setHelperTextRedList
-import com.myproject.cloudbridge.util.Constants.Companion.showSoftInput
+import com.myproject.cloudbridge.util.Utils.hideSoftInput
+import com.myproject.cloudbridge.util.Utils.setHelperTextGreen
+import com.myproject.cloudbridge.util.Utils.setHelperTextGreenList
+import com.myproject.cloudbridge.util.Utils.setHelperTextRed
+import com.myproject.cloudbridge.util.Utils.setHelperTextRedList
+import com.myproject.cloudbridge.util.Utils.showSoftInput
 import com.myproject.cloudbridge.view.intro.myPage.NotRegistsedStoreActivity
 import com.myproject.cloudbridge.viewModel.StoreManagementViewModel
 import kotlinx.coroutines.launch
@@ -33,6 +34,12 @@ class CPRFragment : Fragment() {
     private val viewModel: StoreManagementViewModel by viewModels()
 
     private var result = ""
+    private lateinit var mContext: Context
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mContext = context
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentCPRBinding.inflate(inflater, container, false)
@@ -55,10 +62,10 @@ class CPRFragment : Fragment() {
         with(binding){
 
             cprLayout.requestFocus()
-            showSoftInput(requireActivity(), cprEdit)
+            showSoftInput(cprEdit)
 
             materialToolbar.setNavigationOnClickListener {
-                val intent = Intent(requireContext(), NotRegistsedStoreActivity::class.java)
+                val intent = Intent(mContext, NotRegistsedStoreActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
                 startActivity(intent)
             }
@@ -83,8 +90,8 @@ class CPRFragment : Fragment() {
                     searchBtn.isClickable = true
                     cprLayout.helperText = ""
                     cprLayout.setStartIconDrawable(R.drawable.baseline_check_24)
-                    cprLayout.setStartIconTintList(setHelperTextGreenList(requireContext()))
-                    cprLayout.boxStrokeColor = setHelperTextGreen(requireContext())
+                    cprLayout.setStartIconTintList(setHelperTextGreenList())
+                    cprLayout.boxStrokeColor = setHelperTextGreen()!!
                 }
 
             }
@@ -133,12 +140,12 @@ class CPRFragment : Fragment() {
 
     private fun setPermittedBox(helperText: String){
         with(binding) {
-            hideSoftInput(requireContext(), cprEdit)
+            hideSoftInput(cprEdit)
 
             cprLayout.setStartIconDrawable(R.drawable.baseline_check_24)
-            cprLayout.setStartIconTintList(setHelperTextGreenList(requireContext()))
-            cprLayout.setHelperTextColor(ColorStateList.valueOf(setHelperTextGreen(requireContext())))
-            cprLayout.boxStrokeColor = setHelperTextGreen(requireContext())
+            cprLayout.setStartIconTintList(setHelperTextGreenList())
+            cprLayout.setHelperTextColor(ColorStateList.valueOf(setHelperTextGreen()!!))
+            cprLayout.boxStrokeColor = setHelperTextGreen()!!
             cprLayout.helperText = helperText
             submitBtn.visibility = View.VISIBLE
         }
@@ -147,9 +154,9 @@ class CPRFragment : Fragment() {
     private fun setWarningBox(helperText: String){
         with(binding) {
             cprLayout.setStartIconDrawable(R.drawable.baseline_priority_high_24)
-            cprLayout.setStartIconTintList(setHelperTextRedList(requireContext()))
-            cprLayout.setHelperTextColor(ColorStateList.valueOf(setHelperTextRed(requireContext())))
-            cprLayout.boxStrokeColor = setHelperTextRed(requireContext())
+            cprLayout.setStartIconTintList(setHelperTextRedList())
+            cprLayout.setHelperTextColor(ColorStateList.valueOf(setHelperTextRed()!!))
+            cprLayout.boxStrokeColor = setHelperTextRed()!!
             cprLayout.helperText = helperText
             submitBtn.visibility = View.INVISIBLE
             searchBtn.isClickable = false

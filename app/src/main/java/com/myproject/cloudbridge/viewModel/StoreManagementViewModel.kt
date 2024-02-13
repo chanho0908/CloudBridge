@@ -1,25 +1,22 @@
 package com.myproject.cloudbridge.viewModel
 
 import android.graphics.Bitmap
-import android.net.Uri
-import android.os.Bundle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.myproject.cloudbridge.dataStore.MainDataStore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
-import com.myproject.cloudbridge.util.Constants.Companion.createRequestBody
 import android.util.Log
 import com.myproject.cloudbridge.db.entity.StoreEntity
 import com.myproject.cloudbridge.model.store.AllCrnResponseModel
 import com.myproject.cloudbridge.model.store.CrnStateResponseModel
 import com.myproject.cloudbridge.model.store.CrnStateRequestModel
-import com.myproject.cloudbridge.model.store.ModifyStoreStateSaveModel
 import com.myproject.cloudbridge.model.store.MyStoreInfoRequestModel
 import com.myproject.cloudbridge.repository.DBRepository
 import com.myproject.cloudbridge.repository.NetworkRepository
-import com.myproject.cloudbridge.util.Constants
+import com.myproject.cloudbridge.util.Utils
+import com.myproject.cloudbridge.util.Utils.createRequestBody
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
@@ -30,10 +27,6 @@ class StoreManagementViewModel: ViewModel() {
     private val networkRepository = NetworkRepository()
     private val dbRepository = DBRepository()
 
-    // 나의 매장 수정 정보
-    //private var _myModifyStoreInfo: MutableStateFlow<ModifyStoreStateSaveModel> = MutableStateFlow(
-        //ModifyStoreStateSaveModel("", "", "", "", "",))
-    //val myModifyStoreInfo: StateFlow<ModifyStoreStateSaveModel> get() = _myModifyStoreInfo
 
     // 사업자 등록번호 상태 조회
     private val _state = MutableStateFlow(CrnStateResponseModel(0, 0, "", emptyList()))
@@ -91,12 +84,12 @@ class StoreManagementViewModel: ViewModel() {
     fun getMyStoreInfo() = viewModelScope.launch(Dispatchers.IO) {
         try {
             // 1. Datastore에 저장된 사업자 등록번호를 가지고
-            MainDataStore.getCrn().collect{ crn->
+            MainDataStore.getCrn()?.collect{ crn->
                 // 2. Room에서 나의 매장 정보를 가져와
                 val response = dbRepository.getMyStoreInfo(crn)
 
                 // 3. flow로 반환된 데이터를 StateFlow로 변환해 저장
-                response.stateIn(viewModelScope).collect{ myStore->
+                response?.stateIn(viewModelScope)?.collect{ myStore->
                     _myStore.value = myStore
                 }
             }
@@ -137,7 +130,7 @@ class StoreManagementViewModel: ViewModel() {
     fun updateMyStore(imgBody: MultipartBody.Part? = null, storeName:String, representativeName: String, phone:String,
                         addr: String, lat:String, lng:String, kind:String) = viewModelScope.launch(Dispatchers.IO) {
         try {
-            MainDataStore.getCrn().collect{ crn ->
+            MainDataStore.getCrn()?.collect{ crn ->
 
                 myStoreInfoRequestModel = if (imgBody != null) {
                     // 매장 정보를 RequestBody Type으로 변환 후
@@ -177,7 +170,7 @@ class StoreManagementViewModel: ViewModel() {
 
     // 매장 삭제
     fun deleteMyStore() = viewModelScope.launch(Dispatchers.IO) {
-        MainDataStore.getCrn().collect{ crn ->
+        MainDataStore.getCrn()?.collect{ crn ->
             // Local DB 삭제
             dbRepository.deleteStoreInfo(crn)
 
@@ -213,7 +206,7 @@ class StoreManagementViewModel: ViewModel() {
 
                 val newStoreEntity = StoreEntity(
                     serverEntity.crn,
-                    Constants.Base64ToBitmaps(serverEntity.image),
+                    Utils.Base64ToBitmaps(serverEntity.image),
                     serverEntity.storeName,
                     serverEntity.ceoName,
                     serverEntity.contact,
@@ -238,18 +231,18 @@ class StoreManagementViewModel: ViewModel() {
 
     // 모든 매장 정보
     fun showAllStoreFromRoom() = viewModelScope.launch {
-        dbRepository.getAllStoreInfo().stateIn(viewModelScope).collect{ storeEntities->
+        dbRepository.getAllStoreInfo()?.stateIn(viewModelScope)?.collect{ storeEntities->
             _list.value = storeEntities
         }
     }
     fun checkMyCompanyRegistrationNumber(crn: String) = viewModelScope.launch {
-        MainDataStore.getCrn().collect{
+        MainDataStore.getCrn()?.collect{
             _isEqualCrn.value = it == crn
         }
     }
 
-    suspend fun getMySavedCompanyRegistrationNumber() {
-        MainDataStore.getCrn().collect{
+    fun getMySavedCompanyRegistrationNumber() = viewModelScope.launch  {
+        MainDataStore.getCrn()?.collect{
             _myCompanyRegistrationNumber.value = it
         }
     }
@@ -260,7 +253,7 @@ class StoreManagementViewModel: ViewModel() {
         )
     }
 
-    // 사용자 입력 데이터 업데이트
+    // 사용자 수정 데이터 업데이트
     fun updateSavedData(storeName: String, ceoName: String, contact: String, address: String, kind: String) {
         // 바뀌지 않은 값은 유지
         _myStore.value = _myStore.value.copy(

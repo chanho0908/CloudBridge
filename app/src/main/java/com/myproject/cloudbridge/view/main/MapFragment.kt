@@ -1,10 +1,9 @@
 package com.myproject.cloudbridge.view.main
 
+import android.content.Context
 import android.content.Intent
 import android.location.Location
-import android.net.Uri
 import android.os.Bundle
-import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +14,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.google.android.material.snackbar.Snackbar
 import com.kakao.vectormap.KakaoMap
 import com.kakao.vectormap.KakaoMapReadyCallback
 import com.kakao.vectormap.LatLng
@@ -26,8 +24,10 @@ import com.kakao.vectormap.label.LabelStyle
 import com.kakao.vectormap.label.LabelStyles
 import com.myproject.cloudbridge.R
 import com.myproject.cloudbridge.databinding.FragmentMapBinding
-import com.myproject.cloudbridge.util.Constants.Companion.REQUEST_LOCATION_PERMISSIONS
-import com.myproject.cloudbridge.util.Constants.Companion.isAllPermissionsGranted
+import com.myproject.cloudbridge.util.PermissionManagement
+import com.myproject.cloudbridge.util.PermissionManagement.REQUEST_LOCATION_PERMISSIONS
+import com.myproject.cloudbridge.util.PermissionManagement.isLocationPermissionGranted
+import com.myproject.cloudbridge.util.PermissionManagement.showPermissionSnackBar
 import com.myproject.cloudbridge.util.locationProvider.FusedLocationProvider
 import com.myproject.cloudbridge.util.locationProvider.OnLocationUpdateListener
 import com.myproject.cloudbridge.viewModel.StoreManagementViewModel
@@ -42,12 +42,16 @@ class MapFragment : Fragment(), OnLocationUpdateListener, View.OnClickListener {
     private val binding: FragmentMapBinding get() = _binding!!
     private lateinit var launcherForPermission: ActivityResultLauncher<Array<String>>
     private lateinit var fusedLocationProvider: FusedLocationProvider
-
+    private lateinit var mContext: Context
     private val viewModel: StoreManagementViewModel by viewModels()
 
     // MapCoordType.WGS84 을 나타내는 좌표 클래스
     // WGS84 : 경위도, GPS가 사용하는 좌표계
     private lateinit var latLng: LatLng
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mContext = context
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,12 +65,10 @@ class MapFragment : Fragment(), OnLocationUpdateListener, View.OnClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         initView()
     }
 
     private fun initView(){
-
         launcherForPermission.launch(REQUEST_LOCATION_PERMISSIONS)
 
         CoroutineScope(Dispatchers.Main).launch {
@@ -95,12 +97,12 @@ class MapFragment : Fragment(), OnLocationUpdateListener, View.OnClickListener {
                             // 사용자가 이전에 해당 권한을 거부하고, "다시 묻지 않음"을 선택한 경우에 false를 반환
                             if(!shouldShowRequestPermissionRationale(permission)){
                                 // 사용자에게 왜 권한이 필요한지 설명하는 다이얼로그 또는 메시지를 표시
-                                showPermissionSnackBar()
+                                showPermissionSnackBar(binding.root)
                             }
                         }
                         else -> {
                             // 사용자가 "다시 묻지 않음"을 선택한 경우 처리할 작업
-                            showPermissionSnackBar()
+                            showPermissionSnackBar(binding.root)
                         }
                     }
                 }
@@ -119,18 +121,18 @@ class MapFragment : Fragment(), OnLocationUpdateListener, View.OnClickListener {
                         // 나침반 설정
                         compass?.show()
 
-                        if (!isAllPermissionsGranted(requireContext(), REQUEST_LOCATION_PERMISSIONS)){
+                        if (!isLocationPermissionGranted()){
                             val seoulLatitude = 37.5665
                             val seoulLongitude = 126.9780
                             moveCamera(CameraUpdateFactory.newCenterPosition(LatLng.from(seoulLatitude, seoulLongitude)))
                         }else{
                             moveCamera(CameraUpdateFactory.newCenterPosition(latLng))
                             binding.locationButton.setOnClickListener {
-                                if (isAllPermissionsGranted(requireContext(), REQUEST_LOCATION_PERMISSIONS)){
+                                if (isLocationPermissionGranted()){
                                     fusedLocationProvider.requestLastLocation()
                                     kakaoMap.moveCamera(CameraUpdateFactory.newCenterPosition(latLng))
                                 }else{
-                                    showPermissionSnackBar()
+                                    showPermissionSnackBar(binding.root)
                                 }
                             }
                         }
@@ -140,23 +142,11 @@ class MapFragment : Fragment(), OnLocationUpdateListener, View.OnClickListener {
             }
 
             // MapView : 지도가 보여지는 뷰
-            val view = MapView(requireContext())
+            val view = MapView(mContext)
 
             mapView.addView(view)
             mapView.start(KakaoMapReadyCallback)
         }
-    }
-
-    private fun showPermissionSnackBar() {
-        Snackbar.make(binding.root, "권한이 거부 되었습니다. 설정(앱 정보)에서 권한을 확인해 주세요.",
-            Snackbar.LENGTH_SHORT).setAction("확인"){
-            //설정 화면으로 이동
-            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-            val packageName = requireActivity().packageName
-            val uri = Uri.fromParts("package", packageName, null)
-            intent.data = uri
-            startActivity(intent)
-        }.show()
     }
 
     private fun makeMaker(map: KakaoMap) {
@@ -199,7 +189,7 @@ class MapFragment : Fragment(), OnLocationUpdateListener, View.OnClickListener {
     override fun onClick(v: View?) {
         when(v?.id){
             R.id.search_view -> {
-                startActivity(Intent(requireContext(), SearchActivity::class.java))
+                startActivity(Intent(mContext, SearchActivity::class.java))
             }
         }
     }

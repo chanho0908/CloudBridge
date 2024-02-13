@@ -24,7 +24,7 @@ class UserManagementViewModel: ViewModel() {
     lateinit var userProfile: StateFlow<List<UserEntity>>
 
     fun getUserProfile() = viewModelScope.launch(Dispatchers.IO) {
-        userProfile = dbRepository.getUserData().stateIn(viewModelScope)
+        //userProfile = dbRepository.getUserData().stateIn(viewModelScope)
     }
 
     fun updateUserProfile(userEntity: UserEntity) = viewModelScope.launch(Dispatchers.IO) {

@@ -7,18 +7,18 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
-import android.provider.Settings
 import android.util.Log
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.divider.MaterialDividerItemDecoration
-import com.google.android.material.snackbar.Snackbar
 import com.myproject.cloudbridge.adapter.rv.adapter.MenuRvAdapter
 import com.myproject.cloudbridge.databinding.ActivityMenuManagementBinding
 import com.myproject.cloudbridge.adapter.rv.model.StoreMenuModel
-import com.myproject.cloudbridge.util.Constants.Companion.REQUEST_STORAGE_PERMISSIONS
-import com.myproject.cloudbridge.util.Constants.Companion.isAllPermissionsGranted
+import com.myproject.cloudbridge.util.PermissionManagement.REQUEST_IMAGE_PERMISSIONS
+import com.myproject.cloudbridge.util.PermissionManagement.isImagePermissionGranted
+import com.myproject.cloudbridge.util.PermissionManagement.showPermissionSnackBar
+import com.myproject.cloudbridge.util.Utils.accessGallery
 import java.io.InputStream
 
 class MenuManagementActivity : AppCompatActivity() {
@@ -31,8 +31,8 @@ class MenuManagementActivity : AppCompatActivity() {
         this,
         menuList,
         { position ->
-            if (isAllPermissionsGranted(this, REQUEST_STORAGE_PERMISSIONS)){ accessGallery() }
-            else launcherForPermission.launch(REQUEST_STORAGE_PERMISSIONS)
+            if (isImagePermissionGranted()){ accessGallery(launcherForActivity) }
+            else launcherForPermission.launch(REQUEST_IMAGE_PERMISSIONS)
             selectedItemPosition = position
         },
         { position->
@@ -132,7 +132,7 @@ class MenuManagementActivity : AppCompatActivity() {
         val contracts = ActivityResultContracts.RequestMultiplePermissions()
         launcherForPermission = registerForActivityResult(contracts){ permissions ->
             if (permissions.all { it.value }) {
-                accessGallery()
+                accessGallery(launcherForActivity)
             } else {
                 // 하나 이상의 권한이 거부된 경우 처리할 작업
                 permissions.forEach { (permission, isGranted) ->
@@ -141,12 +141,12 @@ class MenuManagementActivity : AppCompatActivity() {
                             // 사용자가 이전에 해당 권한을 거부하고, "다시 묻지 않음"을 선택한 경우에 false를 반환
                             if(!shouldShowRequestPermissionRationale(permission)){
                                 // 사용자에게 왜 권한이 필요한지 설명하는 다이얼로그 또는 메시지를 표시
-                                showPermissionSnackBar()
+                                showPermissionSnackBar(binding.root)
                             }
                         }
                         else -> {
                             // 사용자가 "다시 묻지 않음"을 선택한 경우 처리할 작업
-                            showPermissionSnackBar()
+                            showPermissionSnackBar(binding.root)
                         }
                     }
                 }
@@ -170,25 +170,6 @@ class MenuManagementActivity : AppCompatActivity() {
         }
     }
 
-    private fun accessGallery(){
-        val intent = Intent(Intent.ACTION_PICK)
-        intent.setDataAndType(
-            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-            "image/*"
-        )
-        launcherForActivity.launch(intent)
-    }
 
 
-    private fun showPermissionSnackBar() {
-        Snackbar.make(binding.root, "권한이 거부 되었습니다. 설정(앱 정보)에서 권한을 확인해 주세요.",
-            Snackbar.LENGTH_INDEFINITE).setAction("확인"){
-            //설정 화면으로 이동
-            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-            val packageName = this.packageName
-            val uri = Uri.fromParts("package", packageName, null)
-            intent.data = uri
-            startActivity(intent)
-        }.show()
-    }
 }

@@ -7,7 +7,6 @@ import retrofit2.http.POST
 import retrofit2.http.Query
 
 interface CompanyRegistrationNumberApi {
-
     @POST("status")
     suspend fun getCRNState(
         @Body requestBody: CrnStateRequestModel,

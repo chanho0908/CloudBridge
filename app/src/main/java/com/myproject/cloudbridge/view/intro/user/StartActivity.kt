@@ -12,7 +12,7 @@ import com.kakao.sdk.common.KakaoSdk
 import com.kakao.sdk.common.model.AuthErrorCause
 import com.kakao.sdk.user.UserApiClient
 import com.myproject.cloudbridge.databinding.ActivityStartBinding
-import com.myproject.cloudbridge.util.Constants
+import com.myproject.cloudbridge.util.Utils
 import com.myproject.cloudbridge.view.main.MainActivity
 import com.myproject.cloudbridge.viewModel.IntroViewModel
 
@@ -93,7 +93,7 @@ class StartActivity : AppCompatActivity() {
             if(first) {
                 // 1. 처음 접속하는 유저가 아니면
                 // 2. 카카오 SDK 초기화
-                KakaoSdk.init(this, Constants.APP_KEY)
+                KakaoSdk.init(this, Utils.APP_KEY)
 
                 // 3. 앱 실행 시 사용자가 앞서 로그인을 통해 발급 받은 토큰이 있는지 확인
                 UserApiClient.instance.accessTokenInfo { tokenInfo, error ->

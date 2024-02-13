@@ -2,18 +2,12 @@ package com.myproject.cloudbridge
 
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
-import android.widget.EditText
-import androidx.annotation.Dimension
-import androidx.core.widget.addTextChangedListener
 import androidx.databinding.BindingAdapter
-import androidx.databinding.InverseBindingAdapter
 import androidx.databinding.InverseBindingListener
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.myproject.cloudbridge.db.entity.StoreEntity
-import com.myproject.cloudbridge.util.Constants.Companion.requestPlzInputText
-import com.myproject.cloudbridge.util.Constants.Companion.setHelperTextRedList
+import com.myproject.cloudbridge.util.Utils.requestPlzInputText
 
 object TestClass: UserModifyInputHandler {
 

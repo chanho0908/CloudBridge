@@ -11,7 +11,7 @@ object MyStoreBindingAdapter {  //static 메소드를 가져야하기 때문에 
 
     // 1) 이미지뷰에 새로운 xml 속성 만들기
     // [속성명 : myStoreImage ]
-    @JvmStatic
+    @JvmStatic // bitmap -> uri
     @BindingAdapter("myStoreImage") //어노테이션 해독기 필요 - 빌드 그래이들에 기능 추가 필요!(kapt)
     fun imageBindingAdapter(view: ImageView, image: Bitmap?){
         if (image != null) {

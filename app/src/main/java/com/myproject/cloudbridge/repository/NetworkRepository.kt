@@ -1,11 +1,11 @@
 package com.myproject.cloudbridge.repository
 
 import android.util.Log
-import com.myproject.cloudbridge.util.Constants.Companion.SECRETE_KEY
 import com.myproject.cloudbridge.model.store.CrnStateRequestModel
 import com.myproject.cloudbridge.model.store.MyStoreInfoRequestModel
 import com.myproject.cloudbridge.retrofit.CRNRetrofitInstance
 import com.myproject.cloudbridge.retrofit.MySQLIStoreInstance
+import com.myproject.cloudbridge.util.Utils.SECRETE_KEY
 
 class NetworkRepository {
     private val storeInfoApiInstance = MySQLIStoreInstance.getStoreApiInstance()
@@ -13,17 +13,18 @@ class NetworkRepository {
     private val crnAPiInstance = CRNRetrofitInstance.getInstance()
 
     // 매장 정보 등록
-    suspend fun registrationStore(store: MyStoreInfoRequestModel){
+    suspend fun registrationStore(store: MyStoreInfoRequestModel) {
         storeInfoApiInstance.storeRegistration(
-                store.storeImage, // 매장 이미지
-                store.storeName,  // 매장명
-                store.ceoName,    // 점주명
-                store.crn,        // 사업자등록번호
-                store.contact,    // 전화번호
-                store.address,    // 주소
-                store.latitude,   // 위도
-                store.longitude,  // 경도
-                store.kind)       // 업종
+            store.storeImage, // 매장 이미지
+            store.storeName,  // 매장명
+            store.ceoName,    // 점주명
+            store.crn,        // 사업자등록번호
+            store.contact,    // 전화번호
+            store.address,    // 주소
+            store.latitude,   // 위도
+            store.longitude,  // 경도
+            store.kind        // 업종
+        )
     }
 
     // 모든 매장의 정보 가져오기
@@ -36,8 +37,7 @@ class NetworkRepository {
     suspend fun getCompanyRegistrationNumber() = storeInfoApiInstance.getCompanyRegistrationNumber()
 
     // 매장 업데이트
-    suspend fun updateStoreInfo(store: MyStoreInfoRequestModel){
-        Log.d("dasdsds", "NetworkRepository")
+    suspend fun updateStoreInfo(store: MyStoreInfoRequestModel) {
         storeInfoApiInstance.updateStoreInfo(
             store.storeImage,
             store.storeName,
@@ -56,7 +56,8 @@ class NetworkRepository {
     suspend fun deleteMyStoreInfo(crn: String) = storeInfoApiInstance.deleteMyStoreInfo(crn)
 
     // 사업자 등록번호 API 호출
-    suspend fun getCRNState(bno: CrnStateRequestModel) = crnAPiInstance.getCRNState(bno, SECRETE_KEY)
+    suspend fun getCRNState(bno: CrnStateRequestModel) =
+        crnAPiInstance.getCRNState(bno, SECRETE_KEY)
 
 
 }

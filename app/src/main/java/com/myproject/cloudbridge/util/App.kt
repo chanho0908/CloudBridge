@@ -7,7 +7,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
 import com.kakao.sdk.common.KakaoSdk
-import com.myproject.cloudbridge.util.Constants.Companion.APP_KEY
+import com.myproject.cloudbridge.util.Utils.APP_KEY
 
 class App: Application() {
     init {
@@ -18,10 +18,10 @@ class App: Application() {
         lateinit var db: FirebaseFirestore
         lateinit var storage: FirebaseStorage
 
-        private var instance: App?= null
+        private var instance: App? = null
 
-        fun context(): Context {
-            return instance!!.applicationContext
+        fun context(): Context? {
+            return instance?.applicationContext
         }
     }
 

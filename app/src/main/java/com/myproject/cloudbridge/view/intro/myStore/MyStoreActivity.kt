@@ -22,36 +22,43 @@ class MyStoreActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_my_store)
+        binding = DataBindingUtil.setContentView<ActivityMyStoreBinding>(
+            this,
+            R.layout.activity_my_store
+        ).apply {
+            vm = viewModel
+            lifecycleOwner = this@MyStoreActivity
+        }
 
         initView()
-
-        lifecycleScope.launch {
-            observeDeleteStoreComplete()
-        }
+        initToolbar()
     }
 
-    private fun initView(){
-
-        // 기본값이 null이라 형변환 해줘야함
-        val flag = intent.getStringExtra("FLAG").toString()
-
-        initToolbar(flag)
+    private fun initView() {
 
         viewModel.getMyStoreInfo()
 
-        with(binding){
-            vm = viewModel
-            lifecycleOwner = this@MyStoreActivity
-
+        with(binding) {
             btnUpdate.setOnClickListener(this@MyStoreActivity)
             btnDelete.setOnClickListener(this@MyStoreActivity)
         }
+
+        lifecycleScope.launch {
+            viewModel.flag.collectLatest {
+                if (it) {
+                    val intent = Intent(this@MyStoreActivity, NotRegistsedStoreActivity::class.java)
+                    intent.putExtra("FLAG", "DELETE")
+                    startActivity(intent)
+                    finish()
+                }
+            }
+        }
     }
 
-    private fun initToolbar(flag: String){
+    private fun initToolbar() {
+        val flag = intent.getStringExtra("FLAG").toString()
 
-        if (flag == "REGISTER"){
+        if (flag == "REGISTER") {
             viewModel.fromServerToRoomSetAllStoreList()
             binding.materialToolbar.setNavigationOnClickListener {
                 val intent = Intent(this@MyStoreActivity, MainActivity::class.java)
@@ -59,25 +66,14 @@ class MyStoreActivity : AppCompatActivity(), View.OnClickListener {
                 startActivity(intent)
                 finish()
             }
-        }else{
+        } else {
             binding.materialToolbar.setNavigationOnClickListener {
                 finish()
             }
         }
     }
 
-    private suspend fun observeDeleteStoreComplete(){
-        viewModel.flag.collectLatest {
-            if (it){
-                val intent = Intent(this@MyStoreActivity, NotRegistsedStoreActivity::class.java)
-                intent.putExtra("FLAG", "DELETE")
-                startActivity(intent)
-                finish()
-            }
-        }
-    }
-
-    private fun showDialog(){
+    private fun showDialog() {
         val builder = MaterialAlertDialogBuilder(this@MyStoreActivity).apply {
             setTitle("매장 삭제")
             setMessage("매장을 삭제 하시겠습니까?")
@@ -92,7 +88,7 @@ class MyStoreActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     override fun onClick(v: View?) {
-        when(v?.id){
+        when (v?.id) {
             R.id.btnUpdate -> {
                 startActivity(Intent(this@MyStoreActivity, StoreUpdateActivity::class.java))
             }

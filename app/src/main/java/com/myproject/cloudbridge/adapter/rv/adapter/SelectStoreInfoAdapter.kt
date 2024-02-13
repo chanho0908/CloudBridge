@@ -10,12 +10,6 @@ import com.myproject.cloudbridge.db.entity.StoreEntity
 class SelectStoreInfoAdapter(private val storeInfoList: List<StoreEntity>):
     RecyclerView.Adapter<SelectStoreInfoAdapter.MainViewHolder>() {
 
-    interface ItemClick{
-        fun onClick(v: View, position: Int)
-    }
-
-    var itemClick: ItemClick?= null
-
     override fun getItemCount(): Int = storeInfoList.size
 
     class MainViewHolder(val binding: StoreItemBinding): RecyclerView.ViewHolder(binding.root)

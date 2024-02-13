@@ -19,6 +19,7 @@ import com.google.android.material.snackbar.Snackbar
 // Manager 패턴
 // 자바에선 괜찮지만 코틀린에서 권장되는 패턴은 아니다.
 object PermissionManagement {
+    private fun getContext(): Context? = App.context()
 
     val REQUEST_IMAGE_PERMISSIONS =
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
@@ -34,27 +35,26 @@ object PermissionManagement {
         Manifest.permission.ACCESS_COARSE_LOCATION,
     )
 
-
-    fun isPermissionGranted(context: Context, permission: String): Boolean {
-        return ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED
+    fun isPermissionGranted(permission: String): Boolean {
+        return getContext()?.let { ContextCompat.checkSelfPermission(it, permission) } == PackageManager.PERMISSION_GRANTED
     }
-    fun isImagePermissionGranted(context: Context): Boolean =
-        REQUEST_IMAGE_PERMISSIONS.any { isPermissionGranted(context, it) }
+    fun isImagePermissionGranted(): Boolean =
+        REQUEST_IMAGE_PERMISSIONS.any { isPermissionGranted(it) }
 
-    fun isLocationPermissionGranted(context: Context): Boolean =
-        REQUEST_LOCATION_PERMISSIONS.any { isPermissionGranted(context, it) }
+    fun isLocationPermissionGranted(): Boolean =
+        REQUEST_LOCATION_PERMISSIONS.any { isPermissionGranted(it) }
 
-    fun showPermissionSnackBar(context: Context, view: View) {
+    fun showPermissionSnackBar(view: View) {
         Snackbar.make(view, "권한이 거부 되었습니다. 설정(앱 정보)에서 권한을 확인해 주세요.",
-            Snackbar.LENGTH_INDEFINITE
+            Snackbar.LENGTH_SHORT
         ).setAction("확인"){
             //설정 화면으로 이동
             val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-            val packageName = context.packageName
+            val packageName = getContext()?.packageName
             val uri = Uri.fromParts("package", packageName, null)
             intent.data = uri
 
-            context.startActivity(intent)
+            getContext()?.startActivity(intent)
 
         }.show()
     }
