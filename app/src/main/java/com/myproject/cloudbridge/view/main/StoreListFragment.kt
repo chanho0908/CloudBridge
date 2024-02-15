@@ -22,12 +22,7 @@ class StoreListFragment : Fragment() {
     private var _binding: FragmentStoreListBinding ?= null
     private val binding get() = _binding!!
     private val viewModel: StoreManagementViewModel by viewModels()
-    private lateinit var mContext: Context
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        mContext = context
-    }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentStoreListBinding.inflate(inflater, container, false)
         return binding.root
@@ -53,7 +48,7 @@ class StoreListFragment : Fragment() {
                 viewModel.list.collect{ list->
                     val adapter = SelectStoreInfoAdapter(list)
 
-                    binding.rv.layoutManager = LinearLayoutManager(mContext)
+                    binding.rv.layoutManager = LinearLayoutManager(requireContext())
                     binding.rv.adapter =  adapter
                 }
             }
@@ -67,7 +62,7 @@ class StoreListFragment : Fragment() {
             setOnMenuItemClickListener{
                 when(it.itemId){
                     R.id.search -> {
-                        startActivity(Intent(mContext, SearchActivity::class.java))
+                        startActivity(Intent(requireContext(), SearchActivity::class.java))
                         true
                     }
                     else -> true

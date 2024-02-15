@@ -5,11 +5,7 @@
         <item>베이커리</item>
         <item>편의점</item>
     </string-array>
-    <string name="cpr_is_10">사업자 등록번호는 10자리 입니다.</string>
     <string name="plz_enter_cpr">사업자 등록번호를 입력해 주세요.</string>
-    <string name="useable_cpr">사용 가능한 사업자 등록번호 입니다.</string>
-    <string name="not_registed_cpr">국세청에 등록되지 않은 사업자등록번호입니다.</string>
-    <string name="used_registed_cpr">이미 사용 중인 사업자등록번호입니다.</string>
     <string name="is_differ_cpr">등록된 정보와 일치하지 않습니다.</string>
     <string name="crn_max_10">10</string>
     <!-- TODO: Remove or change this placeholder text -->

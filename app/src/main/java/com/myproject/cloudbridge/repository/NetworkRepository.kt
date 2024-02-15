@@ -1,11 +1,10 @@
 package com.myproject.cloudbridge.repository
 
-import android.util.Log
 import com.myproject.cloudbridge.model.store.CrnStateRequestModel
 import com.myproject.cloudbridge.model.store.MyStoreInfoRequestModel
 import com.myproject.cloudbridge.retrofit.CRNRetrofitInstance
 import com.myproject.cloudbridge.retrofit.MySQLIStoreInstance
-import com.myproject.cloudbridge.util.Utils.SECRETE_KEY
+import com.myproject.cloudbridge.util.singleton.Utils.SECRETE_KEY
 
 class NetworkRepository {
     private val storeInfoApiInstance = MySQLIStoreInstance.getStoreApiInstance()
@@ -26,6 +25,8 @@ class NetworkRepository {
             store.kind        // 업종
         )
     }
+
+    suspend fun getMyStoreMainImage(imagePath: String) = storeInfoApiInstance.getStoreMainImage(imagePath)
 
     // 모든 매장의 정보 가져오기
     suspend fun getAllStoreInfo() = storeInfoApiInstance.getAllStoreInfo()

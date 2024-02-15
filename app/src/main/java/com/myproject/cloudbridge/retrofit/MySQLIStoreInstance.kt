@@ -4,8 +4,7 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.myproject.cloudbridge.api.StoreInfoApi
 import com.myproject.cloudbridge.api.StoreMenuApi
-import com.myproject.cloudbridge.util.MyOkHttpClient
-import okhttp3.RequestBody
+import com.myproject.cloudbridge.util.singleton.MyOkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 

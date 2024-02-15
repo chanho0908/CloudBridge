@@ -9,7 +9,7 @@ import com.myproject.cloudbridge.db.dao.StoreDao
 import com.myproject.cloudbridge.db.entity.StoreEntity
 import com.myproject.cloudbridge.db.typeConverter.ImageTypeConverter
 
-@Database(entities = [StoreEntity::class], version=1)
+@Database(entities = [StoreEntity::class], version=2)
 @TypeConverters(ImageTypeConverter::class)
 abstract class MainDatabase: RoomDatabase() {
     abstract fun storeDao(): StoreDao
@@ -25,7 +25,9 @@ abstract class MainDatabase: RoomDatabase() {
                     context.applicationContext,
                     MainDatabase::class.java,
                     "main_database"
-                ).build()
+                )
+                    .fallbackToDestructiveMigration()
+                    .build()
                 INSTANCE = instance
                 instance
             }

@@ -1,9 +1,7 @@
 package com.myproject.cloudbridge.view.intro.myStore
 
-
 import android.content.res.ColorStateList
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -16,11 +14,11 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.Navigation
 import com.myproject.cloudbridge.R
 import com.myproject.cloudbridge.databinding.FragmentUpdate1Binding
-import com.myproject.cloudbridge.util.Utils.setHelperTextGreen
-import com.myproject.cloudbridge.util.Utils.setHelperTextGreenList
-import com.myproject.cloudbridge.util.Utils.setHelperTextRed
-import com.myproject.cloudbridge.util.Utils.setHelperTextRedList
-import com.myproject.cloudbridge.util.Utils.showSoftInput
+import com.myproject.cloudbridge.util.management.setHelperTextGreen
+import com.myproject.cloudbridge.util.management.setHelperTextGreenList
+import com.myproject.cloudbridge.util.management.setHelperTextRed
+import com.myproject.cloudbridge.util.management.setHelperTextRedList
+import com.myproject.cloudbridge.util.singleton.Utils.showSoftInput
 import com.myproject.cloudbridge.viewModel.StoreManagementViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -102,19 +100,19 @@ class UpdateFragment1 : Fragment() {
         with(binding) {
             cprLayout.helperText = ""
             cprLayout.setStartIconDrawable(R.drawable.baseline_check_24)
-            cprLayout.setStartIconTintList(setHelperTextGreenList())
-            cprLayout.boxStrokeColor = setHelperTextGreen()!!
+            cprLayout.setStartIconTintList(requireContext().setHelperTextGreenList())
+            cprLayout.boxStrokeColor = requireContext().setHelperTextGreen()
         }
     }
 
     private fun setWarningBox(helperText: String) {
         with(binding) {
             cprLayout.setStartIconDrawable(R.drawable.baseline_priority_high_24)
-            cprLayout.setStartIconTintList(setHelperTextRedList())
+            cprLayout.setStartIconTintList(requireContext().setHelperTextRedList())
             cprLayout.setHelperTextColor(
-                ColorStateList.valueOf(setHelperTextRed())
+                ColorStateList.valueOf(requireContext().setHelperTextRed())
             )
-            cprLayout.boxStrokeColor = setHelperTextRed()
+            cprLayout.boxStrokeColor = requireContext().setHelperTextRed()
             cprLayout.helperText = helperText
         }
     }

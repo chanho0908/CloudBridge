@@ -13,11 +13,15 @@ import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Part
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface StoreInfoApi {
 
     @GET("/db/storeInfo")
     suspend fun getAllStoreInfo(): List<MyStoreInfoResponseModel>
+
+    @GET("/db/my-store-main-image")
+    suspend fun getStoreMainImage(@Query("imagePath") imagePath: String): String
 
     /**
      * Multipart : 이미지, 오디오, 비디오 등과 같은 여러 종류의 데이터를 서버에 업로드하거나 전송할 때 사용

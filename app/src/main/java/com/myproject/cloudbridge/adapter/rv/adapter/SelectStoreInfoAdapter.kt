@@ -1,5 +1,6 @@
 package com.myproject.cloudbridge.adapter.rv.adapter
 
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,9 +21,9 @@ class SelectStoreInfoAdapter(private val storeInfoList: List<StoreEntity>):
 
     override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
         val binding = holder.binding
-        val bitmap =  storeInfoList[position].image
+        val imagePath =  storeInfoList[position].imagePath
 
-        binding.storeImg.setImageBitmap(bitmap)
+        binding.storeImg.setImageURI(Uri.parse(imagePath))
         binding.storenameTv.text = storeInfoList[position].storeName
     }
 

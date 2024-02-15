@@ -1,4 +1,4 @@
-package com.myproject.cloudbridge.util
+package com.myproject.cloudbridge.util.singleton
 import android.util.Log
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient

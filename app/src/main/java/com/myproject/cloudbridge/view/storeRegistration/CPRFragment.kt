@@ -1,6 +1,5 @@
 package com.myproject.cloudbridge.view.storeRegistration
 
-import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Bundle
@@ -17,12 +16,12 @@ import androidx.navigation.Navigation
 import com.myproject.cloudbridge.R
 import com.myproject.cloudbridge.databinding.FragmentCPRBinding
 import com.myproject.cloudbridge.model.store.AllCrnResponseModel
-import com.myproject.cloudbridge.util.Utils.hideSoftInput
-import com.myproject.cloudbridge.util.Utils.setHelperTextGreen
-import com.myproject.cloudbridge.util.Utils.setHelperTextGreenList
-import com.myproject.cloudbridge.util.Utils.setHelperTextRed
-import com.myproject.cloudbridge.util.Utils.setHelperTextRedList
-import com.myproject.cloudbridge.util.Utils.showSoftInput
+import com.myproject.cloudbridge.util.singleton.Utils.hideSoftInput
+import com.myproject.cloudbridge.util.singleton.Utils.showSoftInput
+import com.myproject.cloudbridge.util.management.setHelperTextGreen
+import com.myproject.cloudbridge.util.management.setHelperTextGreenList
+import com.myproject.cloudbridge.util.management.setHelperTextRed
+import com.myproject.cloudbridge.util.management.setHelperTextRedList
 import com.myproject.cloudbridge.view.intro.myPage.NotRegistsedStoreActivity
 import com.myproject.cloudbridge.viewModel.StoreManagementViewModel
 import kotlinx.coroutines.launch
@@ -34,12 +33,7 @@ class CPRFragment : Fragment() {
     private val viewModel: StoreManagementViewModel by viewModels()
 
     private var result = ""
-    private lateinit var mContext: Context
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        mContext = context
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentCPRBinding.inflate(inflater, container, false)
@@ -53,11 +47,6 @@ class CPRFragment : Fragment() {
     }
 
     private fun initView(){
-        val notRegisterCrn = resources.getString(R.string.not_registed_cpr)
-        val usedRegisterCrn = resources.getString(R.string.used_registed_cpr)
-        val useAbleCrn = resources.getString(R.string.useable_cpr)
-        val cprIs10 = resources.getString(R.string.cpr_is_10)
-        val crnMax10 = resources.getString(R.string.crn_max_10).toInt()
 
         with(binding){
 
@@ -65,7 +54,7 @@ class CPRFragment : Fragment() {
             showSoftInput(cprEdit)
 
             materialToolbar.setNavigationOnClickListener {
-                val intent = Intent(mContext, NotRegistsedStoreActivity::class.java)
+                val intent = Intent(requireContext(), NotRegistsedStoreActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
                 startActivity(intent)
             }
@@ -80,7 +69,7 @@ class CPRFragment : Fragment() {
             cprEdit.addTextChangedListener{
                 val input = it.toString()
 
-                if (input.length < crnMax10 || input.length > crnMax10) setWarningBox(cprIs10)
+                if (input.length < 10 || input.length > 10) setWarningBox("사업자 등록 번호는 10자리 입니다.")
 
                 // 1. 사용자가 입력한 사업자 등록 번호가 10글자면
                 if (input.length == 10){
@@ -90,8 +79,8 @@ class CPRFragment : Fragment() {
                     searchBtn.isClickable = true
                     cprLayout.helperText = ""
                     cprLayout.setStartIconDrawable(R.drawable.baseline_check_24)
-                    cprLayout.setStartIconTintList(setHelperTextGreenList())
-                    cprLayout.boxStrokeColor = setHelperTextGreen()
+                    cprLayout.setStartIconTintList(requireContext().setHelperTextGreenList())
+                    cprLayout.boxStrokeColor = requireContext().setHelperTextGreen()
                 }
 
             }
@@ -121,13 +110,13 @@ class CPRFragment : Fragment() {
                             viewModel.crnList.collect{ crnList ->
                                 // 이미 사용 중인 사업자 등록 번호일 때
                                 if(crnList.contains(AllCrnResponseModel(cprEdit.text.toString()))){
-                                    setWarningBox(usedRegisterCrn)
+                                    setWarningBox("이미 사용 중인 사업자 등록 번호 입니다.")
                                     // 존재 하지 않는 사업자 등록 번호일 때
-                                }else if (result == notRegisterCrn) {
-                                    setWarningBox(notRegisterCrn)
+                                }else if (result == "국세청에 등록 되지 않은 사업자 등록 번호 입니다.") {
+                                    setWarningBox("국세청에 등록 되지 않은 사업자 등록 번호입 니다.")
                                     // 사용 가능한 사업자 등록 번호일 때
                                 } else {
-                                    setPermittedBox(useAbleCrn)
+                                    setPermittedBox()
                                 }
                             }
                         }
@@ -138,15 +127,14 @@ class CPRFragment : Fragment() {
         }
     }
 
-    private fun setPermittedBox(helperText: String){
+    private fun setPermittedBox(){
         with(binding) {
             hideSoftInput(cprEdit)
-
             cprLayout.setStartIconDrawable(R.drawable.baseline_check_24)
-            cprLayout.setStartIconTintList(setHelperTextGreenList())
-            cprLayout.setHelperTextColor(ColorStateList.valueOf(setHelperTextGreen()))
-            cprLayout.boxStrokeColor = setHelperTextGreen()
-            cprLayout.helperText = helperText
+            cprLayout.setStartIconTintList(requireContext().setHelperTextGreenList())
+            cprLayout.setHelperTextColor(ColorStateList.valueOf(requireContext().setHelperTextGreen()))
+            cprLayout.boxStrokeColor = requireContext().setHelperTextGreen()
+            cprLayout.helperText = "사용 가능한 사업자 등록 번호 입니다."
             submitBtn.visibility = View.VISIBLE
         }
     }
@@ -154,9 +142,9 @@ class CPRFragment : Fragment() {
     private fun setWarningBox(helperText: String){
         with(binding) {
             cprLayout.setStartIconDrawable(R.drawable.baseline_priority_high_24)
-            cprLayout.setStartIconTintList(setHelperTextRedList())
-            cprLayout.setHelperTextColor(ColorStateList.valueOf(setHelperTextRed()))
-            cprLayout.boxStrokeColor = setHelperTextRed()
+            cprLayout.setStartIconTintList(requireContext().setHelperTextRedList())
+            cprLayout.setHelperTextColor(ColorStateList.valueOf(requireContext().setHelperTextRed()))
+            cprLayout.boxStrokeColor = requireContext().setHelperTextRed()
             cprLayout.helperText = helperText
             submitBtn.visibility = View.INVISIBLE
             searchBtn.isClickable = false

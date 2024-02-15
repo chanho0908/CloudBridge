@@ -1,5 +1,6 @@
-package com.myproject.cloudbridge.util
+package com.myproject.cloudbridge.util.singleton
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.database.Cursor
@@ -8,15 +9,15 @@ import android.graphics.BitmapFactory
 import android.location.Geocoder
 import android.location.Location
 import android.net.Uri
+import android.os.Build
 import android.provider.MediaStore
 import android.util.Base64
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.result.ActivityResultLauncher
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import com.myproject.cloudbridge.R
+import com.myproject.cloudbridge.util.App
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -30,6 +31,20 @@ import java.io.File
 import java.util.Locale
 
 object Utils {
+
+    val REQUEST_IMAGE_PERMISSIONS =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            arrayOf(Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED)
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            arrayOf(Manifest.permission.READ_MEDIA_IMAGES)
+        } else {
+            arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        }
+
+    val REQUEST_LOCATION_PERMISSIONS = arrayOf(
+        Manifest.permission.ACCESS_FINE_LOCATION,
+        Manifest.permission.ACCESS_COARSE_LOCATION,
+    )
     private fun getContext(): Context = App.context()
 
     const val APP_KEY = "c23ff52edb54dc254d59ac484a8d6a2f"
@@ -37,7 +52,7 @@ object Utils {
     // 갤러리 권한 요청
     const val ADDR_RESULT = 1002
 
-    fun Base64ToBitmaps(image: String): Bitmap {
+    fun Base64ToBitmaps(image: String?): Bitmap {
         val encodedByte: ByteArray = Base64.decode(image, Base64.DEFAULT);
         return BitmapFactory.decodeByteArray(encodedByte, 0, encodedByte.size)
     }
@@ -47,20 +62,21 @@ object Utils {
     }
 
     // 절대경로 변환
-    fun absolutelyPath(path: Uri): String {
+    fun absolutelyPath(path: Uri): String? {
         val proj: Array<String> = arrayOf(MediaStore.Images.Media.DATA)
-        val c: Cursor? = getContext()?.contentResolver?.query(path!!, proj, null, null, null)
+        val c: Cursor? = getContext().contentResolver?.query(path, proj, null, null, null)
         val index = c?.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
         c?.moveToFirst()
 
-        val result = c?.getString(index!!)
+        val result = index?.let { c.getString(it) }
 
-        return result!!
+        c?.close()
+        return result
     }
 
-    fun makeStoreMainImage(imgUri: Uri): MultipartBody.Part {
+    fun makeStoreMainImage(imgUri: Uri?): MultipartBody.Part {
         // 이미지 절대경로 반환 후 파일 객체 생성
-        val file = File(absolutelyPath(imgUri))
+        val file = File(imgUri?.let { absolutelyPath(it) })
 
         // 파일 객체를 RequestBody Type으로 변환
         val requestFile = file.asRequestBody("image/*".toMediaTypeOrNull())
@@ -80,7 +96,7 @@ object Utils {
 
     //주소로 위도,경도 구하는 GeoCoding
     fun translateGeo(address: String): Location = try {
-        val locations = getContext()?.let { Geocoder(it, Locale.KOREA).getFromLocationName(address, 1) }
+        val locations = getContext().let { Geocoder(it, Locale.KOREA).getFromLocationName(address, 1) }
 
         if (!locations.isNullOrEmpty()) {
             Location("").apply {
@@ -107,7 +123,7 @@ object Utils {
     fun showSoftInput(focusView: TextInputEditText) {
         CoroutineScope(Dispatchers.IO).launch {
             delay(100)
-            val inputMethodManager = getContext()?.getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager
+            val inputMethodManager = getContext().getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager
             inputMethodManager.showSoftInput(focusView, 0)
         }
     }
@@ -115,7 +131,7 @@ object Utils {
     fun hideSoftInput(focusView: TextInputEditText) {
         CoroutineScope(Dispatchers.IO).launch {
             delay(100)
-            val inputMethodManager = getContext()?.getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager
+            val inputMethodManager = getContext().getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager
             inputMethodManager.hideSoftInputFromWindow(focusView.windowToken, 0)
         }
     }
@@ -124,11 +140,5 @@ object Utils {
         v.helperText = msg
         v.requestFocus()
     }
-
-    fun setHelperBoxBlack() = ContextCompat.getColor(getContext(), R.color.helper_box_color_black)
-    fun setHelperTextRed() = ContextCompat.getColor(getContext(), R.color.helper_text_color_red)
-    fun setHelperTextRedList() = ContextCompat.getColorStateList(getContext(), R.color.helper_text_color_red)
-    fun setHelperTextGreen() = ContextCompat.getColor(getContext(), R.color.helper_text_color_green)
-    fun setHelperTextGreenList() = ContextCompat.getColorStateList(getContext(), R.color.helper_text_color_green)
 
 }

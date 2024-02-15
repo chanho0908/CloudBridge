@@ -8,8 +8,8 @@ import com.myproject.cloudbridge.util.App
 
 class DBRepository {
     val context = App.context()
-    val room = context.let { UserDatabase.getDatabase(it) }
-    val mainDB = context.let { MainDatabase.getDatabase(it).storeDao() }
+    val room = UserDatabase.getDatabase(context)
+    val mainDB =  MainDatabase.getDatabase(context).storeDao()
 
     fun getUserData() = room.UserDao().readUserData() // flow
 

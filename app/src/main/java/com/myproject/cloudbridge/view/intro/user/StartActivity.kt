@@ -12,7 +12,7 @@ import com.kakao.sdk.common.KakaoSdk
 import com.kakao.sdk.common.model.AuthErrorCause
 import com.kakao.sdk.user.UserApiClient
 import com.myproject.cloudbridge.databinding.ActivityStartBinding
-import com.myproject.cloudbridge.util.Utils
+import com.myproject.cloudbridge.util.singleton.Utils
 import com.myproject.cloudbridge.view.main.MainActivity
 import com.myproject.cloudbridge.viewModel.IntroViewModel
 

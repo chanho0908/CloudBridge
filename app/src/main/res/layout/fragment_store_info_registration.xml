@@ -185,7 +185,7 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="240dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="15dp"
                         android:gravity="center"
                         android:orientation="vertical">
@@ -195,6 +195,16 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:src="@drawable/insert_photo_256" />
+
+                        <TextView
+                            android:id="@+id/RequestImageTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="사진을 등록해 주세요"
+                            android:textSize="16dp"
+                            android:visibility="invisible"
+                            android:textColor="@color/red"/>
+
                     </LinearLayout>
 
                     <android.widget.Button
@@ -206,16 +216,15 @@
                         android:textColor="@color/white"
                         android:textSize="17sp" />
 
-
-                    <android.widget.Button
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/submit_button"
-                        style="@style/TextAppearance.App.Button"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="25dp"
                         android:layout_marginBottom="30dp"
                         android:background="@drawable/search_btn"
                         android:text="매장 등록"
+                        android:fontFamily="@font/binggrae_bold"
                         android:textSize="20sp" />
                 </LinearLayout>
 

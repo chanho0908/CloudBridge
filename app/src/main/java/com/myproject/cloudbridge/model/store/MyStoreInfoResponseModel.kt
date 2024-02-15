@@ -5,7 +5,7 @@ import okhttp3.RequestBody
 
 data class MyStoreInfoResponseModel(
     val storeName: String,
-    val image: String,
+    val imagePath: String,
     val ceoName: String,
     val crn: String,
     val contact: String,

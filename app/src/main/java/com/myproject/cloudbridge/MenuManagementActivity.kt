@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.MediaStore
 import android.util.Log
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -15,10 +14,10 @@ import com.google.android.material.divider.MaterialDividerItemDecoration
 import com.myproject.cloudbridge.adapter.rv.adapter.MenuRvAdapter
 import com.myproject.cloudbridge.databinding.ActivityMenuManagementBinding
 import com.myproject.cloudbridge.adapter.rv.model.StoreMenuModel
-import com.myproject.cloudbridge.util.PermissionManagement.REQUEST_IMAGE_PERMISSIONS
-import com.myproject.cloudbridge.util.PermissionManagement.isImagePermissionGranted
-import com.myproject.cloudbridge.util.PermissionManagement.showPermissionSnackBar
-import com.myproject.cloudbridge.util.Utils.accessGallery
+import com.myproject.cloudbridge.util.singleton.Utils.REQUEST_IMAGE_PERMISSIONS
+import com.myproject.cloudbridge.util.singleton.Utils.accessGallery
+import com.myproject.cloudbridge.util.management.hasImagePermission
+import com.myproject.cloudbridge.util.management.showPermissionSnackBar
 import java.io.InputStream
 
 class MenuManagementActivity : AppCompatActivity() {
@@ -28,18 +27,18 @@ class MenuManagementActivity : AppCompatActivity() {
     private val menuList = ArrayList<StoreMenuModel>()
     private var selectedItemPosition: Int? = null
     private val adapter = MenuRvAdapter(
+        this,
         menuList,
         { position ->
-            if (isImagePermissionGranted()){ accessGallery(launcherForActivity) }
+            if (hasImagePermission()){ accessGallery(launcherForActivity) }
             else launcherForPermission.launch(REQUEST_IMAGE_PERMISSIONS)
             selectedItemPosition = position
-        },
-        { position->
-            menuList.removeAt(position)
-            binding.rv.adapter?.notifyItemRemoved(position)
-            binding.rv.adapter?.notifyItemRangeChanged(position, menuList.size)
         }
-    )
+    ) { position ->
+        menuList.removeAt(position)
+        binding.rv.adapter?.notifyItemRemoved(position)
+        binding.rv.adapter?.notifyItemRangeChanged(position, menuList.size)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -168,7 +167,4 @@ class MenuManagementActivity : AppCompatActivity() {
             }
         }
     }
-
-
-
 }

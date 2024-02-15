@@ -1,5 +1,6 @@
 package com.myproject.cloudbridge.adapter.rv.adapter
 
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -32,7 +33,7 @@ class StoreListAdapter: ListAdapter<StoreEntity, StoreListAdapter.MainViewHolder
     override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
         val binding = holder.binding
 
-        binding.storeImg.setImageBitmap(getItem(position).image)
+        binding.storeImg.setImageURI(Uri.parse(getItem(position).imagePath))
         binding.storenameTv.text = getItem(position).storeName
 
 

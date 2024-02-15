@@ -7,7 +7,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
 import com.kakao.sdk.common.KakaoSdk
-import com.myproject.cloudbridge.util.Utils.APP_KEY
+import com.myproject.cloudbridge.util.singleton.Utils.APP_KEY
 
 class App: Application() {
     init {

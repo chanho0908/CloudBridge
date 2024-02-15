@@ -5,15 +5,16 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
-import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.myproject.cloudbridge.R
 import com.myproject.cloudbridge.databinding.ActivityMyStoreBinding
 import com.myproject.cloudbridge.view.intro.myPage.NotRegistsedStoreActivity
 import com.myproject.cloudbridge.view.main.MainActivity
 import com.myproject.cloudbridge.viewModel.StoreManagementViewModel
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class MyStoreActivity : AppCompatActivity(), View.OnClickListener {
@@ -22,14 +23,8 @@ class MyStoreActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView<ActivityMyStoreBinding>(
-            this,
-            R.layout.activity_my_store
-        ).apply {
-            vm = viewModel
-            lifecycleOwner = this@MyStoreActivity
-        }
-
+        binding = ActivityMyStoreBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         initView()
         initToolbar()
     }
@@ -39,17 +34,43 @@ class MyStoreActivity : AppCompatActivity(), View.OnClickListener {
         viewModel.getMyStoreInfo()
 
         with(binding) {
-            btnUpdate.setOnClickListener(this@MyStoreActivity)
-            btnDelete.setOnClickListener(this@MyStoreActivity)
-        }
+            lifecycleScope.launch {
+                repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    viewModel.loading.collect {
+                        if (it) {
+                            viewModel.myStore.collect { myStore ->
 
-        lifecycleScope.launch {
-            viewModel.flag.collectLatest {
-                if (it) {
-                    val intent = Intent(this@MyStoreActivity, NotRegistsedStoreActivity::class.java)
-                    intent.putExtra("FLAG", "DELETE")
-                    startActivity(intent)
-                    finish()
+                                storeCeoNameTextView.text = myStore.storeInfo.ceoName
+                                storeCrnTextView.text = myStore.storeInfo.crn
+                                storeNameTextView.text = myStore.storeInfo.storeName
+                                storePhoneTextView.text = myStore.storeInfo.contact
+                                storeAddrTextView.text = myStore.storeInfo.address
+                                storeKindTextView.text = myStore.storeInfo.kind
+
+                                Glide.with(this@MyStoreActivity)
+                                    .load(myStore.storeImage)
+                                    .into(storeMainImage)
+
+                            }
+                        }
+                    }
+                }
+
+                btnUpdate.setOnClickListener(this@MyStoreActivity)
+                btnDelete.setOnClickListener(this@MyStoreActivity)
+            }
+
+            lifecycleScope.launch {
+                repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    viewModel.flag.collect {
+                        if (it) {
+                            val intent =
+                                Intent(this@MyStoreActivity, NotRegistsedStoreActivity::class.java)
+                            intent.putExtra("FLAG", "DELETE")
+                            startActivity(intent)
+                            finish()
+                        }
+                    }
                 }
             }
         }
@@ -92,6 +113,7 @@ class MyStoreActivity : AppCompatActivity(), View.OnClickListener {
             R.id.btnUpdate -> {
                 startActivity(Intent(this@MyStoreActivity, StoreUpdateActivity::class.java))
             }
+
             R.id.btnDelete -> {
                 showDialog()
             }

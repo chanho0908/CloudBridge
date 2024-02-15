@@ -13,10 +13,11 @@ import com.myproject.cloudbridge.model.store.AllCrnResponseModel
 import com.myproject.cloudbridge.model.store.CrnStateResponseModel
 import com.myproject.cloudbridge.model.store.CrnStateRequestModel
 import com.myproject.cloudbridge.model.store.MyStoreInfoRequestModel
+import com.myproject.cloudbridge.model.store.MyStoreInfoSettingModel
 import com.myproject.cloudbridge.repository.DBRepository
 import com.myproject.cloudbridge.repository.NetworkRepository
-import com.myproject.cloudbridge.util.Utils
-import com.myproject.cloudbridge.util.Utils.createRequestBody
+import com.myproject.cloudbridge.util.singleton.Utils.Base64ToBitmaps
+import com.myproject.cloudbridge.util.singleton.Utils.createRequestBody
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
@@ -36,13 +37,16 @@ class StoreManagementViewModel: ViewModel() {
     val crnList: StateFlow<List<AllCrnResponseModel>> get() = _crnList
 
     // 나의 매장 정보
-    private var _myStore: MutableStateFlow<StoreEntity> = MutableStateFlow(createFirstData())
-    val myStore: StateFlow<StoreEntity> get() = _myStore
+    private var _myStore: MutableStateFlow<MyStoreInfoSettingModel> = MutableStateFlow(initStoreData())
+    val myStore: StateFlow<MyStoreInfoSettingModel> get() = _myStore
 
     // 서버 작업이 완료됐음을 알리는 flag
-
     private val _flag = MutableStateFlow(false)
     val flag: StateFlow<Boolean> get() = _flag
+
+    // 로컬 서버 작업이 완료됐음을 알리는 flag
+    private val _loading = MutableStateFlow(false)
+    val loading: StateFlow<Boolean> get() = _loading
 
     // 나의 사업자 등록번호와 일치하는가 ?
     // false, true 일 경우 타입 추론이 가능하다
@@ -55,7 +59,7 @@ class StoreManagementViewModel: ViewModel() {
     val list: StateFlow<List<StoreEntity>> get() = _list
 
     // 모든 매장 정보
-    private var _myCompanyRegistrationNumber = MutableStateFlow<String>("")
+    private var _myCompanyRegistrationNumber = MutableStateFlow("")
     val myCompanyRegistrationNumber: StateFlow<String> get() = _myCompanyRegistrationNumber
 
     // 사업자 등록 번호 상태 조회
@@ -63,10 +67,10 @@ class StoreManagementViewModel: ViewModel() {
         try {
             val response = networkRepository.getCRNState(CrnStateRequestModel(arrayOf(bno)))
             _state.value = response
-
-        }catch (e : Exception){
-            Log.d("CPRFragment", "Cause getCPRState: $e")
+        }catch (e: Exception){
+            Log.d(TAG, "Cause getCRNList: $e")
         }
+
     }
 
     // 서버에 있는 모든 사업자 등록 번호를 가져오는 메소드
@@ -76,25 +80,35 @@ class StoreManagementViewModel: ViewModel() {
             _crnList.value = response
 
         }catch (e : Exception){
-            Log.d("CPRFragment", "Cause getCRNList: $e")
+            Log.d(TAG, "Cause getCompanyRegistrationNumberList: $e")
         }
     }
 
     fun getMyStoreInfo() = viewModelScope.launch(Dispatchers.IO) {
         try {
             // 1. Datastore에 저장된 사업자 등록번호를 가지고
-            MainDataStore.getCrn()?.collect{ crn->
-                // 2. Room에서 나의 매장 정보를 가져와
+            MainDataStore.getCrn().collect{ crn->
+                // 2. Room에서 나의 매장 정보를 가져와 검색
                 val response = dbRepository.getMyStoreInfo(crn)
 
-                // 3. flow로 반환된 데이터를 StateFlow로 변환해 저장
-                response?.stateIn(viewModelScope)?.collect{ myStore->
-                    _myStore.value = myStore
+                response.collect{
+                    _myStore.value.storeInfo = it
+
+                    requestImageFromServer(it.imagePath)
+                    Log.d("ssssdasd", "getMyStoreInfo it : ${myStore.value.storeImage}")
+                    _loading.value = true
                 }
+
             }
         }catch (e: Exception){
-            Log.d("MyPageViewModel","MyPageViewModel: $e")
+            Log.d(TAG,"MyPageViewModel: $e")
         }
+    }
+
+    private fun requestImageFromServer(imagePath: String) = viewModelScope.launch(Dispatchers.IO){
+        val callback = networkRepository.getMyStoreMainImage(imagePath)
+        val decodeImage = Base64ToBitmaps(callback)
+        _myStore.value.storeImage = decodeImage
     }
 
     // 메장 정보 등록
@@ -122,14 +136,14 @@ class StoreManagementViewModel: ViewModel() {
             // flag가 변경 = 네트워크 통신 종료
             _flag.value = true
         }catch (e: Exception){
-            Log.d("MyPageViewModel","MyPageViewModel: $e")
+            Log.d(TAG,"MyPageViewModel: $e")
         }
     }
 
     fun updateMyStore(imgBody: MultipartBody.Part? = null, storeName:String, representativeName: String, phone:String,
                         addr: String, lat:String, lng:String, kind:String) = viewModelScope.launch(Dispatchers.IO) {
         try {
-            MainDataStore.getCrn()?.collect{ crn ->
+            MainDataStore.getCrn().collect{ crn ->
 
                 myStoreInfoRequestModel = if (imgBody != null) {
                     // 매장 정보를 RequestBody Type으로 변환 후
@@ -163,13 +177,13 @@ class StoreManagementViewModel: ViewModel() {
                 _flag.value = true
             }
         }catch (e: Exception){
-            Log.d("MyPageViewModel","MyPageViewModel: $e")
+            Log.d(TAG,"Cause updateMyStore: $e")
         }
     }
 
     // 매장 삭제
     fun deleteMyStore() = viewModelScope.launch(Dispatchers.IO) {
-        MainDataStore.getCrn()?.collect{ crn ->
+        MainDataStore.getCrn().collect{ crn ->
             // Local DB 삭제
             dbRepository.deleteStoreInfo(crn)
 
@@ -205,7 +219,7 @@ class StoreManagementViewModel: ViewModel() {
 
                 val newStoreEntity = StoreEntity(
                     serverEntity.crn,
-                    Utils.Base64ToBitmaps(serverEntity.image),
+                    serverEntity.imagePath,
                     serverEntity.storeName,
                     serverEntity.ceoName,
                     serverEntity.contact,
@@ -224,47 +238,52 @@ class StoreManagementViewModel: ViewModel() {
                 }
             }
         }catch (e : java.lang.Exception){
-            Log.d("MainViewModel", "Error Causer! : $e ")
+            Log.d(TAG, "Cause fromServerToRoomSetAllStoreList : $e ")
         }
     }
 
     // 모든 매장 정보
     fun showAllStoreFromRoom() = viewModelScope.launch {
-        dbRepository.getAllStoreInfo()?.stateIn(viewModelScope)?.collect{ storeEntities->
+        dbRepository.getAllStoreInfo().stateIn(viewModelScope).collect{ storeEntities->
             _list.value = storeEntities
         }
     }
     fun checkMyCompanyRegistrationNumber(crn: String) = viewModelScope.launch {
-        MainDataStore.getCrn()?.collect{
+        MainDataStore.getCrn().collect{
             _isEqualCrn.value = it == crn
         }
     }
 
     fun getMySavedCompanyRegistrationNumber() = viewModelScope.launch  {
-        MainDataStore.getCrn()?.collect{
+        MainDataStore.getCrn().collect{
             _myCompanyRegistrationNumber.value = it
         }
     }
 
-    fun changeImage(imgBitmap: Bitmap){
-        _myStore.value = _myStore.value.copy(
-            image = imgBitmap
-        )
+    fun changeImage(imgPath: String){
+//        _myStore.value = _myStore.value?.copy(
+            //imagePath = imgPath
+ //       )
     }
 
     // 사용자 수정 데이터 업데이트
     fun updateSavedData(storeName: String, ceoName: String, contact: String, address: String, kind: String) {
         // 바뀌지 않은 값은 유지
-        _myStore.value = _myStore.value.copy(
-            storeName = storeName,
-            contact = contact,
-            ceoName = ceoName,
-            address = address,
-            kind = kind
-        )
+//        _myStore.value = _myStore.value?.copy(
+//            storeName = storeName,
+//            contact = contact,
+//            ceoName = ceoName,
+//            address = address,
+//            kind = kind
+//        )
     }
 
+    private fun initStoreData() = MyStoreInfoSettingModel(
+        StoreEntity("", "", "", "", "", "", "", "", ""),
+        Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
+        )
 
-    private fun createFirstData() = StoreEntity("", Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888),
-        "", "", "", "", "", "", "")
+    companion object{
+        const val TAG = "StoreManagementViewModel"
+    }
 }

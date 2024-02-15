@@ -31,12 +31,7 @@ class MyPageFragment : Fragment(), View.OnClickListener {
 
     private val viewModel: StoreManagementViewModel by viewModels()
     private var isClicked = false
-    private lateinit var mContext: Context
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        mContext = context
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentMyPageBinding.inflate(inflater, container, false)
@@ -58,9 +53,9 @@ class MyPageFragment : Fragment(), View.OnClickListener {
                 viewModel.myCompanyRegistrationNumber.collect{
                     if (isClicked){
                         if (it == ""){
-                            startActivity(Intent(mContext, NotRegistsedStoreActivity::class.java))
+                            startActivity(Intent(requireContext(), NotRegistsedStoreActivity::class.java))
                         }else{
-                            startActivity(Intent(mContext, MyStoreActivity::class.java))
+                            startActivity(Intent(requireContext(), MyStoreActivity::class.java))
                         }
                     }
                 }

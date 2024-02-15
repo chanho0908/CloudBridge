@@ -6,12 +6,14 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.RecyclerView
+import com.myproject.cloudbridge.MenuManagementActivity
 import com.myproject.cloudbridge.databinding.StoreMenuItemBinding
 import com.myproject.cloudbridge.adapter.rv.model.StoreMenuModel
-import com.myproject.cloudbridge.util.Utils.setHelperBoxBlack
-import com.myproject.cloudbridge.util.Utils.setHelperTextRed
+import com.myproject.cloudbridge.util.management.setHelperBoxBlack
+import com.myproject.cloudbridge.util.management.setHelperTextRed
 
-class MenuRvAdapter(private val menuList: ArrayList<StoreMenuModel>,
+class MenuRvAdapter(private val context: Context,
+                    private val menuList: ArrayList<StoreMenuModel>,
                     private val imgClickListener: (Int) -> Unit,
                     private val delButtonClickListener: (Int) -> Unit):
     RecyclerView.Adapter<MenuRvAdapter.MenuRvViewHolder>() {
@@ -52,12 +54,12 @@ class MenuRvAdapter(private val menuList: ArrayList<StoreMenuModel>,
                 if (input.isEmpty()){
                     Log.d("dasds", "이름이 없음")
                     productNameLayout.helperText = "상품명을 입력해 주세요"
-                    productNameLayout.boxStrokeColor = setHelperTextRed()
+                    productNameLayout.boxStrokeColor = context.setHelperTextRed()
 
                 }else {
                     Log.d("dasds", "이름이 있음")
                     productNameLayout.helperText = ""
-                    productNameLayout.boxStrokeColor = setHelperBoxBlack()
+                    productNameLayout.boxStrokeColor = context.setHelperBoxBlack()
                     menuList[position].productName = input
                 }
 
@@ -69,7 +71,7 @@ class MenuRvAdapter(private val menuList: ArrayList<StoreMenuModel>,
                 if (!hasFocus && input.isEmpty()) {
                     Log.d("dasds", "포커스를 잃음")
                     productNameLayout.helperText = "상품명을 입력해 주세요"
-                    productNameLayout.boxStrokeColor = setHelperTextRed()
+                    productNameLayout.boxStrokeColor = context.setHelperTextRed()
                 }
             }
 
@@ -78,10 +80,10 @@ class MenuRvAdapter(private val menuList: ArrayList<StoreMenuModel>,
 
                 if (input.isEmpty()){
                     productQuantityLayout.helperText = "수량을 입력해 주세요"
-                    productQuantityLayout.boxStrokeColor = setHelperTextRed()
+                    productQuantityLayout.boxStrokeColor = context.setHelperTextRed()
                 }else {
                     productQuantityLayout.helperText = ""
-                    productQuantityLayout.boxStrokeColor = setHelperBoxBlack()
+                    productQuantityLayout.boxStrokeColor = context.setHelperBoxBlack()
                     menuList[position].productQuantity = it.toString().toInt()
                 }
 

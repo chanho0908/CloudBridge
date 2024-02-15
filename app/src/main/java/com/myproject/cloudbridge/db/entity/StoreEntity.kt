@@ -2,6 +2,7 @@ package com.myproject.cloudbridge.db.entity
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -14,9 +15,9 @@ data class StoreEntity (
     @ColumnInfo(name = "company_registration_number")
     val crn: String,
     @ColumnInfo(name = "store_image")
-    val image: Bitmap,
+    val imagePath: String,
     @ColumnInfo(name = "store_name")
-    val storeName: String,
+    var storeName: String,
     @ColumnInfo(name = "ceo_name")
     val ceoName: String,
     val contact: String,
