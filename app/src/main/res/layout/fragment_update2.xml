@@ -1,17 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<layout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:bind="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    >
-
-    <data>
-        <variable
-            name="vm"
-            type="com.myproject.cloudbridge.viewModel.StoreManagementViewModel" />
-    </data>
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -29,17 +22,17 @@
                 android:layout_height="wrap_content"
                 android:background="@color/shrine_pink_100"
                 android:minHeight="?attr/actionBarSize"
-                app:navigationIcon="@drawable/arrow_back_24px"
-                android:theme="?attr/actionBarTheme" >
+                android:theme="?attr/actionBarTheme"
+                app:navigationIcon="@drawable/arrow_back_24px">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="매장 정보 수정"
-                    android:textSize="23sp"
-                    android:textColor="@android:color/black"
                     android:fontFamily="@font/binggrae_bold"
+                    android:text="매장 정보 수정"
+                    android:textColor="@android:color/black"
+                    android:textSize="23sp"
                     android:textStyle="bold" />
 
             </com.google.android.material.appbar.MaterialToolbar>
@@ -85,9 +78,8 @@
                             android:id="@+id/storeName_edit"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@{vm.myStore.storeName}"
                             android:fontFamily="@font/rubik_bold"
-                        />
+                             />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -107,7 +99,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/rubik_bold"
-                            android:text="@{vm.myStore.ceoName}" />
+                            />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -125,9 +117,9 @@
                             android:id="@+id/phone_edit"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="number"
                             android:fontFamily="@font/rubik_bold"
-                            android:text="@{vm.myStore.contact}" />
+                            android:inputType="number"
+                             />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -137,11 +129,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="60dp"
                         android:layout_marginTop="5dp"
-                        android:drawableStart="@drawable/ic_search"
                         android:backgroundTint="@color/blue_grey"
+                        android:drawableStart="@drawable/ic_search"
                         android:gravity="center"
-                        android:textSize="18sp"
                         android:text="@string/findAddr"
+                        android:textSize="18sp"
                         android:textStyle="bold" />
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -158,7 +150,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/rubik_bold"
-                            android:text="@{vm.myStore.address}" />
+                             />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -179,27 +171,36 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:fontFamily="@font/rubik"
                             android:inputType="none"
                             android:paddingTop="16dp"
                             android:paddingBottom="16dp"
-                            android:fontFamily="@font/rubik"
-                            android:text="@{vm.myStore.kind}"
                             android:textColor="@color/blue_grey" />
                     </com.google.android.material.textfield.TextInputLayout>
 
+
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="240dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginTop="15dp"
                         android:gravity="center"
                         android:orientation="vertical">
 
                         <ImageView
                             android:id="@+id/main_imgView"
-                            myStoreImage="@{vm.myStore.image}"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:src="@drawable/insert_photo_256" />
+
+                        <TextView
+                            android:id="@+id/RequestImageTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="사진을 등록해 주세요"
+                            android:textSize="16dp"
+                            android:visibility="invisible"
+                            android:textColor="@color/red"/>
+
                     </LinearLayout>
 
                     <com.google.android.material.button.MaterialButton
@@ -226,4 +227,5 @@
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
-</layout>
+</LinearLayout>
+

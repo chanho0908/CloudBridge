@@ -1,6 +1,5 @@
 package com.myproject.cloudbridge.view.storeRegistration
 
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -8,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.addTextChangedListener
@@ -23,39 +21,37 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.myproject.cloudbridge.R
 import com.myproject.cloudbridge.databinding.FragmentStoreInfoRegistrationBinding
-import com.myproject.cloudbridge.util.PermissionManagement.REQUEST_IMAGE_PERMISSIONS
 import com.myproject.cloudbridge.view.intro.myStore.MyStoreActivity
 import com.myproject.cloudbridge.viewModel.StoreManagementViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import com.myproject.cloudbridge.util.PermissionManagement.isImagePermissionGranted
-import com.myproject.cloudbridge.util.PermissionManagement.showPermissionSnackBar
-import com.myproject.cloudbridge.util.Utils.ADDR_RESULT
-import com.myproject.cloudbridge.util.Utils.accessGallery
-import com.myproject.cloudbridge.util.Utils.makeStoreMainImage
-import com.myproject.cloudbridge.util.Utils.requestPlzInputText
-import com.myproject.cloudbridge.util.Utils.showSoftInput
-import com.myproject.cloudbridge.util.Utils.translateGeo
+import com.myproject.cloudbridge.util.singleton.Utils.ADDR_RESULT
+import com.myproject.cloudbridge.util.singleton.Utils.REQUEST_IMAGE_PERMISSIONS
+import com.myproject.cloudbridge.util.singleton.Utils.accessGallery
+import com.myproject.cloudbridge.util.singleton.Utils.makeStoreMainImage
+import com.myproject.cloudbridge.util.singleton.Utils.requestPlzInputText
+import com.myproject.cloudbridge.util.singleton.Utils.showSoftInput
+import com.myproject.cloudbridge.util.singleton.Utils.translateGeo
+import com.myproject.cloudbridge.util.management.hasImagePermission
+import com.myproject.cloudbridge.util.management.showPermissionSnackBar
 
 class StoreInfoRegistrationFragment : Fragment(), View.OnClickListener {
-    private var _binding: FragmentStoreInfoRegistrationBinding ?= null
+    private var _binding: FragmentStoreInfoRegistrationBinding? = null
     private val binding: FragmentStoreInfoRegistrationBinding get() = _binding!!
 
     private lateinit var launcherForPermission: ActivityResultLauncher<Array<String>>
-    private lateinit var launcherForActivity:  ActivityResultLauncher<Intent>
-    private lateinit var mContext: Context
+    private lateinit var launcherForActivity: ActivityResultLauncher<Intent>
 
     private val viewModel: StoreManagementViewModel by viewModels()
     private var imgUrl: Uri? = null
 
     private val args: StoreInfoRegistrationFragmentArgs by navArgs()
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        mContext = context
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         _binding = FragmentStoreInfoRegistrationBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -67,9 +63,9 @@ class StoreInfoRegistrationFragment : Fragment(), View.OnClickListener {
         initListener()
 
         viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModel.flag.collectLatest{
-                    if (it){
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.flag.collectLatest {
+                    if (it) {
                         val intent = Intent(activity, MyStoreActivity::class.java)
                         intent.putExtra("FLAG", "REGISTER")
 
@@ -83,13 +79,13 @@ class StoreInfoRegistrationFragment : Fragment(), View.OnClickListener {
         }
     }
 
-    private fun initView(){
+    private fun initView() {
         val items = resources.getStringArray(R.array.category)
         val adapter = ArrayAdapter(requireActivity(), R.layout.array_list_item, items)
         binding.kindEdit.setAdapter(adapter)
     }
 
-    private fun initListener(){
+    private fun initListener() {
         with(binding) {
             submitButton.setOnClickListener(this@StoreInfoRegistrationFragment)
             btnAddr.setOnClickListener(this@StoreInfoRegistrationFragment)
@@ -125,10 +121,10 @@ class StoreInfoRegistrationFragment : Fragment(), View.OnClickListener {
         }
     }
 
-    private fun initActivityProcess(){
+    private fun initActivityProcess() {
         val contracts = ActivityResultContracts.RequestMultiplePermissions()
 
-        launcherForPermission = registerForActivityResult(contracts){ permissions ->
+        launcherForPermission = registerForActivityResult(contracts) { permissions ->
             if (permissions.all { it.value }) {
                 accessGallery(launcherForActivity)
             } else {
@@ -140,14 +136,15 @@ class StoreInfoRegistrationFragment : Fragment(), View.OnClickListener {
                     when {
                         !isGranted -> {
                             // 사용자가 이전에 해당 권한을 거부하고, "다시 묻지 않음"을 선택한 경우에 false를 반환
-                            if(!shouldShowRequestPermissionRationale(permission)){
+                            if (!shouldShowRequestPermissionRationale(permission)) {
                                 // 사용자에게 왜 권한이 필요한지 설명하는 다이얼로그 또는 메시지를 표시
-                                showPermissionSnackBar(binding.root)
+                                requireContext().showPermissionSnackBar(binding.root)
                             }
                         }
+
                         else -> {
                             // 사용자가 "다시 묻지 않음"을 선택한 경우 처리할 작업
-                            showPermissionSnackBar(binding.root)
+                            requireContext().showPermissionSnackBar(binding.root)
                         }
                     }
                 }
@@ -168,11 +165,12 @@ class StoreInfoRegistrationFragment : Fragment(), View.OnClickListener {
                     else -> {
                         imgUrl = callback.data
 
-                        Glide.with(mContext)
+                        Glide.with(requireContext())
                             .load(imgUrl)
                             .fitCenter()
-                            .apply(RequestOptions().override(800, 800))
+                            .apply(RequestOptions().override(700, 700))
                             .into(binding.mainImgView)
+                        binding.RequestImageTextView.visibility = View.INVISIBLE
                     }
                 }
         }
@@ -181,10 +179,10 @@ class StoreInfoRegistrationFragment : Fragment(), View.OnClickListener {
 
 
     override fun onClick(v: View?) {
-        when(v?.id) {
+        when (v?.id) {
             R.id.submit_button -> {
 
-                with(binding){
+                with(binding) {
 
                     val storeName = storeNameEdit.text.toString()
                     val crn = args.bno
@@ -202,7 +200,7 @@ class StoreInfoRegistrationFragment : Fragment(), View.OnClickListener {
                     } else if (addr.isEmpty()) {
                         requestPlzInputText("주소를 입력해 주세요", addrLayout)
                     } else if (imgUrl == null) {
-                        Toast.makeText(requireContext(), "대표 사진을 등록해 주세요", Toast.LENGTH_LONG).show()
+                        binding.RequestImageTextView.visibility = View.VISIBLE
                     } else {
                         val location = translateGeo(addr)
 
@@ -214,9 +212,9 @@ class StoreInfoRegistrationFragment : Fragment(), View.OnClickListener {
                         } else {
                             if (imgUrl != null) {
 
-                                val imgBody = makeStoreMainImage(imgUrl!!)
+                                val imgBody = makeStoreMainImage(imgUrl)
 
-                                viewModel.registrationStore(imgBody, storeName, ceoName,
+                                viewModel.registrationStore( imgBody, storeName, ceoName,
                                     crn, phone, addr, lat.toString(), lng.toString(), kind
                                 )
                             }
@@ -224,13 +222,14 @@ class StoreInfoRegistrationFragment : Fragment(), View.OnClickListener {
                     }
                 }
             }
+
             R.id.btnAddr -> {
-                val intent = Intent(mContext, AddressActivity::class.java)
+                val intent = Intent(requireContext(), AddressActivity::class.java)
                 launcherForActivity.launch(intent)
             }
 
             R.id.img_load_button -> {
-                if (isImagePermissionGranted()) accessGallery(launcherForActivity)
+                if (requireContext().hasImagePermission()) accessGallery(launcherForActivity)
                 else launcherForPermission.launch(REQUEST_IMAGE_PERMISSIONS)
             }
         }
