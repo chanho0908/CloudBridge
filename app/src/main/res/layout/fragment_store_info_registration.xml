@@ -86,7 +86,7 @@
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/representative_name_Layout"
+                        android:id="@+id/ceo_name_Layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
@@ -97,7 +97,7 @@
                         app:startIconTint="#000">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/representative_name_edit"
+                            android:id="@+id/ceo_name_edit"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="정찬호"
@@ -160,7 +160,7 @@
 
 
                     <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="15dp"
@@ -180,7 +180,9 @@
                             android:paddingBottom="16dp"
                             android:fontFamily="@font/rubik_bold"
                             android:text="베이커리"
-                            android:textColor="@color/blue_grey" />
+                            android:textColor="@color/blue_grey"
+                            app:simpleItems="@array/category"
+                            />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <LinearLayout

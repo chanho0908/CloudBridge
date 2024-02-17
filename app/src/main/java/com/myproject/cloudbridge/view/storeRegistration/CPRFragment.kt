@@ -17,11 +17,12 @@ import com.myproject.cloudbridge.R
 import com.myproject.cloudbridge.databinding.FragmentCPRBinding
 import com.myproject.cloudbridge.model.store.AllCrnResponseModel
 import com.myproject.cloudbridge.util.singleton.Utils.hideSoftInput
+
+import com.myproject.cloudbridge.util.setHelperTextGreen
+import com.myproject.cloudbridge.util.setHelperTextGreenList
+import com.myproject.cloudbridge.util.setHelperTextRed
+import com.myproject.cloudbridge.util.setHelperTextRedList
 import com.myproject.cloudbridge.util.singleton.Utils.showSoftInput
-import com.myproject.cloudbridge.util.management.setHelperTextGreen
-import com.myproject.cloudbridge.util.management.setHelperTextGreenList
-import com.myproject.cloudbridge.util.management.setHelperTextRed
-import com.myproject.cloudbridge.util.management.setHelperTextRedList
 import com.myproject.cloudbridge.view.intro.myPage.NotRegistsedStoreActivity
 import com.myproject.cloudbridge.viewModel.StoreManagementViewModel
 import kotlinx.coroutines.launch
@@ -112,8 +113,9 @@ class CPRFragment : Fragment() {
                                 if(crnList.contains(AllCrnResponseModel(cprEdit.text.toString()))){
                                     setWarningBox("이미 사용 중인 사업자 등록 번호 입니다.")
                                     // 존재 하지 않는 사업자 등록 번호일 때
-                                }else if (result == "국세청에 등록 되지 않은 사업자 등록 번호 입니다.") {
-                                    setWarningBox("국세청에 등록 되지 않은 사업자 등록 번호입 니다.")
+                                    // 변경 금지 : 응답으로 오는 텍스트 그대로여야함
+                                }else if (result == "국세청에 등록되지 않은 사업자등록번호입니다.") {
+                                    setWarningBox("국세청에 등록되지 않은 사업자등록번호입니다.")
                                     // 사용 가능한 사업자 등록 번호일 때
                                 } else {
                                     setPermittedBox()

@@ -98,34 +98,6 @@
 
                     </LinearLayout>
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="2dp"
-                        android:background="#c8c8c8" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp"
-                        android:orientation="vertical">
-
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/rubik_bold"
-                            android:text="@string/crn"
-                            android:textColor="@color/blue_grey"
-                            android:textSize="13sp" />
-
-                        <TextView
-                            android:id="@+id/store_crn_textView"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/rubik_bold"
-                            android:textColor="@color/shrine_pink_900"
-                            android:textSize="18sp" />
-                    </LinearLayout>
 
                     <View
                         android:layout_width="match_parent"

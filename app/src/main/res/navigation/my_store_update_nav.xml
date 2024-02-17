@@ -27,6 +27,10 @@
             android:id="@+id/action_updateFragment2_to_updateFragment1"
             app:destination="@id/updateFragment1"
             app:enterAnim="@android:anim/slide_in_left" />
+        <argument
+            android:name="crn"
+            app:argType="string"
+            android:defaultValue=""/>
     </fragment>
 
 </navigation>

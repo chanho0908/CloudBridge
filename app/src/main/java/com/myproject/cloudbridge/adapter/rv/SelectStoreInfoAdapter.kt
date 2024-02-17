@@ -1,8 +1,7 @@
-package com.myproject.cloudbridge.adapter.rv.adapter
+package com.myproject.cloudbridge.adapter.rv
 
 import android.net.Uri
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.myproject.cloudbridge.databinding.StoreItemBinding

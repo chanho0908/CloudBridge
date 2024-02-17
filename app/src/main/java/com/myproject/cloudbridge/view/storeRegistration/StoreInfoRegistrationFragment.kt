@@ -32,8 +32,8 @@ import com.myproject.cloudbridge.util.singleton.Utils.makeStoreMainImage
 import com.myproject.cloudbridge.util.singleton.Utils.requestPlzInputText
 import com.myproject.cloudbridge.util.singleton.Utils.showSoftInput
 import com.myproject.cloudbridge.util.singleton.Utils.translateGeo
-import com.myproject.cloudbridge.util.management.hasImagePermission
-import com.myproject.cloudbridge.util.management.showPermissionSnackBar
+import com.myproject.cloudbridge.util.hasImagePermission
+import com.myproject.cloudbridge.util.showPermissionSnackBar
 
 class StoreInfoRegistrationFragment : Fragment(), View.OnClickListener {
     private var _binding: FragmentStoreInfoRegistrationBinding? = null
@@ -43,32 +43,30 @@ class StoreInfoRegistrationFragment : Fragment(), View.OnClickListener {
     private lateinit var launcherForActivity: ActivityResultLauncher<Intent>
 
     private val viewModel: StoreManagementViewModel by viewModels()
-    private var imgUrl: Uri? = null
+    private var imgUrl: Uri = Uri.parse("")
 
     private val args: StoreInfoRegistrationFragmentArgs by navArgs()
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentStoreInfoRegistrationBinding.inflate(inflater, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        _binding = FragmentStoreInfoRegistrationBinding.inflate(inflater)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initView()
         initActivityProcess()
         initListener()
+        initObserveSate()
+    }
 
+    private fun initObserveSate(){
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.flag.collectLatest {
+                viewModel.flag.collect {
                     if (it) {
                         val intent = Intent(activity, MyStoreActivity::class.java)
                         intent.putExtra("FLAG", "REGISTER")
-
+                        intent.putExtra("crn", args.bno)
                         startActivity(intent)
 
                         // 부모 액티비티 종료
@@ -79,11 +77,6 @@ class StoreInfoRegistrationFragment : Fragment(), View.OnClickListener {
         }
     }
 
-    private fun initView() {
-        val items = resources.getStringArray(R.array.category)
-        val adapter = ArrayAdapter(requireActivity(), R.layout.array_list_item, items)
-        binding.kindEdit.setAdapter(adapter)
-    }
 
     private fun initListener() {
         with(binding) {
@@ -104,9 +97,9 @@ class StoreInfoRegistrationFragment : Fragment(), View.OnClickListener {
                 else storeNameLayout.helperText = "매장명을 입력해 주세요"
             }
 
-            representativeNameEdit.addTextChangedListener {
-                if (it.toString().isNotEmpty()) representativeNameLayout.helperText = ""
-                else representativeNameLayout.helperText = "대표자명을 입력해 주세요."
+            ceoNameEdit.addTextChangedListener {
+                if (it.toString().isNotEmpty()) ceoNameLayout.helperText = ""
+                else ceoNameLayout.helperText = "대표자명을 입력해 주세요."
             }
 
             phoneEdit.addTextChangedListener {
@@ -161,15 +154,15 @@ class StoreInfoRegistrationFragment : Fragment(), View.OnClickListener {
                         val data = callback.getStringExtra("data")
                         binding.addrEdit.setText(data)
                     }
-
                     else -> {
-                        imgUrl = callback.data
+                        imgUrl = callback.data ?: Uri.parse("")
 
                         Glide.with(requireContext())
                             .load(imgUrl)
                             .fitCenter()
                             .apply(RequestOptions().override(700, 700))
                             .into(binding.mainImgView)
+
                         binding.RequestImageTextView.visibility = View.INVISIBLE
                     }
                 }
@@ -186,20 +179,24 @@ class StoreInfoRegistrationFragment : Fragment(), View.OnClickListener {
 
                     val storeName = storeNameEdit.text.toString()
                     val crn = args.bno
-                    val ceoName = representativeNameEdit.text.toString()
+                    val ceoName = ceoNameEdit.text.toString()
                     val phone = phoneEdit.text.toString()
                     val addr = addrEdit.text.toString()
                     val kind = kindEdit.text.toString()
 
                     if (storeName.isEmpty()) {
                         requestPlzInputText("매장명을 입력해 주세요", storeNameLayout)
+                        storeNameLayout.requestFocus()
                     } else if (ceoName.isEmpty()) {
-                        requestPlzInputText("점주명을 입력해 주세요", representativeNameLayout)
+                        requestPlzInputText("점주명을 입력해 주세요", ceoNameLayout)
+                        ceoNameLayout.requestFocus()
                     } else if (phone.isEmpty()) {
                         requestPlzInputText("매장 전화 번호를 입력해 주세요", phoneLayout)
+                        phoneLayout.requestFocus()
                     } else if (addr.isEmpty()) {
                         requestPlzInputText("주소를 입력해 주세요", addrLayout)
-                    } else if (imgUrl == null) {
+                        addrLayout.requestFocus()
+                    } else if (imgUrl == Uri.parse("")) {
                         binding.RequestImageTextView.visibility = View.VISIBLE
                     } else {
                         val location = translateGeo(addr)
@@ -210,14 +207,9 @@ class StoreInfoRegistrationFragment : Fragment(), View.OnClickListener {
                         if (lat == 0.0 || lng == 0.0) {
                             requestPlzInputText("올바른 주소를 입력해 주세요", addrLayout)
                         } else {
-                            if (imgUrl != null) {
-
-                                val imgBody = makeStoreMainImage(imgUrl)
-
-                                viewModel.registrationStore( imgBody, storeName, ceoName,
-                                    crn, phone, addr, lat.toString(), lng.toString(), kind
-                                )
-                            }
+                            viewModel.registrationStore(imgUrl, storeName, ceoName,
+                                crn, phone, addr, lat.toString(), lng.toString(), kind
+                            )
                         }
                     }
                 }

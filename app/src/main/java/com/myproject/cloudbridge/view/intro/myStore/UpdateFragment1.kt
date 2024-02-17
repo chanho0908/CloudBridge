@@ -14,10 +14,10 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.Navigation
 import com.myproject.cloudbridge.R
 import com.myproject.cloudbridge.databinding.FragmentUpdate1Binding
-import com.myproject.cloudbridge.util.management.setHelperTextGreen
-import com.myproject.cloudbridge.util.management.setHelperTextGreenList
-import com.myproject.cloudbridge.util.management.setHelperTextRed
-import com.myproject.cloudbridge.util.management.setHelperTextRedList
+import com.myproject.cloudbridge.util.setHelperTextGreen
+import com.myproject.cloudbridge.util.setHelperTextGreenList
+import com.myproject.cloudbridge.util.setHelperTextRed
+import com.myproject.cloudbridge.util.setHelperTextRedList
 import com.myproject.cloudbridge.util.singleton.Utils.showSoftInput
 import com.myproject.cloudbridge.viewModel.StoreManagementViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -48,10 +48,11 @@ class UpdateFragment1 : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 // stateFlow 는 같은 값을 emit 하지 않는다.
-                viewModel.isEqualCrn.collectLatest {
+                viewModel.isEqualCrn.collect {
                     if (it == true) {
+                        val crn = binding.cprEdit.text.toString()
                         val action =
-                            UpdateFragment1Directions.actionUpdateFragment1ToUpdateFragment2()
+                            UpdateFragment1Directions.actionUpdateFragment1ToUpdateFragment2(crn)
                         Navigation.findNavController(view).navigate(action)
                     } else {
                         if (isSearched) {

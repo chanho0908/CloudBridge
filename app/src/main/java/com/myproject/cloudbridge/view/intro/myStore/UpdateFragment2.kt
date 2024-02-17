@@ -16,6 +16,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.myproject.cloudbridge.R
 import com.myproject.cloudbridge.databinding.FragmentUpdate2Binding
@@ -25,8 +26,8 @@ import com.myproject.cloudbridge.util.singleton.Utils.accessGallery
 import com.myproject.cloudbridge.util.singleton.Utils.makeStoreMainImage
 import com.myproject.cloudbridge.util.singleton.Utils.requestPlzInputText
 import com.myproject.cloudbridge.util.singleton.Utils.translateGeo
-import com.myproject.cloudbridge.util.management.hasImagePermission
-import com.myproject.cloudbridge.util.management.showPermissionSnackBar
+import com.myproject.cloudbridge.util.hasImagePermission
+import com.myproject.cloudbridge.util.showPermissionSnackBar
 import com.myproject.cloudbridge.view.storeRegistration.AddressActivity
 import com.myproject.cloudbridge.viewModel.StoreManagementViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -42,7 +43,7 @@ class UpdateFragment2 : Fragment(), View.OnClickListener {
 
     private lateinit var launcherForPermission: ActivityResultLauncher<Array<String>>
     private lateinit var launcherForActivity: ActivityResultLauncher<Intent>
-
+    private val args: UpdateFragment2Args by navArgs()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentUpdate2Binding.inflate(inflater)
@@ -57,40 +58,40 @@ class UpdateFragment2 : Fragment(), View.OnClickListener {
     }
 
     private fun initView() {
-        viewModel.getMyStoreInfo()
+        viewModel.getMyStoreInfo(args.crn)
 
         with(binding) {
-            lifecycleScope.launch {
+            viewLifecycleOwner.lifecycleScope.launch {
                 repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    viewModel.loading.collect {
+                    viewModel.imgLoading.collect {
                         if (it) {
                             viewModel.myStore.collect { myStore ->
 
-                                storeNameEdit.setText(myStore.storeInfo.ceoName)
-                                ceoNameEdit.setText(myStore.storeInfo.crn)
-                                phoneEdit.setText(myStore.storeInfo.storeName)
-                                addrEdit.setText(myStore.storeInfo.contact)
+                                storeNameEdit.setText(myStore.storeInfo.storeName)
+                                ceoNameEdit.setText(myStore.storeInfo.ceoName)
+                                phoneEdit.setText(myStore.storeInfo.contact)
+                                addrEdit.setText(myStore.storeInfo.address)
 
                                 Glide.with(this@UpdateFragment2)
                                     .load(myStore.storeImage)
                                     .into(mainImgView)
-
                             }
                         }
                     }
                 }
             }
         }
+
         viewLifecycleOwner.lifecycleScope.launch {
             // Activity가 포그라운드에 있을 때만 특정 라이프 사이클이 트리거 되어있을 때 동작
             // onStop 일 때 Job을 취소
             // https://kotlinworld.com/228
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-
-                viewModel.flag.collectLatest {
+                viewModel.flag.collect {
                     if (it) {
-                        val intent = Intent(activity, MyStoreActivity::class.java)
-
+                        val intent = Intent(requireContext(), MyStoreActivity::class.java)
+                        intent.putExtra("crn", args.crn)
+                        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
                         startActivity(intent)
 
                         // 부모 액티비티 종료
@@ -99,10 +100,6 @@ class UpdateFragment2 : Fragment(), View.OnClickListener {
                 }
             }
         }
-
-        val items = resources.getStringArray(R.array.category)
-        val adapter = ArrayAdapter(requireContext(), R.layout.array_list_item, items)
-        binding.kindEdit.setAdapter(adapter)
     }
 
     private fun initListener() {
@@ -123,8 +120,8 @@ class UpdateFragment2 : Fragment(), View.OnClickListener {
             }
 
             ceoNameEdit.addTextChangedListener {
-                if (it.toString().isNotEmpty()) representativeNameLayout.helperText = ""
-                else representativeNameLayout.helperText = "대표자명을 입력해 주세요."
+                if (it.toString().isNotEmpty()) ceoNameLayout.helperText = ""
+                else ceoNameLayout.helperText = "대표자명을 입력해 주세요."
             }
 
             phoneEdit.addTextChangedListener {
@@ -189,11 +186,10 @@ class UpdateFragment2 : Fragment(), View.OnClickListener {
                                 .load(imgUrl)
                                 .into(binding.mainImgView)
                         }
-
                     }
                 }
+            }
         }
-    }
 
     private fun getSavedStateInstance() {
         with(binding) {
@@ -212,23 +208,24 @@ class UpdateFragment2 : Fragment(), View.OnClickListener {
             R.id.submit_button -> {
                 with(binding) {
                     val storeName = storeNameEdit.text.toString()
-                    val representativeName = ceoNameEdit.text.toString()
+                    val ceoName = ceoNameEdit.text.toString()
                     val phone = phoneEdit.text.toString()
                     val addr = addrEdit.text.toString()
                     val kind = kindEdit.text.toString()
 
                     if (storeName.isEmpty()) {
                         requestPlzInputText("매장명을 입력해 주세요", storeNameLayout)
+                        storeNameLayout.requestFocus()
 
-                    } else if (representativeName.isEmpty()) {
-                        requestPlzInputText("점주명을 입력해 주세요", representativeNameLayout)
-
+                    } else if (ceoName.isEmpty()) {
+                        requestPlzInputText("점주명을 입력해 주세요", ceoNameLayout)
+                        ceoNameLayout.requestFocus()
                     } else if (phone.isEmpty()) {
                         requestPlzInputText("매장 전화 번호를 입력해 주세요", phoneLayout)
-
+                        phoneLayout.requestFocus()
                     } else if (addr.isEmpty()) {
                         requestPlzInputText("주소를 입력해 주세요", addrLayout)
-
+                        addrLayout.requestFocus()
                     } else {
                         val location = translateGeo(addr)
 
@@ -243,13 +240,12 @@ class UpdateFragment2 : Fragment(), View.OnClickListener {
                                 val imgBody = makeStoreMainImage(imgUrl)
 
                                 viewModel.updateMyStore(
-                                    imgBody, storeName, representativeName,
+                                    imgBody, storeName, ceoName, args.crn,
                                     phone, addr, lat.toString(), lng.toString(), kind
                                 )
                             } else {
-
                                 viewModel.updateMyStore(
-                                    null, storeName, representativeName,
+                                    null, storeName, ceoName, args.crn,
                                     phone, addr, lat.toString(), lng.toString(), kind
                                 )
                             }
@@ -260,6 +256,7 @@ class UpdateFragment2 : Fragment(), View.OnClickListener {
             }
 
             R.id.btnAddr -> {
+                getSavedStateInstance()
                 val intent = Intent(requireContext(), AddressActivity::class.java)
                 launcherForActivity.launch(intent)
             }
