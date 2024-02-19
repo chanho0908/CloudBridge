@@ -11,9 +11,17 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.carousel.CarouselLayoutManager
+import com.google.android.material.carousel.CarouselSnapHelper
+import com.google.android.material.carousel.FullScreenCarouselStrategy
+import com.google.android.material.carousel.HeroCarouselStrategy
+import com.google.android.material.carousel.MultiBrowseCarouselStrategy
 import com.myproject.cloudbridge.R
+import com.myproject.cloudbridge.adapter.rv.CarouselAdapter
 import com.myproject.cloudbridge.adapter.rv.SelectStoreInfoAdapter
 import com.myproject.cloudbridge.databinding.FragmentStoreListBinding
+import com.myproject.cloudbridge.model.store.CarouselModel
+import com.myproject.cloudbridge.util.ImgResizing
 import com.myproject.cloudbridge.viewModel.StoreManagementViewModel
 import kotlinx.coroutines.launch
 
@@ -48,15 +56,48 @@ class StoreListFragment : Fragment() {
     }
 
     private fun initRv(){
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModel.allStoreList.collect{ list->
-                    val adapter = SelectStoreInfoAdapter(list)
-                    binding.rv.layoutManager = LinearLayoutManager(requireContext())
-                    binding.rv.adapter =  adapter
+        val carouseRvAdapter = CarouselAdapter(getCarouselModelList())
+
+        with(binding){
+
+            with(carouselRv){
+
+                val snapHelper = CarouselSnapHelper()
+                snapHelper.attachToRecyclerView(this)
+                adapter = carouseRvAdapter
+                layoutManager = CarouselLayoutManager(MultiBrowseCarouselStrategy())
+
+            }
+
+            viewLifecycleOwner.lifecycleScope.launch {
+                repeatOnLifecycle(Lifecycle.State.STARTED){
+                    viewModel.allStoreList.collect{ list->
+                        val adapter = SelectStoreInfoAdapter(list)
+                        rv.layoutManager = LinearLayoutManager(requireContext())
+                        rv.adapter =  adapter
+                    }
                 }
             }
         }
+    }
+
+    private fun getCarouselModelList(): ArrayList<CarouselModel>{
+        // 새 이미지 크기를 지정합니다.
+        val newWidth = 650
+        val newHeight = 850
+
+        val imgResizing = ImgResizing()
+        // 이미지를 리사이징합니다.
+
+        val carouselModelList = arrayListOf(
+            CarouselModel("carousel1", imgResizing.resizeImage(requireContext(), R.drawable.carousel1, newWidth, newHeight)),
+            CarouselModel("carousel2", imgResizing.resizeImage(requireContext(), R.drawable.carousel2, newWidth, newHeight)),
+            CarouselModel("carousel3", imgResizing.resizeImage(requireContext(), R.drawable.carousel3, newWidth, newHeight)),
+            CarouselModel("carousel4", imgResizing.resizeImage(requireContext(), R.drawable.carousel4, newWidth, newHeight))
+
+        )
+
+        return carouselModelList
     }
 
     private fun initToolbar(){

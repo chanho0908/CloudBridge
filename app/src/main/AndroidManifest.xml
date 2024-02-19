@@ -15,17 +15,17 @@
 
     <application
         android:name=".util.App"
-        android:allowBackup="false"
+        android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
+        android:largeHeap="true"
         android:label="@string/app_name"
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CloudBridge"
         android:usesCleartextTraffic="true"
-        tools:replace="android:allowBackup,android:icon"
         tools:targetApi="31">
         <activity
             android:name=".MenuManagementActivity"
@@ -52,9 +52,6 @@
             android:exported="true" />
         <activity
             android:name=".view.main.SearchActivity"
-            android:exported="true" />
-        <activity
-            android:name=".TestActivity"
             android:exported="true" />
         <activity
             android:name=".view.intro.myStore.MyStoreActivity"
