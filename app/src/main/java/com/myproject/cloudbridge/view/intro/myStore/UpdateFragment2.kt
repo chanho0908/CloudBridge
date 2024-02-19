@@ -141,23 +141,31 @@ class UpdateFragment2 : Fragment(), View.OnClickListener {
         launcherForPermission = registerForActivityResult(contract1) { permissions ->
             if (permissions.any { it.value }) {
                 accessGallery(launcherForActivity)
-            } else {
+            }  else {
                 // 하나 이상의 권한이 거부된 경우 처리할 작업
-                permissions.forEach { (permission, isGranted) ->
-                    when {
-                        !isGranted -> {
-                            // 사용자가 이전에 해당 권한을 거부하고, "다시 묻지 않음"을 선택한 경우에 false를 반환
-                            if (!shouldShowRequestPermissionRationale(permission)) {
-                                // 사용자에게 왜 권한이 필요한지 설명하는 다이얼로그 또는 메시지를 표시
-                                requireContext().showPermissionSnackBar(binding.root)
-                            }
-                        }
+                //  ActivityCompat.shouldShowRequestPermissionRationale
+                //  → 사용자가 권한 요청을 명시적으로 거부한 경우 true를 반환한다.
+                //	→ 사용자가 다시 묻지 않음 선택한 경우 false를 반환한다.
+                permissions.entries.forEach { (permission, isGranted) ->
 
+                    when {
+                        isGranted -> {
+                            // 권한이 승인된 경우 처리할 작업
+                            accessGallery(launcherForActivity)
+                        }
+                        !isGranted -> {
+                            // 권한이 거부된 경우 처리할 작업
+                            // 사용자에게 왜 권한이 필요한지 설명하는 다이얼로그 또는 메시지를 표시
+                            requireContext().showPermissionSnackBar(binding.root)
+                        }
                         else -> {
                             // 사용자가 "다시 묻지 않음"을 선택한 경우 처리할 작업
+                            // 사용자에게 왜 권한이 필요한지 설명하는 다이얼로그 또는 메시지를 표시
                             requireContext().showPermissionSnackBar(binding.root)
                         }
                     }
+
+                    //val context: Context = context ?: return@registerForActivityResult
                 }
             }
         }

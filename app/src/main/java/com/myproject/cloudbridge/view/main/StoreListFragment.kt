@@ -1,6 +1,5 @@
 package com.myproject.cloudbridge.view.main
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -13,7 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.myproject.cloudbridge.R
-import com.myproject.cloudbridge.adapter.rv.adapter.SelectStoreInfoAdapter
+import com.myproject.cloudbridge.adapter.rv.SelectStoreInfoAdapter
 import com.myproject.cloudbridge.databinding.FragmentStoreListBinding
 import com.myproject.cloudbridge.viewModel.StoreManagementViewModel
 import kotlinx.coroutines.launch
@@ -30,24 +29,29 @@ class StoreListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         initViewModel()
         initToolbar()
         initRv()
     }
 
     private fun initViewModel(){
-        // 서버에서 데이터를 가져와 Room에 저장
         viewModel.fromServerToRoomSetAllStoreList()
-        viewModel.showAllStoreFromRoom()
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModel.flag.collect {
+                    if (it) {
+                        viewModel.showAllStoreFromRoom()
+                    }
+                }
+            }
+        }
     }
 
     private fun initRv(){
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModel.list.collect{ list->
+                viewModel.allStoreList.collect{ list->
                     val adapter = SelectStoreInfoAdapter(list)
-
                     binding.rv.layoutManager = LinearLayoutManager(requireContext())
                     binding.rv.adapter =  adapter
                 }

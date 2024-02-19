@@ -11,22 +11,44 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/shrine_pink_100"
-        android:paddingStart="10dp"
-        android:paddingEnd="15dp"
+        android:background="@color/shrine_pink_50"
+        android:paddingTop="10dp"
+        android:paddingStart="15dp"
         app:navigationIcon="@drawable/ic_cloud">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="구름 다리"
+            android:textSize="23sp"
+            android:fontFamily="@font/binggrae_bold"
+            android:textColor="@color/shrine_pink_900"
+            android:textStyle="bold" />
 
     </com.google.android.material.appbar.MaterialToolbar>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:orientation="vertical">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/carousel_rv"
+            android:background="@color/shrine_pink_50"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            app:layoutManager="com.google.android.material.carousel.CarouselLayoutManager"
+
+            />
+
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:background="@color/shrine_pink_50"
+            />
 
     </LinearLayout>
 

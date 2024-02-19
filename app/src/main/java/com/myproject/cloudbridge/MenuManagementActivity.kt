@@ -11,20 +11,20 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.divider.MaterialDividerItemDecoration
-import com.myproject.cloudbridge.adapter.rv.adapter.MenuRvAdapter
+import com.myproject.cloudbridge.adapter.rv.MenuRvAdapter
 import com.myproject.cloudbridge.databinding.ActivityMenuManagementBinding
-import com.myproject.cloudbridge.adapter.rv.model.StoreMenuModel
+import com.myproject.cloudbridge.model.store.StoreMenuRvModel
 import com.myproject.cloudbridge.util.singleton.Utils.REQUEST_IMAGE_PERMISSIONS
 import com.myproject.cloudbridge.util.singleton.Utils.accessGallery
-import com.myproject.cloudbridge.util.management.hasImagePermission
-import com.myproject.cloudbridge.util.management.showPermissionSnackBar
+import com.myproject.cloudbridge.util.hasImagePermission
+import com.myproject.cloudbridge.util.showPermissionSnackBar
 import java.io.InputStream
 
 class MenuManagementActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMenuManagementBinding
     private lateinit var launcherForPermission: ActivityResultLauncher<Array<String>>
     private lateinit var launcherForActivity: ActivityResultLauncher<Intent>
-    private val menuList = ArrayList<StoreMenuModel>()
+    private val menuList = ArrayList<StoreMenuRvModel>()
     private var selectedItemPosition: Int? = null
     private val adapter = MenuRvAdapter(
         this,
@@ -114,7 +114,7 @@ class MenuManagementActivity : AppCompatActivity() {
 
     private fun addMenuItem() {
         // 새로운 항목 생성
-        val newItem = StoreMenuModel(null, "", 0, "")
+        val newItem = StoreMenuRvModel(null, "", 0, "")
 
         // 데이터 리스트에 항목 추가
         menuList.add(newItem)

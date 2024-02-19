@@ -1,21 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="150dp"
-    app:cardElevation="8dp"
-    app:cardUseCompatPadding="true"
-    app:cardCornerRadius="10dp"
-    app:cardPreventCornerOverlap="true"
+    android:layout_height="wrap_content"
     android:orientation="horizontal">
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingTop="10dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp">
 
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
@@ -25,8 +22,8 @@
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/store_img"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:layout_gravity="center_vertical"
                 tools:srcCompat="@tools:sample/avatars" />
 
@@ -35,26 +32,23 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_marginStart="15dp"
-            android:orientation="vertical"
-            >
+            android:layout_weight="1"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/storename_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="18sp"
                 android:text="매장명"
-                />
+                android:textSize="18sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
                 android:text="매장명"
-                />
+                android:textSize="20sp" />
         </LinearLayout>
 
     </LinearLayout>
-</androidx.cardview.widget.CardView>
+</LinearLayout>

@@ -24,10 +24,12 @@ import com.kakao.vectormap.label.LabelStyles
 import com.myproject.cloudbridge.R
 import com.myproject.cloudbridge.databinding.FragmentMapBinding
 import com.myproject.cloudbridge.util.singleton.Utils.REQUEST_LOCATION_PERMISSIONS
-import com.myproject.cloudbridge.util.management.hasLocationPermission
+import com.myproject.cloudbridge.util.hasLocationPermission
 import com.myproject.cloudbridge.util.locationProvider.FusedLocationProvider
 import com.myproject.cloudbridge.util.locationProvider.OnLocationUpdateListener
-import com.myproject.cloudbridge.util.management.showPermissionSnackBar
+import com.myproject.cloudbridge.util.showPermissionSnackBar
+import com.myproject.cloudbridge.util.singleton.Utils
+import com.myproject.cloudbridge.util.singleton.Utils.accessGallery
 import com.myproject.cloudbridge.viewModel.StoreManagementViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -82,22 +84,26 @@ class MapFragment : Fragment(), OnLocationUpdateListener, View.OnClickListener {
 
                 fusedLocationProvider.requestLastLocation()
 
-            } else {
-                // 하나 이상의 권한이 거부된 경우 처리할 작업
-                permissions.forEach { (permission, isGranted) ->
+            }  else {
+                permissions.entries.forEach { (permission, isGranted) ->
+
                     when {
+                        isGranted -> {
+                            // 권한이 승인된 경우 처리할 작업
+                        }
                         !isGranted -> {
-                            // 사용자가 이전에 해당 권한을 거부하고, "다시 묻지 않음"을 선택한 경우에 false를 반환
-                            if(!shouldShowRequestPermissionRationale(permission)){
-                                // 사용자에게 왜 권한이 필요한지 설명하는 다이얼로그 또는 메시지를 표시
-                                requireContext().showPermissionSnackBar(binding.root)
-                            }
+                            // 권한이 거부된 경우 처리할 작업
+                            // 사용자에게 왜 권한이 필요한지 설명하는 다이얼로그 또는 메시지를 표시
+                            requireContext().showPermissionSnackBar(binding.root)
                         }
                         else -> {
                             // 사용자가 "다시 묻지 않음"을 선택한 경우 처리할 작업
+                            // 사용자에게 왜 권한이 필요한지 설명하는 다이얼로그 또는 메시지를 표시
                             requireContext().showPermissionSnackBar(binding.root)
                         }
                     }
+
+                    //val context: Context = context ?: return@registerForActivityResult
                 }
             }
             showMapWithUserCurrentLocation()
@@ -147,11 +153,11 @@ class MapFragment : Fragment(), OnLocationUpdateListener, View.OnClickListener {
         // 1. LabelStyles 설정하기 - Icon 이미지 하나만 있는 스타일
         val styles: LabelStyles = LabelStyles.from(LabelStyle.from(R.drawable.ic_bread_maker_64))
 
-        viewModel.showAllStoreFromRoom()
+        //viewModel.showAllStoreFromRoom()
         viewLifecycleOwner.lifecycleScope.launch {
 
             repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModel.list.collect{
+                viewModel.allStoreList.collect{
                     it.map { store->
                         latLng = LatLng.from(store.latitude.toDouble(), store.longitude.toDouble())
 

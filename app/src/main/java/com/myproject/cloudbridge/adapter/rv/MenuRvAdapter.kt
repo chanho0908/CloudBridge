@@ -1,4 +1,4 @@
-package com.myproject.cloudbridge.adapter.rv.adapter
+package com.myproject.cloudbridge.adapter.rv
 
 import android.content.Context
 import android.util.Log
@@ -6,14 +6,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.RecyclerView
-import com.myproject.cloudbridge.MenuManagementActivity
 import com.myproject.cloudbridge.databinding.StoreMenuItemBinding
-import com.myproject.cloudbridge.adapter.rv.model.StoreMenuModel
-import com.myproject.cloudbridge.util.management.setHelperBoxBlack
-import com.myproject.cloudbridge.util.management.setHelperTextRed
+import com.myproject.cloudbridge.model.store.StoreMenuRvModel
+import com.myproject.cloudbridge.util.setHelperBoxBlack
+import com.myproject.cloudbridge.util.setHelperTextRed
 
 class MenuRvAdapter(private val context: Context,
-                    private val menuList: ArrayList<StoreMenuModel>,
+                    private val menuList: ArrayList<StoreMenuRvModel>,
                     private val imgClickListener: (Int) -> Unit,
                     private val delButtonClickListener: (Int) -> Unit):
     RecyclerView.Adapter<MenuRvAdapter.MenuRvViewHolder>() {
@@ -95,7 +94,7 @@ class MenuRvAdapter(private val context: Context,
         }
 
     }
-    fun getRvListData(): ArrayList<StoreMenuModel> = menuList
+    fun getRvListData(): ArrayList<StoreMenuRvModel> = menuList
 
 }
 

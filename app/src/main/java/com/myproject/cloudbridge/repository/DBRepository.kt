@@ -7,9 +7,9 @@ import com.myproject.cloudbridge.db.entity.UserEntity
 import com.myproject.cloudbridge.util.App
 
 class DBRepository {
-    val context = App.context()
-    val room = UserDatabase.getDatabase(context)
-    val mainDB =  MainDatabase.getDatabase(context).storeDao()
+    private val context = App.context()
+    private val room = UserDatabase.getDatabase(context)
+    private val mainDB =  MainDatabase.getDatabase(context).storeInfoDao()
 
     fun getUserData() = room.UserDao().readUserData() // flow
 

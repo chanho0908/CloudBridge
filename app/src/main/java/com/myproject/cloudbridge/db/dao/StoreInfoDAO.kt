@@ -8,9 +8,8 @@ import androidx.room.Update
 import com.myproject.cloudbridge.db.entity.StoreEntity
 import kotlinx.coroutines.flow.Flow
 
-
 @Dao
-interface StoreDao {
+interface StoreInfoDAO {
     @Query("SELECT * FROM store_table")
     fun readAllStoreInfo() : Flow<List<StoreEntity>>
 
