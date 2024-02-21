@@ -8,16 +8,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.myproject.cloudbridge.databinding.StoreItemBinding
 import com.myproject.cloudbridge.localDB.entity.StoreEntity
+import com.myproject.cloudbridge.model.store.StoreInfoSettingModel
 
-class StoreListAdapter(private val s: String): ListAdapter<StoreEntity, StoreListAdapter.MainViewHolder>(DiffCallback){
+class StoreListAdapter: ListAdapter<StoreInfoSettingModel, StoreListAdapter.MainViewHolder>(DiffCallback){
 
     companion object{
-        private val DiffCallback = object : DiffUtil.ItemCallback<StoreEntity>(){
-            override fun areItemsTheSame(oldItem: StoreEntity, newItem: StoreEntity): Boolean {
-                return oldItem.crn == newItem.crn
+        private val DiffCallback = object : DiffUtil.ItemCallback<StoreInfoSettingModel>(){
+            override fun areItemsTheSame(oldItem: StoreInfoSettingModel, newItem: StoreInfoSettingModel): Boolean {
+                return oldItem.storeInfo == newItem.storeInfo
             }
 
-            override fun areContentsTheSame(oldItem: StoreEntity, newItem: StoreEntity): Boolean {
+            override fun areContentsTheSame(oldItem: StoreInfoSettingModel, newItem: StoreInfoSettingModel): Boolean {
                 return oldItem == newItem
             }
 
@@ -34,12 +35,14 @@ class StoreListAdapter(private val s: String): ListAdapter<StoreEntity, StoreLis
         val binding = holder.binding
         val item = getItem(position)
 
-        Glide.with(binding.root)
-            .load(item.imagePath)
-            .into(binding.storeImg)
+        with(binding){
+            Glide.with(binding.root)
+                .load(item.storeImage)
+                .into(binding.storeImg)
 
-        //binding.storeImg.setImageURI(Uri.parse(getItem(position).imagePath))
-        //binding.storenameTv.text = item.storeName
+            storename.text = item.storeInfo.storeName
+        }
+
 
     }
 }

@@ -2,6 +2,7 @@ package com.myproject.cloudbridge.view.main
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.myproject.cloudbridge.R
+import com.myproject.cloudbridge.adapter.rv.StoreListAdapter
 import com.myproject.cloudbridge.databinding.FragmentStoreListBinding
 import com.myproject.cloudbridge.view.search.SearchActivity
 import com.myproject.cloudbridge.viewModel.StoreManagementViewModel
@@ -29,37 +31,27 @@ class StoreListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initViewModel()
+        initView()
         initToolbar()
         initRv()
     }
 
-    private fun initViewModel(){
-        viewModel.fromServerToRoomSetAllStoreList()
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModel.flag.collect {
-                    if (it) {
-                        viewModel.showAllStoreFromRoom()
-                    }
-                }
-            }
-        }
+    private fun initView(){
+        viewModel.showAllStoreFromRoom()
     }
 
     private fun initRv(){
-
-
         with(binding){
-
-
             viewLifecycleOwner.lifecycleScope.launch {
                 repeatOnLifecycle(Lifecycle.State.STARTED){
-                    viewModel.allStoreList.collect{ list->
-                        //val adapter = SelectStoreInfoAdapter(list)
+
+                    viewModel.allStoreData.collect{
+                        val adapter = StoreListAdapter()
+                        adapter.submitList(it)
                         rv.layoutManager = LinearLayoutManager(requireContext())
-                        //rv.adapter =  adapter
+                        rv.adapter =  adapter
                     }
+
                 }
             }
         }

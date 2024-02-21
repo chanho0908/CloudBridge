@@ -156,9 +156,9 @@ class MapFragment : Fragment(), OnLocationUpdateListener, View.OnClickListener {
         viewLifecycleOwner.lifecycleScope.launch {
 
             repeatOnLifecycle(Lifecycle.State.STARTED){
-                viewModel.allStoreList.collect{
-                    it.map { store->
-                        latLng = LatLng.from(store.latitude.toDouble(), store.longitude.toDouble())
+                viewModel.allStoreData.collect{
+                    it?.map { store->
+                        latLng = LatLng.from(store.storeInfo.latitude.toDouble(), store.storeInfo.longitude.toDouble())
 
                         // 2. LabelOptions 생성하기
                         val options = LabelOptions.from(latLng)
