@@ -58,13 +58,13 @@ class UpdateFragment2 : Fragment(), View.OnClickListener {
     }
 
     private fun initView() {
-        viewModel.getMyStoreInfo(args.crn)
+        viewModel.getMyStoreInfo()
 
         with(binding) {
             viewLifecycleOwner.lifecycleScope.launch {
                 repeatOnLifecycle(Lifecycle.State.STARTED) {
                     viewModel.imgLoading.collect {
-                        if (it) {
+                        if (it == true) {
                             viewModel.myStore.collect { myStore ->
 
                                 storeNameEdit.setText(myStore.storeInfo.storeName)
@@ -88,7 +88,7 @@ class UpdateFragment2 : Fragment(), View.OnClickListener {
             // https://kotlinworld.com/228
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.flag.collect {
-                    if (it) {
+                    if (it == true) {
                         val intent = Intent(requireContext(), MyStoreActivity::class.java)
                         intent.putExtra("crn", args.crn)
                         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP

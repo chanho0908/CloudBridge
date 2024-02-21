@@ -63,7 +63,7 @@ class StoreInfoRegistrationFragment : Fragment(), View.OnClickListener {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.flag.collect {
-                    if (it) {
+                    if (it == true) {
                         val intent = Intent(activity, MyStoreActivity::class.java)
                         intent.putExtra("FLAG", "REGISTER")
                         intent.putExtra("crn", args.bno)

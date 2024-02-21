@@ -23,6 +23,9 @@ import com.myproject.cloudbridge.util.singleton.Utils.makeStoreMainImage
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.forEach
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
 class StoreManagementViewModel : ViewModel() {
@@ -44,11 +47,11 @@ class StoreManagementViewModel : ViewModel() {
     val myStore = _myStore.asStateFlow()
 
     // 서버 작업이 완료됐음을 알리는 flag
-    private val _flag = MutableStateFlow(false)
+    private val _flag = MutableStateFlow<Boolean?>(null)
     val flag = _flag.asStateFlow()
 
     // 로컬 서버 이미지 작업이 완료 됐음을 알리는 flag
-    private val _imgLoading = MutableStateFlow(false)
+    private val _imgLoading = MutableStateFlow<Boolean?>(null)
     val imgLoading = _imgLoading.asStateFlow()
 
     // 나의 사업자 등록번호와 일치하는가 ?
@@ -58,8 +61,8 @@ class StoreManagementViewModel : ViewModel() {
     val isEqualCrn = _isEqualCrn.asStateFlow()
 
     // 모든 매장 정보
-    private var _allStoreList = MutableStateFlow<List<StoreEntity>>(emptyList())
-    val allStoreList = _allStoreList.asStateFlow()
+    private var _allStoreData = MutableStateFlow<ArrayList<StoreInfoSettingModel>?>(null)
+    val allStoreData = _allStoreData.asStateFlow()
 
     // 내 사업자 등록 번호
     private var _myCompanyRegistrationNumber = MutableStateFlow<String?>(null)
@@ -103,17 +106,6 @@ class StoreManagementViewModel : ViewModel() {
                     requestImageFromServer(it.imagePath)
                 }
             }
-
-        } catch (e: Exception) {
-            Log.d(TAG, "getMyStoreInfo: $e")
-        }
-    }
-
-    fun getAllStoreInfo() = viewModelScope.launch(Dispatchers.IO) {
-        try {
-            val response = networkRepository.getAllStoreInfo()
-            val images = response.map { requestImageFromServer(it.imagePath) }
-            Log.d("Dasds", images[0].toString())
 
         } catch (e: Exception) {
             Log.d(TAG, "getMyStoreInfo: $e")
@@ -215,7 +207,6 @@ class StoreManagementViewModel : ViewModel() {
 
                     // Remote DB 삭제
                     networkRepository.deleteMyStoreInfo(it)
-                    _flag.value = true
                 }
             }
         }catch (e: Exception){
@@ -258,15 +249,12 @@ class StoreManagementViewModel : ViewModel() {
 
                     if (findEntity != null) {
                         // Room 에 이미 있는 데이터면 업데이트
-                        Log.d(TAG, "엡데이트")
                         dbRepository.updateStoreInfo(newStoreEntity)
                     } else {
                         // Room 에 없는 데이터면 추가
-                        Log.d(TAG, "추가")
                         dbRepository.insertStoreInfo(newStoreEntity)
                     }
                 }
-                Log.d(TAG, "fromServerToRoomSetAllStoreList end \n")
                 _flag.value = true
             }
 
@@ -277,9 +265,22 @@ class StoreManagementViewModel : ViewModel() {
 
     // 모든 매장 정보
     fun showAllStoreFromRoom() = viewModelScope.launch {
+        fromServerToRoomSetAllStoreList()
+        val allStoreData =  ArrayList<StoreInfoSettingModel>()
+
         dbRepository.getAllStoreInfo().stateIn(viewModelScope).collect { storeEntities ->
-            _allStoreList.value = storeEntities
+
+            storeEntities. forEach { storeEntity ->
+                val imagePath = storeEntity.imagePath
+                val imgBase64 = networkRepository.getMyStoreMainImage(imagePath)
+                val decodedImg = Base64ToBitmaps(imgBase64)
+                allStoreData.add(StoreInfoSettingModel(storeEntity, decodedImg))
+            }
+
+            _allStoreData.value = allStoreData
+            _flag.value = true
         }
+
     }
 
     fun checkMyCompanyRegistrationNumber(crn: String) = viewModelScope.launch {

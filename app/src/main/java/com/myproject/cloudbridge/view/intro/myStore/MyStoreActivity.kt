@@ -35,12 +35,12 @@ class MyStoreActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun initCoroutineProcess() {
         crn = intent.getStringExtra("crn").toString()
-        viewModel.getMyStoreInfo(crn)
+        viewModel.getMyStoreInfo()
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.imgLoading.collect { loading ->
-                    if (loading) {
+                    if (loading == true) {
                         viewModel.myStore.collect { store ->
                             initView(store)
                         }
@@ -52,7 +52,7 @@ class MyStoreActivity : AppCompatActivity(), View.OnClickListener {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.flag.collect {
-                    if (it) {
+                    if (it == true) {
                         val intent = Intent(this@MyStoreActivity, NotRegistsedStoreActivity::class.java)
                         intent.putExtra("FLAG", "DELETE")
                         startActivity(intent)
