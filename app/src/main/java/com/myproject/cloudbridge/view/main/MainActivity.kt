@@ -13,6 +13,7 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
     private val storeListFragment = StoreListFragment()
     private val mapFragment = MapFragment()
     private val myPageFragment = MyPageFragment()
+    private val awardFragment = AwardFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +28,10 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
         return when(item.itemId){
             R.id.homeFragment -> {
                 setCurrentFragment(storeListFragment)
+                true
+            }
+            R.id.awardFragment -> {
+                setCurrentFragment(awardFragment)
                 true
             }
             R.id.mapFragment -> {

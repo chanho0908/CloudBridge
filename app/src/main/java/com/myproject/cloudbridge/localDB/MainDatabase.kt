@@ -1,13 +1,13 @@
-package com.myproject.cloudbridge.db
+package com.myproject.cloudbridge.localDB
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.myproject.cloudbridge.db.dao.StoreInfoDAO
-import com.myproject.cloudbridge.db.entity.StoreEntity
-import com.myproject.cloudbridge.db.typeConverter.ImageTypeConverter
+import com.myproject.cloudbridge.localDB.dao.StoreInfoDAO
+import com.myproject.cloudbridge.localDB.entity.StoreEntity
+import com.myproject.cloudbridge.localDB.typeConverter.ImageTypeConverter
 
 @Database(entities = [StoreEntity::class], version=4)
 @TypeConverters(ImageTypeConverter::class)

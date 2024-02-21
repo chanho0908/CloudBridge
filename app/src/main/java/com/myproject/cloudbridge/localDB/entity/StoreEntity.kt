@@ -1,13 +1,8 @@
-package com.myproject.cloudbridge.db.entity
+package com.myproject.cloudbridge.localDB.entity
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.net.Uri
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import androidx.room.TypeConverter
-import java.io.ByteArrayOutputStream
 
 @Entity(tableName = "store_table")
 data class StoreEntity (

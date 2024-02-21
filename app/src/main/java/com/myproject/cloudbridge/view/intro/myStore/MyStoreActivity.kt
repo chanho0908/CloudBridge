@@ -3,7 +3,6 @@ package com.myproject.cloudbridge.view.intro.myStore
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.lifecycle.Lifecycle
@@ -13,11 +12,10 @@ import com.bumptech.glide.Glide
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.myproject.cloudbridge.R
 import com.myproject.cloudbridge.databinding.ActivityMyStoreBinding
-import com.myproject.cloudbridge.model.store.MyStoreInfoSettingModel
+import com.myproject.cloudbridge.model.store.StoreInfoSettingModel
 import com.myproject.cloudbridge.view.intro.myPage.NotRegistsedStoreActivity
 import com.myproject.cloudbridge.view.main.MainActivity
 import com.myproject.cloudbridge.viewModel.StoreManagementViewModel
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -65,7 +63,7 @@ class MyStoreActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
-    private fun initView(myStore: MyStoreInfoSettingModel) {
+    private fun initView(myStore: StoreInfoSettingModel) {
         with(binding) {
             storeCeoNameTextView.text = myStore.storeInfo.ceoName
             storeNameTextView.text = myStore.storeInfo.storeName

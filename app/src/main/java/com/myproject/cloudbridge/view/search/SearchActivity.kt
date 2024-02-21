@@ -1,8 +1,7 @@
-package com.myproject.cloudbridge.view.main
+package com.myproject.cloudbridge.view.search
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.myproject.cloudbridge.R
 import com.myproject.cloudbridge.databinding.ActivitySearchBinding
 
 class SearchActivity : AppCompatActivity() {

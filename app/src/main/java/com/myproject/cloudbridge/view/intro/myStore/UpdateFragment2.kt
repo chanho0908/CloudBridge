@@ -25,9 +25,9 @@ import com.myproject.cloudbridge.util.singleton.Utils.REQUEST_IMAGE_PERMISSIONS
 import com.myproject.cloudbridge.util.singleton.Utils.accessGallery
 import com.myproject.cloudbridge.util.singleton.Utils.makeStoreMainImage
 import com.myproject.cloudbridge.util.singleton.Utils.requestPlzInputText
-import com.myproject.cloudbridge.util.singleton.Utils.translateGeo
 import com.myproject.cloudbridge.util.hasImagePermission
 import com.myproject.cloudbridge.util.showPermissionSnackBar
+import com.myproject.cloudbridge.util.translateGeo
 import com.myproject.cloudbridge.view.storeRegistration.AddressActivity
 import com.myproject.cloudbridge.viewModel.StoreManagementViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -235,7 +235,7 @@ class UpdateFragment2 : Fragment(), View.OnClickListener {
                         requestPlzInputText("주소를 입력해 주세요", addrLayout)
                         addrLayout.requestFocus()
                     } else {
-                        val location = translateGeo(addr)
+                        val location = requireContext().translateGeo(addr)
 
                         val lat = location.latitude
                         val lng = location.longitude

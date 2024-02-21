@@ -16,13 +16,12 @@ import androidx.navigation.Navigation
 import com.myproject.cloudbridge.R
 import com.myproject.cloudbridge.databinding.FragmentCPRBinding
 import com.myproject.cloudbridge.model.store.AllCrnResponseModel
-import com.myproject.cloudbridge.util.singleton.Utils.hideSoftInput
-
+import com.myproject.cloudbridge.util.hideSoftInput
 import com.myproject.cloudbridge.util.setHelperTextGreen
 import com.myproject.cloudbridge.util.setHelperTextGreenList
 import com.myproject.cloudbridge.util.setHelperTextRed
 import com.myproject.cloudbridge.util.setHelperTextRedList
-import com.myproject.cloudbridge.util.singleton.Utils.showSoftInput
+import com.myproject.cloudbridge.util.showSoftInput
 import com.myproject.cloudbridge.view.intro.myPage.NotRegistsedStoreActivity
 import com.myproject.cloudbridge.viewModel.StoreManagementViewModel
 import kotlinx.coroutines.launch
@@ -52,7 +51,7 @@ class CPRFragment : Fragment() {
         with(binding){
 
             cprLayout.requestFocus()
-            showSoftInput(cprEdit)
+            requireContext().showSoftInput(cprEdit)
 
             materialToolbar.setNavigationOnClickListener {
                 val intent = Intent(requireContext(), NotRegistsedStoreActivity::class.java)
@@ -131,7 +130,7 @@ class CPRFragment : Fragment() {
 
     private fun setPermittedBox(){
         with(binding) {
-            hideSoftInput(cprEdit)
+            requireContext().hideSoftInput(cprEdit)
             cprLayout.setStartIconDrawable(R.drawable.baseline_check_24)
             cprLayout.setStartIconTintList(requireContext().setHelperTextGreenList())
             cprLayout.setHelperTextColor(ColorStateList.valueOf(requireContext().setHelperTextGreen()))

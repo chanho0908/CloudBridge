@@ -30,10 +30,10 @@ import com.myproject.cloudbridge.util.singleton.Utils.REQUEST_IMAGE_PERMISSIONS
 import com.myproject.cloudbridge.util.singleton.Utils.accessGallery
 import com.myproject.cloudbridge.util.singleton.Utils.makeStoreMainImage
 import com.myproject.cloudbridge.util.singleton.Utils.requestPlzInputText
-import com.myproject.cloudbridge.util.singleton.Utils.showSoftInput
-import com.myproject.cloudbridge.util.singleton.Utils.translateGeo
 import com.myproject.cloudbridge.util.hasImagePermission
 import com.myproject.cloudbridge.util.showPermissionSnackBar
+import com.myproject.cloudbridge.util.showSoftInput
+import com.myproject.cloudbridge.util.translateGeo
 
 class StoreInfoRegistrationFragment : Fragment(), View.OnClickListener {
     private var _binding: FragmentStoreInfoRegistrationBinding? = null
@@ -85,7 +85,7 @@ class StoreInfoRegistrationFragment : Fragment(), View.OnClickListener {
             imgLoadButton.setOnClickListener(this@StoreInfoRegistrationFragment)
 
             storeNameLayout.requestFocus()
-            showSoftInput(storeNameEdit)
+            requireContext().showSoftInput(storeNameEdit)
 
             materialToolbar.setNavigationOnClickListener {
                 val action = R.id.action_storeInfoRegistrationFragment_to_CPRFragment
@@ -203,7 +203,7 @@ class StoreInfoRegistrationFragment : Fragment(), View.OnClickListener {
                     } else if (imgUrl == Uri.parse("")) {
                         binding.RequestImageTextView.visibility = View.VISIBLE
                     } else {
-                        val location = translateGeo(addr)
+                        val location = requireContext().translateGeo(addr)
 
                         val lat = location.latitude
                         val lng = location.longitude

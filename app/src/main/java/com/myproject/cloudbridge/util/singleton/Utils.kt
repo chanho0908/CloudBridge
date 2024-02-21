@@ -95,48 +95,6 @@ object Utils {
         launcherForActivity.launch(intent)
     }
 
-    //주소로 위도,경도 구하는 GeoCoding
-    fun translateGeo(address: String): Location = try {
-        val locations = getContext().let { Geocoder(it, Locale.KOREA).getFromLocationName(address, 1) }
-
-        if (!locations.isNullOrEmpty()) {
-            Location("").apply {
-                latitude = locations[0].latitude
-                longitude = locations[0].longitude
-            }
-        } else {
-            throw Exception("주소를 변환할 수 없습니다.")
-        }
-    } catch (e: Exception) {
-        e.printStackTrace()
-        // 예외 발생 시 빈 Location 객체를 반환
-        Location("").apply {
-            latitude = 0.0
-            longitude = 0.0
-        }
-    }
-
-    fun String.isNumeric(): Boolean {
-        return this.all { it.isDigit() }
-    }
-
-
-    fun showSoftInput(focusView: TextInputEditText) {
-        CoroutineScope(Dispatchers.IO).launch {
-            delay(100)
-            val inputMethodManager = getContext().getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager
-            inputMethodManager.showSoftInput(focusView, 0)
-        }
-    }
-
-    fun hideSoftInput(focusView: TextInputEditText) {
-        CoroutineScope(Dispatchers.IO).launch {
-            delay(100)
-            val inputMethodManager = getContext().getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager
-            inputMethodManager.hideSoftInputFromWindow(focusView.windowToken, 0)
-        }
-    }
-
     fun requestPlzInputText(msg: String, v: TextInputLayout){
         v.helperText = msg
         v.requestFocus()

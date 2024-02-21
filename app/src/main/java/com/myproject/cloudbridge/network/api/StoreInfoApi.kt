@@ -1,4 +1,4 @@
-package com.myproject.cloudbridge.api
+package com.myproject.cloudbridge.network.api
 
 import com.myproject.cloudbridge.model.store.AllCrnResponseModel
 import com.myproject.cloudbridge.model.store.MyStoreInfoResponseModel

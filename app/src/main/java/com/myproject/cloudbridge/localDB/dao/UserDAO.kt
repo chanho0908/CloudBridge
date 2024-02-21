@@ -1,11 +1,11 @@
-package com.myproject.cloudbridge.db.dao
+package com.myproject.cloudbridge.localDB.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import com.myproject.cloudbridge.db.entity.UserEntity
+import com.myproject.cloudbridge.localDB.entity.UserEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao

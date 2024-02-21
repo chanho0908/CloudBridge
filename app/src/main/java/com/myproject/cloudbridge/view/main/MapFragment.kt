@@ -28,8 +28,7 @@ import com.myproject.cloudbridge.util.hasLocationPermission
 import com.myproject.cloudbridge.util.locationProvider.FusedLocationProvider
 import com.myproject.cloudbridge.util.locationProvider.OnLocationUpdateListener
 import com.myproject.cloudbridge.util.showPermissionSnackBar
-import com.myproject.cloudbridge.util.singleton.Utils
-import com.myproject.cloudbridge.util.singleton.Utils.accessGallery
+import com.myproject.cloudbridge.view.search.SearchActivity
 import com.myproject.cloudbridge.viewModel.StoreManagementViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

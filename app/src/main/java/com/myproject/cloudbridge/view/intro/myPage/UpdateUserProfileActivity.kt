@@ -11,7 +11,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.kakao.sdk.user.UserApiClient
 import com.myproject.cloudbridge.dataStore.MainDataStore
 import com.myproject.cloudbridge.databinding.ActivityUpdateUserProfileBinding
-import com.myproject.cloudbridge.db.entity.UserEntity
+import com.myproject.cloudbridge.localDB.entity.UserEntity
 import com.myproject.cloudbridge.viewModel.UserManagementViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

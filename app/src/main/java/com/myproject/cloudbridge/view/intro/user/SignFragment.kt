@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import com.myproject.cloudbridge.databinding.FragmentSignBinding
-import com.myproject.cloudbridge.db.entity.UserEntity
+import com.myproject.cloudbridge.localDB.entity.UserEntity
 import com.myproject.cloudbridge.view.main.MainActivity
 import com.myproject.cloudbridge.viewModel.IntroViewModel
 

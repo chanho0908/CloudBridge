@@ -1,11 +1,11 @@
-package com.myproject.cloudbridge.db
+package com.myproject.cloudbridge.localDB
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.myproject.cloudbridge.db.dao.UserDAO
-import com.myproject.cloudbridge.db.entity.UserEntity
+import com.myproject.cloudbridge.localDB.dao.UserDAO
+import com.myproject.cloudbridge.localDB.entity.UserEntity
 
 @Database(entities = [UserEntity::class], version = 3)
 abstract class UserDatabase: RoomDatabase() {

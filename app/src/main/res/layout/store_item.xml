@@ -25,7 +25,7 @@
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_gravity="center_vertical"
-                tools:srcCompat="@tools:sample/avatars" />
+                 />
 
         </androidx.cardview.widget.CardView>
 
@@ -37,7 +37,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/storename_tv"
+                android:id="@+id/storename"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="매장명"

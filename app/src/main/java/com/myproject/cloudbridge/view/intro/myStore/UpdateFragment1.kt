@@ -18,9 +18,8 @@ import com.myproject.cloudbridge.util.setHelperTextGreen
 import com.myproject.cloudbridge.util.setHelperTextGreenList
 import com.myproject.cloudbridge.util.setHelperTextRed
 import com.myproject.cloudbridge.util.setHelperTextRedList
-import com.myproject.cloudbridge.util.singleton.Utils.showSoftInput
+import com.myproject.cloudbridge.util.showSoftInput
 import com.myproject.cloudbridge.viewModel.StoreManagementViewModel
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class UpdateFragment1 : Fragment() {
@@ -69,7 +68,7 @@ class UpdateFragment1 : Fragment() {
         with(binding) {
 
             cprLayout.requestFocus()
-            showSoftInput(cprEdit)
+            requireContext().showSoftInput(cprEdit)
 
             materialToolbar.setNavigationOnClickListener {
                 activity?.finish()

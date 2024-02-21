@@ -51,7 +51,7 @@
             android:name=".view.intro.myStore.StoreUpdateActivity"
             android:exported="true" />
         <activity
-            android:name=".view.main.SearchActivity"
+            android:name=".view.search.SearchActivity"
             android:exported="true" />
         <activity
             android:name=".view.intro.myStore.MyStoreActivity"

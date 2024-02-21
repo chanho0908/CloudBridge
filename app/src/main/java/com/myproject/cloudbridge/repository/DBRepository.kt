@@ -1,9 +1,9 @@
 package com.myproject.cloudbridge.repository
 
-import com.myproject.cloudbridge.db.MainDatabase
-import com.myproject.cloudbridge.db.entity.StoreEntity
-import com.myproject.cloudbridge.db.UserDatabase
-import com.myproject.cloudbridge.db.entity.UserEntity
+import com.myproject.cloudbridge.localDB.MainDatabase
+import com.myproject.cloudbridge.localDB.entity.StoreEntity
+import com.myproject.cloudbridge.localDB.UserDatabase
+import com.myproject.cloudbridge.localDB.entity.UserEntity
 import com.myproject.cloudbridge.util.App
 
 class DBRepository {

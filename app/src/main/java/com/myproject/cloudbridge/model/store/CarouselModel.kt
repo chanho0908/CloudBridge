@@ -4,5 +4,5 @@ import android.graphics.Bitmap
 
 data class CarouselModel (
     val id: String,
-    val bitmap: Bitmap
+    val resource: Int
 )

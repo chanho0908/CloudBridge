@@ -2,8 +2,8 @@ package com.myproject.cloudbridge.repository
 
 import com.myproject.cloudbridge.model.store.CrnStateRequestModel
 import com.myproject.cloudbridge.model.store.MyStoreInfoRequestModel
-import com.myproject.cloudbridge.retrofit.CRNRetrofitInstance
-import com.myproject.cloudbridge.retrofit.MySQLIStoreInstance
+import com.myproject.cloudbridge.network.retrofit.CRNRetrofitInstance
+import com.myproject.cloudbridge.network.retrofit.MySQLIStoreInstance
 import com.myproject.cloudbridge.util.singleton.Utils.SECRETE_KEY
 
 class NetworkRepository {

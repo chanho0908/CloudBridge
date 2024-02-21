@@ -6,13 +6,12 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.firestore.DocumentReference
 import com.kakao.sdk.user.UserApiClient
 import com.myproject.cloudbridge.dataStore.MainDataStore
-import com.myproject.cloudbridge.db.entity.UserEntity
+import com.myproject.cloudbridge.localDB.entity.UserEntity
 import com.myproject.cloudbridge.repository.DBRepository
 import com.myproject.cloudbridge.repository.NetworkRepository
 import com.myproject.cloudbridge.util.App
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class UserManagementViewModel: ViewModel() {

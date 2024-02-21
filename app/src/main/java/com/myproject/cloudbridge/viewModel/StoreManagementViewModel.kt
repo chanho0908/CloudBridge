@@ -9,26 +9,20 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import android.util.Log
-import com.myproject.cloudbridge.db.entity.StoreEntity
+import com.myproject.cloudbridge.localDB.entity.StoreEntity
 import com.myproject.cloudbridge.model.store.AllCrnResponseModel
 import com.myproject.cloudbridge.model.store.CrnStateResponseModel
 import com.myproject.cloudbridge.model.store.CrnStateRequestModel
 import com.myproject.cloudbridge.model.store.MyStoreInfoRequestModel
-import com.myproject.cloudbridge.model.store.MyStoreInfoSettingModel
+import com.myproject.cloudbridge.model.store.StoreInfoSettingModel
 import com.myproject.cloudbridge.repository.DBRepository
 import com.myproject.cloudbridge.repository.NetworkRepository
-import com.myproject.cloudbridge.util.singleton.Utils
 import com.myproject.cloudbridge.util.singleton.Utils.Base64ToBitmaps
 import com.myproject.cloudbridge.util.singleton.Utils.createRequestBody
 import com.myproject.cloudbridge.util.singleton.Utils.makeStoreMainImage
 import kotlinx.coroutines.async
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.stateIn
 
 class StoreManagementViewModel : ViewModel() {
@@ -46,7 +40,7 @@ class StoreManagementViewModel : ViewModel() {
     val crnList = _crnList.asStateFlow()
 
     // 나의 매장 정보
-    private var _myStore: MutableStateFlow<MyStoreInfoSettingModel> = MutableStateFlow(initStoreData())
+    private var _myStore: MutableStateFlow<StoreInfoSettingModel> = MutableStateFlow(initStoreData())
     val myStore = _myStore.asStateFlow()
 
     // 서버 작업이 완료됐음을 알리는 flag
@@ -100,13 +94,27 @@ class StoreManagementViewModel : ViewModel() {
         }
     }
 
-    fun getMyStoreInfo(crn: String) = viewModelScope.launch(Dispatchers.IO) {
+    fun getMyStoreInfo() = viewModelScope.launch(Dispatchers.IO) {
         try {
-            val response = dbRepository.getMyStoreInfo(crn)
-            response.stateIn(viewModelScope).collect {
-                _myStore.value.storeInfo = it
-                requestImageFromServer(it.imagePath)
+            myCompanyRegistrationNumber.collect{ myCompanyRegistrationNumber->
+                val response = dbRepository.getMyStoreInfo(myCompanyRegistrationNumber.toString())
+                response.stateIn(viewModelScope).collect {
+                    _myStore.value.storeInfo = it
+                    requestImageFromServer(it.imagePath)
+                }
             }
+
+        } catch (e: Exception) {
+            Log.d(TAG, "getMyStoreInfo: $e")
+        }
+    }
+
+    fun getAllStoreInfo() = viewModelScope.launch(Dispatchers.IO) {
+        try {
+            val response = networkRepository.getAllStoreInfo()
+            val images = response.map { requestImageFromServer(it.imagePath) }
+            Log.d("Dasds", images[0].toString())
+
         } catch (e: Exception) {
             Log.d(TAG, "getMyStoreInfo: $e")
         }
@@ -125,7 +133,7 @@ class StoreManagementViewModel : ViewModel() {
 
     // 메장 정보 등록
     fun registrationStore(imgUrl: Uri, storeName: String, ceoName: String, crn: String,
-        phone: String, addr: String, lat: String, lng: String, kind: String) = viewModelScope.launch(Dispatchers.IO) {
+                          phone: String, addr: String, lat: String, lng: String, kind: String) = viewModelScope.launch(Dispatchers.IO) {
         try {
 
             val imgBody = makeStoreMainImage(imgUrl)
@@ -150,13 +158,13 @@ class StoreManagementViewModel : ViewModel() {
             fromServerToRoomSetAllStoreList()
             // flag가 변경 = 네트워크 통신 종료
             _flag.value = true
-            } catch (e: Exception) {
-                Log.d(TAG, "MyPageViewModel: $e")
-            }
+        } catch (e: Exception) {
+            Log.d(TAG, "MyPageViewModel: $e")
+        }
     }
 
     fun updateMyStore(imgBody: MultipartBody.Part? = null, storeName: String, ceoName: String, crn: String,
-        phone: String, addr: String, lat: String, lng: String, kind: String) = viewModelScope.launch(Dispatchers.IO) {
+                      phone: String, addr: String, lat: String, lng: String, kind: String) = viewModelScope.launch(Dispatchers.IO) {
         try {
             myStoreInfoRequestModel = if (imgBody != null) {
                 // 매장 정보를 RequestBody Type으로 변환 후
@@ -216,7 +224,7 @@ class StoreManagementViewModel : ViewModel() {
     }
 
     // Room에 서버 매장 데이터 저장
-     fun fromServerToRoomSetAllStoreList() = viewModelScope.launch(Dispatchers.IO) {
+    fun fromServerToRoomSetAllStoreList() = viewModelScope.launch(Dispatchers.IO) {
         try {
             dbRepository.getAllStoreInfo().stateIn(viewModelScope).collect { storeEntities ->
 
@@ -275,7 +283,7 @@ class StoreManagementViewModel : ViewModel() {
     }
 
     fun checkMyCompanyRegistrationNumber(crn: String) = viewModelScope.launch {
-       myCompanyRegistrationNumber.collect {
+        myCompanyRegistrationNumber.collect {
             _isEqualCrn.value = it == crn
         }
     }
@@ -292,7 +300,7 @@ class StoreManagementViewModel : ViewModel() {
         )
     }
 
-    private fun initStoreData() = MyStoreInfoSettingModel(
+    private fun initStoreData() = StoreInfoSettingModel(
         StoreEntity("", "", "", "", "", "", "", "", ""),
         Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
     )

@@ -1,4 +1,4 @@
-package com.myproject.cloudbridge.view.main
+package com.myproject.cloudbridge.view.search
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,11 +6,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.addCallback
 import androidx.appcompat.widget.SearchView
-import androidx.navigation.Navigation
-import androidx.navigation.fragment.findNavController
 import com.myproject.cloudbridge.databinding.FragmentSearchBinding
+import com.myproject.cloudbridge.view.main.MainActivity
 
 class SearchFragment : Fragment() {
     private var _binding : FragmentSearchBinding ?= null

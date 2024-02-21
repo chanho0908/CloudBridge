@@ -1,6 +1,6 @@
-package com.myproject.cloudbridge.retrofit
+package com.myproject.cloudbridge.network.retrofit
 
-import com.myproject.cloudbridge.api.CompanyRegistrationNumberApi
+import com.myproject.cloudbridge.network.api.CompanyRegistrationNumberApi
 import com.myproject.cloudbridge.util.singleton.MyOkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

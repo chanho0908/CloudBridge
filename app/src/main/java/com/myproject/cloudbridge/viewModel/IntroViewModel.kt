@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.myproject.cloudbridge.dataStore.MainDataStore
-import com.myproject.cloudbridge.db.entity.UserEntity
+import com.myproject.cloudbridge.localDB.entity.UserEntity
 import com.myproject.cloudbridge.model.user.User
 import com.myproject.cloudbridge.repository.DBRepository
 import com.myproject.cloudbridge.util.App

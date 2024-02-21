@@ -1,6 +1,5 @@
 package com.myproject.cloudbridge.adapter.rv
 
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -8,9 +7,9 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.myproject.cloudbridge.databinding.StoreItemBinding
-import com.myproject.cloudbridge.db.entity.StoreEntity
+import com.myproject.cloudbridge.localDB.entity.StoreEntity
 
-class StoreListAdapter: ListAdapter<StoreEntity, StoreListAdapter.MainViewHolder>(DiffCallback){
+class StoreListAdapter(private val s: String): ListAdapter<StoreEntity, StoreListAdapter.MainViewHolder>(DiffCallback){
 
     companion object{
         private val DiffCallback = object : DiffUtil.ItemCallback<StoreEntity>(){
@@ -40,7 +39,7 @@ class StoreListAdapter: ListAdapter<StoreEntity, StoreListAdapter.MainViewHolder
             .into(binding.storeImg)
 
         //binding.storeImg.setImageURI(Uri.parse(getItem(position).imagePath))
-        binding.storenameTv.text = item.storeName
+        //binding.storenameTv.text = item.storeName
 
     }
 }
