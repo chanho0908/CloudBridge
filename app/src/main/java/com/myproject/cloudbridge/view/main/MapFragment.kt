@@ -3,6 +3,7 @@ package com.myproject.cloudbridge.view.main
 import android.content.Intent
 import android.location.Location
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -67,7 +68,7 @@ class MapFragment : Fragment(), OnLocationUpdateListener, View.OnClickListener {
 
         CoroutineScope(Dispatchers.Main).launch {
             binding.progressBar.setProgressCompat(60, true)
-            delay(400)
+            delay(420)
             binding.progressBar.setProgressCompat(100, true)
         }
 
@@ -152,12 +153,13 @@ class MapFragment : Fragment(), OnLocationUpdateListener, View.OnClickListener {
         // 1. LabelStyles 설정하기 - Icon 이미지 하나만 있는 스타일
         val styles: LabelStyles = LabelStyles.from(LabelStyle.from(R.drawable.ic_bread_maker_64))
 
-        //viewModel.showAllStoreFromRoom()
+        viewModel.fetchAllStoreFromRoom()
         viewLifecycleOwner.lifecycleScope.launch {
 
             repeatOnLifecycle(Lifecycle.State.STARTED){
                 viewModel.allStoreData.collect{
                     it?.map { store->
+                        Log.d("dasdsaxx", store.storeInfo.latitude)
                         latLng = LatLng.from(store.storeInfo.latitude.toDouble(), store.storeInfo.longitude.toDouble())
 
                         // 2. LabelOptions 생성하기

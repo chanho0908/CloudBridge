@@ -9,6 +9,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.myproject.cloudbridge.localDB.entity.StoreEntity
 import com.myproject.cloudbridge.model.store.AllCrnResponseModel
 import com.myproject.cloudbridge.model.store.CrnStateResponseModel
@@ -34,6 +36,7 @@ class StoreManagementViewModel : ViewModel() {
     private val networkRepository = NetworkRepository()
     private val dbRepository = DBRepository()
 
+
     // 사업자 등록번호 상태 조회
     private val _state = MutableStateFlow(CrnStateResponseModel(0, 0, "", emptyList()))
     val state = _state.asStateFlow()
@@ -46,7 +49,7 @@ class StoreManagementViewModel : ViewModel() {
     private var _myStore: MutableStateFlow<StoreInfoSettingModel> = MutableStateFlow(initStoreData())
     val myStore = _myStore.asStateFlow()
 
-    // 서버 작업이 완료됐음을 알리는 flag
+    // 서버 작업이 완료 됐음을 알리는 flag
     private val _flag = MutableStateFlow<Boolean?>(null)
     val flag = _flag.asStateFlow()
 
@@ -198,6 +201,7 @@ class StoreManagementViewModel : ViewModel() {
 
     // 매장 삭제
     fun deleteMyStore() = viewModelScope.launch(Dispatchers.IO) {
+        Log.d(TAG, "Delete Request")
         try{
             myCompanyRegistrationNumber.collect {
                 // Local DB 삭제
@@ -207,6 +211,7 @@ class StoreManagementViewModel : ViewModel() {
 
                     // Remote DB 삭제
                     networkRepository.deleteMyStoreInfo(it)
+                    _flag.value = true
                 }
             }
         }catch (e: Exception){
@@ -264,7 +269,7 @@ class StoreManagementViewModel : ViewModel() {
     }
 
     // 모든 매장 정보
-    fun showAllStoreFromRoom() = viewModelScope.launch {
+    fun fetchAllStoreFromRoom() = viewModelScope.launch {
         fromServerToRoomSetAllStoreList()
         val allStoreData =  ArrayList<StoreInfoSettingModel>()
 
@@ -278,7 +283,6 @@ class StoreManagementViewModel : ViewModel() {
             }
 
             _allStoreData.value = allStoreData
-            _flag.value = true
         }
 
     }
