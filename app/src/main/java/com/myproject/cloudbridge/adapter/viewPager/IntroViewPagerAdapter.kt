@@ -3,8 +3,8 @@ package com.myproject.cloudbridge.adapter.viewPager
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.myproject.cloudbridge.view.intro.user.JoinFragment
-import com.myproject.cloudbridge.view.intro.user.SignFragment
+import com.myproject.cloudbridge.view.user.JoinFragment
+import com.myproject.cloudbridge.view.user.SignFragment
 
 class IntroViewPagerAdapter(fragment: FragmentActivity): FragmentStateAdapter(fragment) {
 

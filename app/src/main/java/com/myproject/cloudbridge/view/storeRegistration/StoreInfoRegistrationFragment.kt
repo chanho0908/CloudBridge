@@ -21,7 +21,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.myproject.cloudbridge.R
 import com.myproject.cloudbridge.databinding.FragmentStoreInfoRegistrationBinding
-import com.myproject.cloudbridge.view.intro.myStore.MyStoreActivity
+import com.myproject.cloudbridge.view.myStore.MyStoreActivity
 import com.myproject.cloudbridge.viewModel.StoreManagementViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch

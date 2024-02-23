@@ -37,7 +37,7 @@ class StoreListFragment : Fragment() {
     }
 
     private fun initView(){
-        viewModel.showAllStoreFromRoom()
+        viewModel.fetchAllStoreFromRoom()
     }
 
     private fun initRv(){
