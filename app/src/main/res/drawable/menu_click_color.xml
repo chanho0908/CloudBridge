@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- 바텀네비게이션을 클릭했을 때 생상 !-->
+
+
     <item
         android:color="@color/shrine_pink_900"
-        android:background="@android:color/transparent"
         android:state_checked="true"/>
 
     <item
         android:color="@color/shrine_pink_900"
-        android:background="@android:color/transparent"
         android:state_checked="false"/>
 </selector>

@@ -22,8 +22,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:background="@color/shrine_pink_100"
+        app:itemActiveIndicatorStyle="@null"
         app:itemIconTint="@drawable/menu_click_color"
-        app:itemTextColor="@drawable/menu_click_color"
         app:menu="@menu/main_menu" />
 
 
