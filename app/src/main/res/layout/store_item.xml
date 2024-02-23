@@ -20,11 +20,12 @@
             android:layout_marginStart="10dp"
             app:cardCornerRadius="16dp">
 
-            <androidx.appcompat.widget.AppCompatImageView
+            <ImageView
                 android:id="@+id/store_img"
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:layout_gravity="center_vertical"
+                android:scaleType="centerCrop"
                  />
 
         </androidx.cardview.widget.CardView>

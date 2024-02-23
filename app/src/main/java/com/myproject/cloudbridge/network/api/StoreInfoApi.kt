@@ -26,6 +26,7 @@ interface StoreInfoApi {
     /**
      * Multipart : 이미지, 오디오, 비디오 등과 같은 여러 종류의 데이터를 서버에 업로드하거나 전송할 때 사용
      * 업로드할 데이터를 @Part 어노테이션을 사용해 파라미터로 지정
+     * @Part로 나눠진 파라미터를 하나의 객체로 만들어 전송
      * */
     @Multipart
     @POST("/db/store-registration") // 서버 엔드포인트 URL, HTTP POST 요청
@@ -41,7 +42,6 @@ interface StoreInfoApi {
         @Part("kind") kind: RequestBody            // 타입
     ): ResponseBody
     // 서버로부터 받은 응답을 처리하기 위한 Retrofit Call 객체를 반환
-    // @Part로 나눠진 파라미터를 하나의 객체로 만들어 전송
 
     @GET("/db/storeInfo/{crn}")
     suspend fun getMyStoreInfo(@Path("crn") crn: String): MyStoreInfoResponseModel
