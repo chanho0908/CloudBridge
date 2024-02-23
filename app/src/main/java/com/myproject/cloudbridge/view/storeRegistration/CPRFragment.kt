@@ -22,7 +22,7 @@ import com.myproject.cloudbridge.util.setHelperTextGreenList
 import com.myproject.cloudbridge.util.setHelperTextRed
 import com.myproject.cloudbridge.util.setHelperTextRedList
 import com.myproject.cloudbridge.util.showSoftInput
-import com.myproject.cloudbridge.view.intro.myPage.NotRegistsedStoreActivity
+import com.myproject.cloudbridge.view.myStore.NotRegistsedStoreActivity
 import com.myproject.cloudbridge.viewModel.StoreManagementViewModel
 import kotlinx.coroutines.launch
 
@@ -33,7 +33,6 @@ class CPRFragment : Fragment() {
     private val viewModel: StoreManagementViewModel by viewModels()
 
     private var result = ""
-
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentCPRBinding.inflate(inflater, container, false)

@@ -8,11 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.myproject.cloudbridge.R
-import com.myproject.cloudbridge.dataStore.MainDataStore
 import com.myproject.cloudbridge.databinding.FragmentMyPageBinding
-import com.myproject.cloudbridge.view.intro.myPage.MyInfoActivity
-import com.myproject.cloudbridge.view.intro.myPage.NotRegistsedStoreActivity
-import com.myproject.cloudbridge.view.intro.myStore.MyStoreActivity
+import com.myproject.cloudbridge.view.myStore.NotRegistsedStoreActivity
+import com.myproject.cloudbridge.view.myStore.MyStoreActivity
 import com.myproject.cloudbridge.viewModel.StoreManagementViewModel
 
 class MyPageFragment : Fragment(), View.OnClickListener {
