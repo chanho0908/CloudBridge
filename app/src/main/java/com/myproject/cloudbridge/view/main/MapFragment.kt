@@ -14,6 +14,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.kakao.vectormap.KakaoMap
 import com.kakao.vectormap.KakaoMapReadyCallback
 import com.kakao.vectormap.LatLng
@@ -42,6 +43,7 @@ class MapFragment : Fragment(), OnLocationUpdateListener, View.OnClickListener {
     private val binding: FragmentMapBinding get() = _binding!!
     private lateinit var launcherForPermission: ActivityResultLauncher<Array<String>>
     private lateinit var fusedLocationProvider: FusedLocationProvider
+    private lateinit var sheetBehavior:  BottomSheetBehavior<View>
     private val viewModel: StoreManagementViewModel by viewModels()
 
     // MapCoordType.WGS84 을 나타내는 좌표 클래스
@@ -60,11 +62,17 @@ class MapFragment : Fragment(), OnLocationUpdateListener, View.OnClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        sheetBehavior = BottomSheetBehavior.from(view.findViewById(R.id.store_bottom_sheet))
         initView()
     }
 
     private fun initView(){
         launcherForPermission.launch(REQUEST_LOCATION_PERMISSIONS)
+
+        with(sheetBehavior){
+            isHideable = true
+            state = BottomSheetBehavior.STATE_HIDDEN
+        }
 
         CoroutineScope(Dispatchers.Main).launch {
             binding.progressBar.setProgressCompat(60, true)
@@ -72,7 +80,8 @@ class MapFragment : Fragment(), OnLocationUpdateListener, View.OnClickListener {
             binding.progressBar.setProgressCompat(100, true)
         }
 
-        binding.searchView.setOnClickListener(this)
+        //binding.searchView.setOnClickListener(this)
+
     }
 
     private fun initActivityProcess(){
