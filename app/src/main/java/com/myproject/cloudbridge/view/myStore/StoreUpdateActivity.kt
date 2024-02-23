@@ -1,4 +1,4 @@
-package com.myproject.cloudbridge.view.intro.myStore
+package com.myproject.cloudbridge.view.myStore
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

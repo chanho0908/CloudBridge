@@ -1,4 +1,4 @@
-package com.myproject.cloudbridge.view.intro.myPage
+package com.myproject.cloudbridge.view.myPage
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity

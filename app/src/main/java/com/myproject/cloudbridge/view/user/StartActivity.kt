@@ -1,4 +1,4 @@
-package com.myproject.cloudbridge.view.intro.user
+package com.myproject.cloudbridge.view.user
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity

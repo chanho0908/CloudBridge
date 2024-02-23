@@ -1,4 +1,4 @@
-package com.myproject.cloudbridge.view.intro.myStore
+package com.myproject.cloudbridge.view.myStore
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -13,17 +13,13 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.myproject.cloudbridge.R
 import com.myproject.cloudbridge.databinding.ActivityMyStoreBinding
 import com.myproject.cloudbridge.model.store.StoreInfoSettingModel
-import com.myproject.cloudbridge.view.intro.myPage.NotRegistsedStoreActivity
 import com.myproject.cloudbridge.view.main.MainActivity
 import com.myproject.cloudbridge.viewModel.StoreManagementViewModel
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class MyStoreActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var binding: ActivityMyStoreBinding
     private val viewModel: StoreManagementViewModel by viewModels()
-    private lateinit var crn: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +30,6 @@ class MyStoreActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun initCoroutineProcess() {
-        crn = intent.getStringExtra("crn").toString()
         viewModel.getMyStoreInfo()
 
         lifecycleScope.launch {
