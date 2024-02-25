@@ -33,7 +33,7 @@ import java.util.Locale
 
 object Utils {
 
-    val REQUEST_IMAGE_PERMISSIONS =
+    val REQUEST_IMAGE_PERMISSIONS by lazy{
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
             arrayOf(Manifest.permission.READ_MEDIA_IMAGES, Manifest.permission.READ_MEDIA_VISUAL_USER_SELECTED)
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -41,17 +41,23 @@ object Utils {
         } else {
             arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
         }
+    }
 
-    val REQUEST_LOCATION_PERMISSIONS = arrayOf(
-        Manifest.permission.ACCESS_FINE_LOCATION,
-        Manifest.permission.ACCESS_COARSE_LOCATION,
-    )
+    val REQUEST_LOCATION_PERMISSIONS by lazy {
+        arrayOf(
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+        )
+    }
     fun getContext(): Context = App.context()
 
-    const val APP_KEY = "c23ff52edb54dc254d59ac484a8d6a2f"
-    const val SECRETE_KEY = "t2ivQakqcZ/cvxzekT7Ra9Ja8J1N1lBKu6LqVkijMliEeoD1lLXU0Qei+V9AC8aMbNG+TjVkca70NqFB9akmSg=="
+    val APP_KEY by lazy {
+        "c23ff52edb54dc254d59ac484a8d6a2f"
+    }
+
+    val SECRETE_KEY by lazy { "t2ivQakqcZ/cvxzekT7Ra9Ja8J1N1lBKu6LqVkijMliEeoD1lLXU0Qei+V9AC8aMbNG+TjVkca70NqFB9akmSg==" }
     // 갤러리 권한 요청
-    const val ADDR_RESULT = 1002
+    val ADDR_RESULT by lazy { 1002 }
 
     fun Base64ToBitmaps(image: String?): Bitmap {
         val encodedByte: ByteArray = Base64.decode(image, Base64.DEFAULT);
