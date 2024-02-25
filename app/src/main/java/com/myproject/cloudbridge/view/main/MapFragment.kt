@@ -80,7 +80,7 @@ class MapFragment : Fragment(), OnLocationUpdateListener, View.OnClickListener {
             binding.progressBar.setProgressCompat(100, true)
         }
 
-        //binding.searchView.setOnClickListener(this)
+        binding.searchView.setOnClickListener(this)
 
     }
 
@@ -89,7 +89,7 @@ class MapFragment : Fragment(), OnLocationUpdateListener, View.OnClickListener {
 
         val contract = ActivityResultContracts.RequestMultiplePermissions()
         launcherForPermission = registerForActivityResult(contract) { permissions ->
-            if (permissions.all { it.value }) {
+            if (permissions.any { it.value }) {
 
                 fusedLocationProvider.requestLastLocation()
 
@@ -98,7 +98,7 @@ class MapFragment : Fragment(), OnLocationUpdateListener, View.OnClickListener {
 
                     when {
                         isGranted -> {
-                            // 권한이 승인된 경우 처리할 작업
+                            fusedLocationProvider.requestLastLocation()
                         }
                         !isGranted -> {
                             // 권한이 거부된 경우 처리할 작업
@@ -167,10 +167,10 @@ class MapFragment : Fragment(), OnLocationUpdateListener, View.OnClickListener {
 
             repeatOnLifecycle(Lifecycle.State.STARTED){
                 viewModel.allStoreData.collect{
-                    it?.map { store->
-                        Log.d("dasdsaxx", store.storeInfo.latitude)
-                        latLng = LatLng.from(store.storeInfo.latitude.toDouble(), store.storeInfo.longitude.toDouble())
 
+                    it?.map { store->
+                        latLng = LatLng.from(store.storeInfo.latitude.toDouble(), store.storeInfo.longitude.toDouble())
+                        Log.d("dasdsaxx", store.storeInfo.crn)
                         // 2. LabelOptions 생성하기
                         val options = LabelOptions.from(latLng)
                             .setStyles(styles)
