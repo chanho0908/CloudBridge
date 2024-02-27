@@ -1,4 +1,4 @@
-package com.myproject.cloudbridge.view.storeRegistration
+package com.myproject.cloudbridge.ui.storeRegistration
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

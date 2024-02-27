@@ -1,4 +1,4 @@
-package com.myproject.cloudbridge.view.main
+package com.myproject.cloudbridge.ui.main
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

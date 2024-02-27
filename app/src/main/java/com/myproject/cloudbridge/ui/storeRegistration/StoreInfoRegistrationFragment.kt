@@ -1,4 +1,4 @@
-package com.myproject.cloudbridge.view.storeRegistration
+package com.myproject.cloudbridge.ui.storeRegistration
 
 import android.content.Intent
 import android.net.Uri
@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.addTextChangedListener
@@ -21,14 +20,12 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.myproject.cloudbridge.R
 import com.myproject.cloudbridge.databinding.FragmentStoreInfoRegistrationBinding
-import com.myproject.cloudbridge.view.myStore.MyStoreActivity
+import com.myproject.cloudbridge.ui.myStore.MyStoreActivity
 import com.myproject.cloudbridge.viewModel.StoreManagementViewModel
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import com.myproject.cloudbridge.util.singleton.Utils.ADDR_RESULT
 import com.myproject.cloudbridge.util.singleton.Utils.REQUEST_IMAGE_PERMISSIONS
 import com.myproject.cloudbridge.util.singleton.Utils.accessGallery
-import com.myproject.cloudbridge.util.singleton.Utils.makeStoreMainImage
 import com.myproject.cloudbridge.util.singleton.Utils.requestPlzInputText
 import com.myproject.cloudbridge.util.hasImagePermission
 import com.myproject.cloudbridge.util.showPermissionSnackBar
@@ -60,6 +57,11 @@ class StoreInfoRegistrationFragment : Fragment(), View.OnClickListener {
     }
 
     private fun initObserveSate(){
+
+        // viewLifeCycleOwner :
+        // UI 요소에 대한이벤트를 처리하기 위해 사용
+        // 프래그먼트 라이프 사이클  의 경우 프래그먼트의 인스턴스가 살아있음에도 불구하고
+        // 프래그먼트가 인플레이션한 뷰만 할당 해제되는 경우가 있을 수 있기 때문.
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.flag.collect {
@@ -79,6 +81,9 @@ class StoreInfoRegistrationFragment : Fragment(), View.OnClickListener {
 
 
     private fun initListener() {
+
+
+
         with(binding) {
             submitButton.setOnClickListener(this@StoreInfoRegistrationFragment)
             btnAddr.setOnClickListener(this@StoreInfoRegistrationFragment)

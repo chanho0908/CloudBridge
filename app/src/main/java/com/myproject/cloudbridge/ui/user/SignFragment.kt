@@ -1,4 +1,4 @@
-package com.myproject.cloudbridge.view.user
+package com.myproject.cloudbridge.ui.user
 
 import android.content.Intent
 import android.os.Bundle
@@ -10,7 +10,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import com.myproject.cloudbridge.databinding.FragmentSignBinding
 import com.myproject.cloudbridge.localDB.entity.UserEntity
-import com.myproject.cloudbridge.view.main.MainActivity
+import com.myproject.cloudbridge.ui.main.MainActivity
 import com.myproject.cloudbridge.viewModel.IntroViewModel
 
 class SignFragment : Fragment() {

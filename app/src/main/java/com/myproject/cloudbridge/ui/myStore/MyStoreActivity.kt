@@ -1,4 +1,4 @@
-package com.myproject.cloudbridge.view.myStore
+package com.myproject.cloudbridge.ui.myStore
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -13,7 +13,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.myproject.cloudbridge.R
 import com.myproject.cloudbridge.databinding.ActivityMyStoreBinding
 import com.myproject.cloudbridge.model.store.StoreInfoSettingModel
-import com.myproject.cloudbridge.view.main.MainActivity
+import com.myproject.cloudbridge.ui.main.MainActivity
 import com.myproject.cloudbridge.viewModel.StoreManagementViewModel
 import kotlinx.coroutines.launch
 
@@ -43,6 +43,7 @@ class MyStoreActivity : AppCompatActivity(), View.OnClickListener {
                 }
             }
         }
+
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {

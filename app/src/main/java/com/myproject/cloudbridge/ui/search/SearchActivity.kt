@@ -1,4 +1,4 @@
-package com.myproject.cloudbridge.view.search
+package com.myproject.cloudbridge.ui.search
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

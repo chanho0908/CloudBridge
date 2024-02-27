@@ -1,4 +1,4 @@
-package com.myproject.cloudbridge.view.user
+package com.myproject.cloudbridge.ui.user
 
 import android.content.Intent
 import android.os.Bundle
@@ -13,7 +13,7 @@ import androidx.fragment.app.viewModels
 import com.kakao.sdk.user.UserApiClient
 import com.myproject.cloudbridge.databinding.FragmentJoinBinding
 import com.myproject.cloudbridge.model.user.User
-import com.myproject.cloudbridge.view.main.MainActivity
+import com.myproject.cloudbridge.ui.main.MainActivity
 import com.myproject.cloudbridge.viewModel.IntroViewModel
 import java.util.regex.Pattern
 

@@ -1,4 +1,4 @@
-package com.myproject.cloudbridge.view.myPage
+package com.myproject.cloudbridge.ui.myPage
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -12,7 +12,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.myproject.cloudbridge.R
 import com.myproject.cloudbridge.databinding.ActivityMyInfoBinding
-import com.myproject.cloudbridge.view.user.SignOrLoginActivity
+import com.myproject.cloudbridge.ui.user.SignOrLoginActivity
 import com.myproject.cloudbridge.viewModel.UserManagementViewModel
 import kotlinx.coroutines.launch
 

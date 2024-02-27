@@ -1,11 +1,11 @@
-package com.myproject.cloudbridge.view.myStore
+package com.myproject.cloudbridge.ui.myStore
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.myproject.cloudbridge.databinding.ActivityNotRegistsedStoreBinding
-import com.myproject.cloudbridge.view.main.MainActivity
-import com.myproject.cloudbridge.view.storeRegistration.RegisteStoreActivity
+import com.myproject.cloudbridge.ui.main.MainActivity
+import com.myproject.cloudbridge.ui.storeRegistration.RegisteStoreActivity
 
 class NotRegistsedStoreActivity : AppCompatActivity() {
     private lateinit var binding: ActivityNotRegistsedStoreBinding

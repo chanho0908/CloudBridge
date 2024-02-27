@@ -1,4 +1,4 @@
-package com.myproject.cloudbridge.view.storeRegistration
+package com.myproject.cloudbridge.ui.storeRegistration
 
 import android.content.Intent
 import android.content.res.ColorStateList
@@ -22,7 +22,7 @@ import com.myproject.cloudbridge.util.setHelperTextGreenList
 import com.myproject.cloudbridge.util.setHelperTextRed
 import com.myproject.cloudbridge.util.setHelperTextRedList
 import com.myproject.cloudbridge.util.showSoftInput
-import com.myproject.cloudbridge.view.myStore.NotRegistsedStoreActivity
+import com.myproject.cloudbridge.ui.myStore.NotRegistsedStoreActivity
 import com.myproject.cloudbridge.viewModel.StoreManagementViewModel
 import kotlinx.coroutines.launch
 

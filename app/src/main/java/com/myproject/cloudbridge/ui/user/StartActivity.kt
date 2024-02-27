@@ -1,4 +1,4 @@
-package com.myproject.cloudbridge.view.user
+package com.myproject.cloudbridge.ui.user
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -13,7 +13,7 @@ import com.kakao.sdk.common.model.AuthErrorCause
 import com.kakao.sdk.user.UserApiClient
 import com.myproject.cloudbridge.databinding.ActivityStartBinding
 import com.myproject.cloudbridge.util.singleton.Utils
-import com.myproject.cloudbridge.view.main.MainActivity
+import com.myproject.cloudbridge.ui.main.MainActivity
 import com.myproject.cloudbridge.viewModel.IntroViewModel
 
 class StartActivity : AppCompatActivity() {

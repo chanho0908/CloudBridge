@@ -1,4 +1,4 @@
-package com.myproject.cloudbridge.view.myStore
+package com.myproject.cloudbridge.ui.myStore
 
 import android.content.Intent
 import android.net.Uri
@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.addTextChangedListener
@@ -28,9 +27,8 @@ import com.myproject.cloudbridge.util.singleton.Utils.requestPlzInputText
 import com.myproject.cloudbridge.util.hasImagePermission
 import com.myproject.cloudbridge.util.showPermissionSnackBar
 import com.myproject.cloudbridge.util.translateGeo
-import com.myproject.cloudbridge.view.storeRegistration.AddressActivity
+import com.myproject.cloudbridge.ui.storeRegistration.AddressActivity
 import com.myproject.cloudbridge.viewModel.StoreManagementViewModel
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 

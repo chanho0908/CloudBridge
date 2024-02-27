@@ -1,4 +1,4 @@
-package com.myproject.cloudbridge.view.myPage
+package com.myproject.cloudbridge.ui.myPage
 
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP
