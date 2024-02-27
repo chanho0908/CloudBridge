@@ -7,59 +7,60 @@
     android:layout_gravity="center"
     android:orientation="vertical"
     android:paddingTop="15dp"
-    tools:context=".view.main.MapFragment">
+    tools:context=".ui.main.MapFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="horizontal">
 
             <LinearLayout
                 android:id="@+id/search_view"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="15dp"
+                android:layout_marginBottom="5dp"
                 android:layout_weight="1"
                 android:background="@drawable/search_view_bg"
                 android:orientation="horizontal">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:padding="10dp"
-                    android:src="@drawable/ic_search" />
-
                 <TextView
                     android:id="@+id/search_text"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:hint="검색어를 입력하세요"
+                    android:textStyle="bold"
+                    android:textSize="15sp"
+                    android:layout_marginStart="15dp"
+                    android:gravity="center|start"
                      />
 
             </LinearLayout>
 
             <ImageButton
                 android:id="@+id/location_button"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
+                android:layout_marginBottom="5dp"
                 android:background="@drawable/button_location"
-                android:layout_marginBottom="2dp"
-                android:src="@drawable/ic_location" />
+                android:padding="10dp"
+                android:src="@android:drawable/ic_menu_mylocation" />
         </LinearLayout>
 
         <com.google.android.material.progressindicator.LinearProgressIndicator
             android:id="@+id/progressBar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            app:indicatorColor="@color/shrine_pink_100"
+        />
 
         <com.kakao.vectormap.MapView
             android:id="@+id/map_view"
