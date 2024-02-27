@@ -49,14 +49,6 @@ class StoreManagementViewModel : ViewModel() {
     private var _myStore: MutableStateFlow<StoreInfoSettingModel> = MutableStateFlow(initStoreData())
     val myStore = _myStore.asStateFlow()
 
-    // 서버 작업이 완료 됐음을 알리는 flag
-    private val _flag = MutableStateFlow<Boolean?>(null)
-    val flag = _flag.asStateFlow()
-
-    // 로컬 서버 이미지 작업이 완료 됐음을 알리는 flag
-    private val _imgLoading = MutableStateFlow<Boolean?>(null)
-    val imgLoading = _imgLoading.asStateFlow()
-
     // 나의 사업자 등록번호와 일치하는가 ?
     // false, true 일 경우 타입 추론이 가능하다
     // null일 경우 타입을 명시해줘야 한다.
@@ -71,12 +63,25 @@ class StoreManagementViewModel : ViewModel() {
     private var _myCompanyRegistrationNumber = MutableStateFlow<String?>(null)
     val myCompanyRegistrationNumber = _myCompanyRegistrationNumber.asStateFlow()
 
+    // 서버 작업이 완료 됐음을 알리는 flag
+    private val _flag = MutableStateFlow<Boolean?>(null)
+    val flag = _flag.asStateFlow()
+
+    // 서버 이미지 요청 작업이 완료 됐음을 알리는 flag
+    private val _imgLoading = MutableStateFlow<Boolean?>(null)
+    val imgLoading = _imgLoading.asStateFlow()
+
+    // 로컬 패치 완료 됐음을 알리는 flag
+    private val _fetch = MutableStateFlow<Boolean?>(null)
+    val fetch = _fetch.asStateFlow()
+
     init {
         viewModelScope.launch {
             MainDataStore.getCrn().collect {
                 _myCompanyRegistrationNumber.value = it
             }
         }
+
     }
 
     // 사업자 등록 번호 상태 조회
@@ -283,6 +288,7 @@ class StoreManagementViewModel : ViewModel() {
             }
 
             _allStoreData.value = allStoreData
+            _fetch.value = true
         }
 
     }

@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/shrine_pink_50"
-    tools:context=".view.main.StoreListFragment">
+    tools:context=".ui.main.StoreListFragment">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"

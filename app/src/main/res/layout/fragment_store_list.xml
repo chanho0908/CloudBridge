@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/shrine_pink_50"
-    tools:context=".view.main.StoreListFragment">
+    tools:context=".ui.main.StoreListFragment">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
@@ -39,11 +39,17 @@
             android:paddingStart="10dp"
             android:paddingEnd="10dp">
 
-            <View
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#c8c8c8"
-                android:layout_marginTop="10dp"/>
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="10dp"
+                    android:background="#c8c8c8" />
+            </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv"

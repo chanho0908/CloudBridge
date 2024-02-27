@@ -1,4 +1,4 @@
-package com.myproject.cloudbridge.view.main
+package com.myproject.cloudbridge.ui.main
 
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
@@ -23,22 +23,14 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        initFragment()
+    }
+
+    private fun initFragment(){
         binding.navigationView.setOnItemSelectedListener(this)
         setCurrentFragment(storeListFragment)
-
-        val navigationView = binding.navigationView
-        // 색상 리소스 ID에서 실제 색상 가져오기
-        // 색상 리소스 ID에서 실제 색상 가져오기
-        val colorWhite = ContextCompat.getColor(this, R.color._white)
-
-        // ColorDrawable로 변환하여 Drawable 변수에 할당
-
-        // ColorDrawable로 변환하여 Drawable 변수에 할당
-        val backgroundDrawable: Drawable = ColorDrawable(colorWhite)
-        navigationView.itemBackground = backgroundDrawable
-
-
     }
+
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         return when(item.itemId){

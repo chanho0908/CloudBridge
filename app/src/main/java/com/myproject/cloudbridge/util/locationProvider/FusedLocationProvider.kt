@@ -21,7 +21,7 @@ class FusedLocationProvider (
 
     // 1. 위치 서비스를 관리하는 클라이언트를 초기화
     private fun initLocationClient() {
-        Log.d("FusedLocationManager", "initLocationClient() start ")
+
         // 위치 서비스를 관리하고 제공하는 클라이언트
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context)
 
@@ -54,7 +54,6 @@ class FusedLocationProvider (
 
     // 2. 위치 업데이트를 처리하는 콜백 초기화
     private fun initLocationCallback() {
-        Log.d(TAG, "initLocationCallback() start")
         // Fused Location Provider에서 위치 업데이트 이벤트를 수신하는 콜백 클래스
         // 위치 서비스로부터 새로운 위치 업데이트가 있을 때마다 호출
         locationCallback = object : LocationCallback() {
@@ -102,13 +101,9 @@ class FusedLocationProvider (
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            Log.d(TAG, "requestLastLocation() : PERMISSION NOT GRANTED")
             return
         }
-        Log.d(TAG, "requestLastLocation() 권한 허용")
         fusedLocationProviderClient.lastLocation.addOnSuccessListener { location ->
-                Log.d(TAG, "requestLastLocation addOnSuccessListener start")
-                Log.d(TAG, "requestLastLocation() : ${location.latitude} / ${location.longitude}")
                 listener.onLocationUpdated(location)
             }
     }

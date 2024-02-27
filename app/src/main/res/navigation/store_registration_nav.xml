@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/CPRFragment"
-        android:name="com.myproject.cloudbridge.view.storeRegistration.CPRFragment"
+        android:name="com.myproject.cloudbridge.ui.storeRegistration.CPRFragment"
         android:label="CPRFragment" >
         <action
             android:id="@+id/action_CPRFragment_to_storeInfoRegistrationFragment"
@@ -14,7 +14,7 @@
     </fragment>
     <fragment
         android:id="@+id/storeInfoRegistrationFragment"
-        android:name="com.myproject.cloudbridge.view.storeRegistration.StoreInfoRegistrationFragment"
+        android:name="com.myproject.cloudbridge.ui.storeRegistration.StoreInfoRegistrationFragment"
         android:label="StoreInfoRegistrationFragment" >
         <argument
             android:name="bno"
