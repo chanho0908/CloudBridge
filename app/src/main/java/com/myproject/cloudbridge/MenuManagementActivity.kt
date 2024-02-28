@@ -7,6 +7,7 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,39 +25,23 @@ class MenuManagementActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMenuManagementBinding
     private lateinit var launcherForPermission: ActivityResultLauncher<Array<String>>
     private lateinit var launcherForActivity: ActivityResultLauncher<Intent>
-    private val menuList = ArrayList<StoreMenuRvModel>()
+    private val menuList = arrayListOf<StoreMenuRvModel>()
     private var selectedItemPosition: Int? = null
-    private val adapter = MenuRvAdapter(
-        this,
-        menuList,
-        { position ->
-            if (hasImagePermission()){ accessGallery(launcherForActivity) }
-            else launcherForPermission.launch(REQUEST_IMAGE_PERMISSIONS)
-            selectedItemPosition = position
-        }
-    ) { position ->
-        menuList.removeAt(position)
-        binding.rv.adapter?.notifyItemRemoved(position)
-        binding.rv.adapter?.notifyItemRangeChanged(position, menuList.size)
-    }
+    private lateinit var menuAdapter: MenuRvAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMenuManagementBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         initView()
         initActivityProcess()
         initRv()
-
     }
 
     private fun initView(){
         binding.apply {
             addBtn.setOnClickListener {
-
                 addMenuItem()
-
             }
 
             upBtn.setOnClickListener{
@@ -70,25 +55,16 @@ class MenuManagementActivity : AppCompatActivity() {
                     when(it.itemId){
 
                         R.id.add_menu_item -> {
-                            val rvList = adapter.getRvListData()
-                            var hasEmptyField = false // 입력되지 않은 값이 있는지 여부를 추적하기 위한 플래그
 
-                            rvList.forEachIndexed { index, menu ->
+                            menuList.forEachIndexed { index, menu ->
                                 if (menu.productName.isEmpty() || menu.productQuantity == 0){
-                                    // 입력되지 않은 값이 있으면 해당 항목에 포커스를 설정하고 플래그를 true로 설정
-                                    hasEmptyField = true
+                                    // 입력되지 않은 값이 있으면 해당 항목에 포커스
                                     binding.rv.scrollToPosition(index)
 
                                     // 특정 위치에 대한 ViewHolder를 검색
                                     binding.rv.findViewHolderForAdapterPosition(index)?.itemView?.requestFocus()
                                     return@forEachIndexed
                                 }
-                                Log.d("sadasasxxxx", "$it" )
-                            }
-
-                            if (hasEmptyField) {
-
-                            } else {
 
                             }
                         }
@@ -100,16 +76,32 @@ class MenuManagementActivity : AppCompatActivity() {
     }
 
     private fun initRv(){
-        addMenuItem()
+        val newItem = StoreMenuRvModel(null, "", 0, "")
 
-        binding.apply {
-            rv.adapter = adapter
-            rv.layoutManager = LinearLayoutManager(this@MenuManagementActivity)
+        // 데이터 리스트에 항목 추가
+        menuList.add(newItem)
 
-            val deco = MaterialDividerItemDecoration(this@MenuManagementActivity,  MaterialDividerItemDecoration.VERTICAL)
-            rv.addItemDecoration(deco)
+        menuAdapter = MenuRvAdapter(
+            this,
+            menuList,
+            { position ->
+                if (hasImagePermission()){ accessGallery(launcherForActivity) }
+                else launcherForPermission.launch(REQUEST_IMAGE_PERMISSIONS)
+                selectedItemPosition = position
+            }
+        ) { position ->
+            Log.d("CurrentMenRvAdapter", "target : ${menuList[position].productName}")
+            menuList.removeAt(position)
+
+            menuAdapter.notifyItemRemoved(position)
+            //menuAdapter.notifyItemRangeChanged(position, menuList.size)
+            Log.d("CurrentMenRvAdapter", "activity ${menuList.size}")
         }
 
+        with(binding.rv){
+            adapter = menuAdapter
+            layoutManager = LinearLayoutManager(this@MenuManagementActivity)
+        }
     }
 
     private fun addMenuItem() {
@@ -120,8 +112,7 @@ class MenuManagementActivity : AppCompatActivity() {
         menuList.add(newItem)
 
         // 새로운 항목이 추가되었음을 어댑터에 알림
-        adapter.notifyItemInserted(menuList.size - 1)
-
+        menuAdapter.notifyItemInserted(menuList.size - 1)
         // 스크롤을 추가된 항목으로 이동시킴
         binding.rv.scrollToPosition(menuList.size - 1)
     }
@@ -162,8 +153,11 @@ class MenuManagementActivity : AppCompatActivity() {
                 val inputStream: InputStream? = contentResolver.openInputStream(imageUri)
                 val bitmap: Bitmap? = BitmapFactory.decodeStream(inputStream)
 
-                menuList[selectedItemPosition!!].imgBitmap = bitmap
-                adapter.notifyItemChanged(selectedItemPosition!!)
+                if (selectedItemPosition != null){
+                    menuList[selectedItemPosition!!].imgBitmap = bitmap
+                    menuAdapter.notifyItemChanged(selectedItemPosition!!)
+                }
+
             }
         }
     }
