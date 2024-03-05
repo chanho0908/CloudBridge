@@ -22,7 +22,6 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         initFragment()
     }
 
@@ -30,7 +29,6 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
         binding.navigationView.setOnItemSelectedListener(this)
         setCurrentFragment(storeListFragment)
     }
-
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         return when(item.itemId){

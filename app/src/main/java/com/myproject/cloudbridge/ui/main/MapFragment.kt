@@ -9,33 +9,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.UiThread
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.kakao.vectormap.KakaoMap
-import com.kakao.vectormap.KakaoMapReadyCallback
-import com.kakao.vectormap.LatLng
-import com.kakao.vectormap.MapView
-import com.kakao.vectormap.animation.Interpolation
-import com.kakao.vectormap.camera.CameraAnimation
-import com.kakao.vectormap.camera.CameraUpdate
-import com.kakao.vectormap.camera.CameraUpdateFactory
-import com.kakao.vectormap.label.Label
-import com.kakao.vectormap.label.LabelAnimator
-import com.kakao.vectormap.label.LabelLayer
-import com.kakao.vectormap.label.LabelOptions
-import com.kakao.vectormap.label.LabelStyle
-import com.kakao.vectormap.label.LabelStyles
-import com.kakao.vectormap.label.LabelTransition
-import com.kakao.vectormap.label.Transition
-import com.kakao.vectormap.label.animation.DropAnimation
-import com.kakao.vectormap.label.animation.ScaleAlphaAnimation
-import com.kakao.vectormap.label.animation.ScaleAlphaAnimations
 import com.myproject.cloudbridge.R
 import com.myproject.cloudbridge.databinding.FragmentMapBinding
+import com.myproject.cloudbridge.model.store.StoreInfoSettingModel
 import com.myproject.cloudbridge.ui.search.SearchActivity
 import com.myproject.cloudbridge.util.hasLocationPermission
 import com.myproject.cloudbridge.util.locationProvider.FusedLocationProvider
@@ -43,25 +26,27 @@ import com.myproject.cloudbridge.util.locationProvider.OnLocationUpdateListener
 import com.myproject.cloudbridge.util.showPermissionSnackBar
 import com.myproject.cloudbridge.util.singleton.Utils.REQUEST_LOCATION_PERMISSIONS
 import com.myproject.cloudbridge.viewModel.StoreManagementViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import com.naver.maps.geometry.LatLng
+import com.naver.maps.map.CameraPosition
+import com.naver.maps.map.LocationTrackingMode
+import com.naver.maps.map.NaverMap
+import com.naver.maps.map.OnMapReadyCallback
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import com.naver.maps.map.MapFragment
+import com.naver.maps.map.NaverMapOptions
 
-
-class MapFragment : Fragment(), OnLocationUpdateListener, View.OnClickListener {
+class MapFragment : Fragment(), OnLocationUpdateListener, OnMapReadyCallback {
     private var _binding: FragmentMapBinding? = null
     private val binding: FragmentMapBinding get() = _binding!!
     private lateinit var launcherForPermission: ActivityResultLauncher<Array<String>>
-    private lateinit var fusedLocationProvider: FusedLocationProvider
     private lateinit var sheetBehavior: BottomSheetBehavior<View>
-    private lateinit var labelLayer: LabelLayer
-    private lateinit var map: KakaoMap
-
-    // MapCoordType.WGS84 을 나타내는 좌표 클래스
-    // WGS84 : 경위도, GPS가 사용하는 좌표계
-    private lateinit var currentLocation: LatLng
+    private lateinit var allStoreData: ArrayList<StoreInfoSettingModel>
+    private lateinit var nMap: NaverMap
     private val viewModel: StoreManagementViewModel by viewModels()
+
+    private var currentLocation: LatLng = LatLng(35.1798159, 129.0750222)
+    private lateinit var fusedLocationProvider: FusedLocationProvider
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -76,30 +61,59 @@ class MapFragment : Fragment(), OnLocationUpdateListener, View.OnClickListener {
         super.onViewCreated(view, savedInstanceState)
         initActivityProcess()
         initView(view)
-        showMapWithUserCurrentLocation()
     }
 
     private fun initView(view: View) {
+        fusedLocationProvider = FusedLocationProvider(requireContext(), this)
         launcherForPermission.launch(REQUEST_LOCATION_PERMISSIONS)
+
+        if (requireContext().hasLocationPermission()){
+            Log.d("sdsadsa", "권한 허용")
+            fusedLocationProvider.requestLastLocation()
+            val options = NaverMapOptions()
+                .camera(CameraPosition(currentLocation, 8.0))
+                .mapType(NaverMap.MapType.Terrain)
+            initMapInstance(options)
+        }else{
+            Log.d("sdsadsa", "권한 거부")
+            val options = NaverMapOptions()
+                .camera(CameraPosition(currentLocation, 8.0))
+                .mapType(NaverMap.MapType.Terrain)
+            initMapInstance(options)
+        }
+
+
+        with(binding) {
+            viewLifecycleOwner.lifecycleScope.launch {
+                progressBar.setProgressCompat(60, true)
+                delay(700)
+                progressBar.setProgressCompat(100, true)
+            }
+
+            searchView.setOnClickListener{
+                startActivity(Intent(requireContext(), SearchActivity::class.java))
+            }
+        }
+
+        //fetchAllStoreData()
 
         sheetBehavior = BottomSheetBehavior.from(view.findViewById(R.id.store_bottom_sheet))
         with(sheetBehavior) {
             isHideable = true
             state = BottomSheetBehavior.STATE_HIDDEN
         }
+    }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            binding.progressBar.setProgressCompat(60, true)
-            delay(420)
-            binding.progressBar.setProgressCompat(100, true)
-        }
-
-        binding.searchView.setOnClickListener(this)
-        binding.locationButton.setOnClickListener(this)
+    private fun initMapInstance(options: NaverMapOptions){
+        val manger = childFragmentManager
+        val mapFragment = manger.findFragmentById(R.id.map) as MapFragment?
+            ?: MapFragment.newInstance(options).also {
+                childFragmentManager.beginTransaction().add(R.id.map, it).commit()
+            }
+        mapFragment.getMapAsync(this)
     }
 
     private fun initActivityProcess() {
-        fusedLocationProvider = FusedLocationProvider(requireContext(), this)
 
         val contract = ActivityResultContracts.RequestMultiplePermissions()
         launcherForPermission = registerForActivityResult(contract) { permissions ->
@@ -132,132 +146,70 @@ class MapFragment : Fragment(), OnLocationUpdateListener, View.OnClickListener {
         }
     }
 
-    private fun showMapWithUserCurrentLocation() {
-        with(binding) {
-            // MapReadyCallback 을 통해 지도가 정상적으로 시작된 후에 수신할 수 있다.
-            val KakaoMapReadyCallback = object : KakaoMapReadyCallback() {
-                override fun onMapReady(kakaoMap: KakaoMap) {
-                    map = kakaoMap
-                    labelLayer = kakaoMap.labelManager?.layer!!
-
-                    with(kakaoMap) {
-                        // 나침반 설정
-                        compass?.show()
-
-                        // 위치 권한이 허용되지 않으면 기본 위치를 보여줌
-                        if (!requireContext().hasLocationPermission()) {
-                            val seoulLatitude = 37.5665
-                            val seoulLongitude = 126.9780
-                            moveCamera(
-                                CameraUpdateFactory.newCenterPosition(
-                                    LatLng.from(
-                                        seoulLatitude,
-                                        seoulLongitude
-                                    )
-                                )
-                            )
-                        } else {
-                            // 카메라를 이동
-                            map.moveCamera(CameraUpdateFactory.newCenterPosition(currentLocation))
-
-                        }
-                    }
-                }
-            }
-
-            // MapView : 지도가 보여지는 뷰
-            val view = MapView(requireContext())
-            mapView.addView(view)
-            mapView.start(KakaoMapReadyCallback)
-            makeMaker()
-        }
-    }
-
-    private fun makeMaker() {
+    private fun fetchAllStoreData() {
         viewModel.fetchAllStoreFromRoom()
-
         viewLifecycleOwner.lifecycleScope.launch {
+
+            // StateFlow는 동일한 값을 발행하지 않지만
+            // LifeCycle이 트리거될때 한번 수행하므로 가져옴
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.fetch.collect{ fetched ->
-                    if (fetched == true){
-                        viewModel.allStoreData.collect {
-                            Log.d("sdasdas", "collect")
-                            labelLayer.removeAll()
-                            it?.map { store ->
-
-                                val pos = LatLng.from(store.storeInfo.latitude.toDouble(), store.storeInfo.longitude.toDouble())
-
-                                showAnimationLabel(pos)
-                            }
-                        }
+                viewModel.fetch.collect { fetched ->
+                    if (fetched == true) {
+                        allStoreData = viewModel.allStoreData.value ?: ArrayList()
+                        addMaker()
                     }
                 }
             }
         }
     }
 
-    /**
-     * 마커 애니메이션 수정
-     *
-     * */
-    private fun showAnimationLabel(pos: LatLng) {
+    private fun addMaker() {
 
-        val label = labelLayer.addLabel(
-            LabelOptions.from(pos)
-                .setStyles(R.drawable.ic_marker_128)
-        )
+        allStoreData.forEach { store ->
 
-        // 애니메이션 설정
-        val dropAnimation = DropAnimation.from("dropAnimator")
-        dropAnimation.setRemoveLabelAtStop(true)
-        dropAnimation.setPixelHeight(500f)
-        dropAnimation.setInterpolation(Interpolation.Linear)
-        // 반복 횟수
-        dropAnimation.setRepeatCount(0)
 
-        // 애니메이션 생성
-        val animator: LabelAnimator = map.labelManager?.addAnimator(dropAnimation)!!
-
-        // 애니메이터에 라벨 추가
-        animator.addLabels(label)
-
-        // 애니메이션 시작
-        animator.start()
-        map.moveCamera(
-            CameraUpdateFactory.newCenterPosition(pos, 14),
-            CameraAnimation.from(500)
-        )
+        }
     }
-
 
     override fun onLocationUpdated(location: Location) {
-        currentLocation = LatLng.from(location.latitude, location.longitude)
+        Log.d("sdsadsa", "$location")
+        currentLocation = LatLng(location.latitude, location.longitude)
+        Log.d("sdsadsa", "currentLocation: $location")
     }
 
     override fun onStop() {
         super.onStop()
         fusedLocationProvider.stopLocationUpdates()
     }
-    override fun onClick(v: View?) {
-        when (v?.id) {
-            R.id.search_view -> {
-                startActivity(Intent(requireContext(), SearchActivity::class.java))
-            }
-            R.id.location_button -> {
-                // 내 위치로 가기 버튼을 누르면
-                // 위치 권한이 허용 됐다면
-                if (requireContext().hasLocationPermission()) {
-                    // 마지막 위치를 요청해서
-                    fusedLocationProvider.requestLastLocation()
 
-                    // 카메라를 이동
-                    map.moveCamera(CameraUpdateFactory.newCenterPosition(currentLocation))
-                } else {
-                    // 위치 권한이 허용되지 않았다면 권한 요청을 보냄
-                    requireContext().showPermissionSnackBar(binding.root)
-                }
+    @UiThread
+    override fun onMapReady(naverMap: NaverMap) {
+        nMap = naverMap
 
+        // https://navermaps.github.io/android-map-sdk/guide-ko/4-1.html
+        // 지도 옵션 세팅
+        with(naverMap){
+            // 사용자 위치 따라가기
+            locationTrackingMode = LocationTrackingMode.Follow
+
+            // 건물 내부 표시
+            isIndoorEnabled = true
+
+            with(uiSettings){
+                // 줌버튼
+                isZoomControlEnabled = false
+
+                // 실내지도 층 피커
+                isIndoorLevelPickerEnabled = true
+
+                // 축적바
+                isScaleBarEnabled = true
+
+                // 현위치 버튼
+                isLocationButtonEnabled = true
             }
         }
     }
+
+
 }

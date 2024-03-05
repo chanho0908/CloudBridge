@@ -84,12 +84,6 @@ dependencies {
     implementation "com.kakao.sdk:v2-talk:2.14.0" // 친구, 메시지(카카오톡)
     implementation "com.kakao.sdk:v2-share:2.14.0" // 메시지(카카오톡 공유)
 
-    // 카카오 지도
-    implementation 'com.kakao.maps.open:android:2.6.3'
-
-    implementation fileTree(include: ['*.jar'], dir:'libs')
-    implementation files('libs/libDaumMapAndroid.jar')
-
     implementation 'com.google.android.gms:play-services-location:21.1.0'
 
     //FireBase
@@ -112,9 +106,6 @@ dependencies {
 
     implementation "androidx.room:room-ktx:$roomVersion"
 
-    // Custom Dialog
-    // 출처 : https://github.com/JobGetabu/DroidAlert
-    //implementation 'com.github.JobGetabu:DroidAlert:Tag'
-
+    implementation("com.naver.maps:map-sdk:3.17.0")
 
 }

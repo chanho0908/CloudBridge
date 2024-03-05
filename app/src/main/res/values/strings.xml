@@ -8,8 +8,6 @@
     <string name="plz_enter_cpr">사업자 등록번호를 입력해 주세요.</string>
     <string name="is_differ_cpr">등록된 정보와 일치하지 않습니다.</string>
     <string name="crn_max_10">10</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="myStoreName">나의 매장</string>
     <string name="ceoName">대표자명</string>
     <string name="crn">사업자등록번호</string>
