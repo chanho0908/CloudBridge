@@ -41,15 +41,13 @@ object Utils {
             Manifest.permission.ACCESS_COARSE_LOCATION,
         )
     }
-    fun getContext(): Context = App.context()
+    val LOCATION_PERMISSION_REQUEST_CODE by lazy { 100 }
+    val ADDR_RESULT_RESULT_CODE by lazy { 1002 }
+    val APP_KEY by lazy { "c23ff52edb54dc254d59ac484a8d6a2f" }
 
-    val APP_KEY by lazy {
-        "c23ff52edb54dc254d59ac484a8d6a2f"
-    }
-
+    // 사업자 등록 번호 API KEY
     val SECRETE_KEY by lazy { "t2ivQakqcZ/cvxzekT7Ra9Ja8J1N1lBKu6LqVkijMliEeoD1lLXU0Qei+V9AC8aMbNG+TjVkca70NqFB9akmSg==" }
-    // 갤러리 권한 요청
-    val ADDR_RESULT by lazy { 1002 }
+
 
     fun Base64ToBitmaps(image: String?): Bitmap {
         val encodedByte: ByteArray = Base64.decode(image, Base64.DEFAULT);
@@ -97,5 +95,5 @@ object Utils {
         v.helperText = msg
         v.requestFocus()
     }
-
+    fun getContext(): Context = App.context()
 }

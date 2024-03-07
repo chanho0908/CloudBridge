@@ -19,7 +19,6 @@ import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.myproject.cloudbridge.R
 import com.myproject.cloudbridge.databinding.FragmentUpdate2Binding
-import com.myproject.cloudbridge.util.singleton.Utils.ADDR_RESULT
 import com.myproject.cloudbridge.util.singleton.Utils.REQUEST_IMAGE_PERMISSIONS
 import com.myproject.cloudbridge.util.singleton.Utils.accessGallery
 import com.myproject.cloudbridge.util.singleton.Utils.makeStoreMainImage
@@ -28,6 +27,7 @@ import com.myproject.cloudbridge.util.hasImagePermission
 import com.myproject.cloudbridge.util.showPermissionSnackBar
 import com.myproject.cloudbridge.util.translateGeo
 import com.myproject.cloudbridge.ui.storeRegistration.AddressActivity
+import com.myproject.cloudbridge.util.singleton.Utils.ADDR_RESULT_RESULT_CODE
 import com.myproject.cloudbridge.viewModel.StoreManagementViewModel
 import kotlinx.coroutines.launch
 
@@ -173,7 +173,7 @@ class UpdateFragment2 : Fragment(), View.OnClickListener {
             val callback = result.data
             if (callback != null)
                 when (result.resultCode) {
-                    ADDR_RESULT -> {
+                    ADDR_RESULT_RESULT_CODE -> {
                         val data = callback.getStringExtra("data")
                         binding.addrEdit.setText(data)
                     }

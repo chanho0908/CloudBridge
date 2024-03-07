@@ -7,7 +7,7 @@ import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import com.myproject.cloudbridge.databinding.ActivityAddressBinding
-import com.myproject.cloudbridge.util.singleton.Utils.ADDR_RESULT
+import com.myproject.cloudbridge.util.singleton.Utils.ADDR_RESULT_RESULT_CODE
 
 class AddressActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAddressBinding
@@ -40,7 +40,7 @@ class AddressActivity : AppCompatActivity() {
             // 카카오 주소 검색 API 결과를 브릿지 경로를 통해 전달 받는다(from Javascript)
             val intent = Intent()
             intent.putExtra("data", data)
-            setResult(ADDR_RESULT, intent)
+            setResult(ADDR_RESULT_RESULT_CODE, intent)
             finish()
         }
     }
