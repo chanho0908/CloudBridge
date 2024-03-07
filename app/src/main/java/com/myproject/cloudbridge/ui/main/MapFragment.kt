@@ -27,6 +27,7 @@ import com.myproject.cloudbridge.util.singleton.Utils.LOCATION_PERMISSION_REQUES
 import com.myproject.cloudbridge.util.singleton.Utils.REQUEST_LOCATION_PERMISSIONS
 import com.myproject.cloudbridge.viewModel.StoreManagementViewModel
 import com.naver.maps.geometry.LatLng
+import com.naver.maps.map.CameraAnimation
 import com.naver.maps.map.CameraPosition
 import com.naver.maps.map.CameraUpdate
 import com.naver.maps.map.LocationTrackingMode
@@ -103,15 +104,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     override fun onMapReady(naverMap: NaverMap) {
         this.naverMap = naverMap
 
-        // 빨간색 표시 마커 (네이버맵 현재 가운데에 항상 위치)
-        val marker = Marker()
-        //marker.position = LatLng(
-        //    naverMap.cameraPosition.target.latitude,
-        //    naverMap.cameraPosition.target.longitude
-        //)
-        //marker.icon = OverlayImage.fromResource(R.drawable.ic_cloud)
-        //marker.map = naverMap
-
         if (ActivityCompat.checkSelfPermission(
                 requireContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -153,11 +145,23 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
             // 내장 위치 추적 기능 사용
             locationSource = mLocationSource
+            //minZoom = 5.0
+            //maxZoom = 18.0
 
             naverMap.addOnOptionChangeListener {
                 val mode = naverMap.locationTrackingMode.name
-                if (mode == "None"){
-                    locationTrackingMode = LocationTrackingMode.Follow
+                val currentLocation = mLocationSource.lastLocation
+                when(mode){
+                    "None" -> locationTrackingMode = LocationTrackingMode.Follow
+                    "Follow", "NoFollow" ->{
+                        // 현재 위치 버튼을 눌렀을 때 카메라가 줌이 너무 작아지는걸 방지
+                        if (currentLocation != null){
+                            val latLng = LatLng(currentLocation.latitude, currentLocation.longitude)
+                            val cameraPosition = CameraPosition(latLng, 14.0)
+
+                            naverMap.moveCamera(CameraUpdate.toCameraPosition(cameraPosition).animate(CameraAnimation.Easing))
+                        }
+                    }
                 }
             }
 
@@ -228,6 +232,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 viewModel.fetch.collect { fetched ->
                     if (fetched == true) {
                         allStoreData = viewModel.allStoreData.value ?: ArrayList()
+                        addMaker()
                     }
                 }
             }
@@ -237,8 +242,17 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private fun addMaker() {
 
         allStoreData.forEach { store ->
-
-
+            val marker = Marker()
+            with(marker){
+                icon = OverlayImage.fromResource(R.drawable.ic_marker)
+                position = LatLng(
+                    store.storeInfo.latitude.toDouble(),
+                    store.storeInfo.longitude.toDouble()
+                )
+                map = naverMap
+                width = 82
+                height = 86
+            }
         }
     }
 }
