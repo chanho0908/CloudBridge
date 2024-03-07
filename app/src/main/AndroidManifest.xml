@@ -32,8 +32,12 @@
             android:exported="true" />
 
         <meta-data
-            android:name="com.kakao.vectormap.APP_KEY"
+            android:name="com.kakao.sdk.AppKey"
             android:value="c23ff52edb54dc254d59ac484a8d6a2f" />
+
+        <meta-data
+            android:name="com.naver.maps.map.CLIENT_ID"
+            android:value="@string/naver_map_sdk_client_id" />
 
         <activity
             android:name=".ui.user.StartActivity"
