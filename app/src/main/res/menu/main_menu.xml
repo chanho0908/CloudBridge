@@ -2,14 +2,18 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/homeFragment"
-        android:icon="@drawable/baseline_home_24"/>
+        android:icon="@drawable/baseline_home_24"
+        android:title="홈"/>
     <item
         android:id="@+id/awardFragment"
-        android:icon="@drawable/outline_diversity_1_24"/>
+        android:icon="@drawable/outline_diversity_1_24"
+        android:title="큐레이션"/>
     <item
         android:id="@+id/mapFragment"
-        android:icon="@drawable/outline_map_24"/>
+        android:icon="@drawable/outline_map_24"
+        android:title="지도"/>
     <item
         android:id="@+id/myPageFragment"
-        android:icon="@drawable/baseline_person_outline_24"/>
+        android:icon="@drawable/baseline_person_outline_24"
+        android:title="마이"/>
 </menu>
