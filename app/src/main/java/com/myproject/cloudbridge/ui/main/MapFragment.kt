@@ -11,18 +11,26 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.UiThread
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
+import androidx.core.graphics.ColorUtils
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.bumptech.glide.Glide
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.firebase.database.collection.LLRBNode.Color
 import com.myproject.cloudbridge.R
+import com.myproject.cloudbridge.databinding.BottomSheetBinding
 import com.myproject.cloudbridge.databinding.FragmentMapBinding
 import com.myproject.cloudbridge.model.store.StoreInfoSettingModel
 import com.myproject.cloudbridge.ui.search.SearchActivity
+import com.myproject.cloudbridge.util.setHelperBoxBlack
 import com.myproject.cloudbridge.util.singleton.Utils.LOCATION_PERMISSION_REQUEST_CODE
 import com.myproject.cloudbridge.util.singleton.Utils.REQUEST_LOCATION_PERMISSIONS
 import com.myproject.cloudbridge.viewModel.StoreManagementViewModel
@@ -37,6 +45,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import com.naver.maps.map.MapFragment
 import com.naver.maps.map.NaverMapOptions
+import com.naver.maps.map.overlay.CircleOverlay
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.util.FusedLocationSource
@@ -47,14 +56,12 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     // 내장 위치 추적 기능 사용
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var mLocationSource: FusedLocationSource
-    private lateinit var allStoreData: ArrayList<StoreInfoSettingModel>
     private lateinit var sheetBehavior: BottomSheetBehavior<View>
     private lateinit var naverMap: NaverMap
-    private val viewModel: StoreManagementViewModel by viewModels()
+    private val viewModel: StoreManagementViewModel by activityViewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentMapBinding.inflate(inflater, container, false)
-        fetchAllStoreData()
         initMap()
         return binding.root
     }
@@ -65,7 +72,8 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun initView(view: View) {
-        sheetBehavior = BottomSheetBehavior.from(view.findViewById(R.id.store_bottom_sheet))
+
+        sheetBehavior = BottomSheetBehavior.from(view.findViewById(R.id.bottomSheet))
         with(sheetBehavior) {
             isHideable = true
             state = BottomSheetBehavior.STATE_HIDDEN
@@ -138,6 +146,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 naverMap.moveCamera(cameraUpdate)
             }
         }
+        addMaker()
     }
 
     private fun permissionGrantedMapUiSetting(){
@@ -145,12 +154,11 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
             // 내장 위치 추적 기능 사용
             locationSource = mLocationSource
-            //minZoom = 5.0
-            //maxZoom = 18.0
 
             naverMap.addOnOptionChangeListener {
                 val mode = naverMap.locationTrackingMode.name
                 val currentLocation = mLocationSource.lastLocation
+
                 when(mode){
                     "None" -> locationTrackingMode = LocationTrackingMode.Follow
                     "Follow", "NoFollow" ->{
@@ -164,6 +172,15 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     }
                 }
             }
+
+            with(naverMap.locationOverlay){
+                val color = ContextCompat.getColor(requireContext(), R.color.pink)
+                circleRadius = 400
+                // setAlphaComponent : 투명도 지정
+                // 0(완전 투명) ~ 255(완전 불투명)
+                circleColor = ColorUtils.setAlphaComponent(color, 90)
+            }
+
 
             /**
              * 사용자의 위치를 지도에서 추적하는 모드
@@ -219,40 +236,47 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 isScaleBarEnabled = true
             }
         }
-
     }
 
-    private fun fetchAllStoreData() {
-        viewModel.fetchAllStoreFromRoom()
+    private fun addMaker() {
         viewLifecycleOwner.lifecycleScope.launch {
-
-            // StateFlow는 동일한 값을 발행하지 않지만
-            // LifeCycle이 트리거될때 한번 수행하므로 가져옴
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.fetch.collect { fetched ->
-                    if (fetched == true) {
-                        allStoreData = viewModel.allStoreData.value ?: ArrayList()
-                        addMaker()
+                val storeData = viewModel.allStoreData.value
+                Log.d("MapFragmentLifeCycle", "MapFragment initView() $storeData")
+                viewModel.allStoreData.value?.forEach { store ->
+                    val marker = Marker()
+                    with(marker){
+                        icon = OverlayImage.fromResource(R.drawable.ic_marker)
+                        position = LatLng(
+                            store.storeInfo.latitude.toDouble(),
+                            store.storeInfo.longitude.toDouble()
+                        )
+                        map = naverMap
+                        width = 86
+                        height = 90
+
+                        setOnClickListener {
+                            sheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+                            showBottomSheetWithStoreData(store)
+                            true
+                        }
                     }
                 }
             }
         }
+
     }
 
-    private fun addMaker() {
-
-        allStoreData.forEach { store ->
-            val marker = Marker()
-            with(marker){
-                icon = OverlayImage.fromResource(R.drawable.ic_marker)
-                position = LatLng(
-                    store.storeInfo.latitude.toDouble(),
-                    store.storeInfo.longitude.toDouble()
-                )
-                map = naverMap
-                width = 82
-                height = 86
-            }
+    private fun showBottomSheetWithStoreData(store: StoreInfoSettingModel) {
+        with(binding){
+            Glide.with(binding.root)
+                .load(store.storeImage)
+                .into(storeImageView)
+            storeName.text = store.storeInfo.storeName
+            addr.text = store.storeInfo.address
         }
+
+        // Behavior 상태 : 바텀 시트를 완전히 펼쳐진 상태
+        sheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
     }
 }

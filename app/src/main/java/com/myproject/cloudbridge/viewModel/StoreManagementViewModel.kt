@@ -23,7 +23,10 @@ import com.myproject.cloudbridge.util.singleton.Utils.Base64ToBitmaps
 import com.myproject.cloudbridge.util.singleton.Utils.createRequestBody
 import com.myproject.cloudbridge.util.singleton.Utils.makeStoreMainImage
 import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.forEach
@@ -35,7 +38,14 @@ class StoreManagementViewModel : ViewModel() {
 
     private val networkRepository = NetworkRepository()
     private val dbRepository = DBRepository()
+    init {
+        Log.d("MapFragmentLifeCycle", "viewModel Create")
+    }
 
+    override fun onCleared() {
+        super.onCleared()
+        Log.d("MapFragmentLifeCycle", "viewModel onCleared")
+    }
 
     // 사업자 등록번호 상태 조회
     private val _state = MutableStateFlow(CrnStateResponseModel(0, 0, "", emptyList()))
@@ -120,7 +130,7 @@ class StoreManagementViewModel : ViewModel() {
         }
     }
 
-    private fun requestImageFromServer(imagePath: String) = viewModelScope.launch(Dispatchers.IO) {
+    fun requestImageFromServer(imagePath: String) = viewModelScope.launch(Dispatchers.IO) {
         try {
             val response = networkRepository.getMyStoreMainImage(imagePath)
             val decodeImage = Base64ToBitmaps(response)
@@ -286,8 +296,8 @@ class StoreManagementViewModel : ViewModel() {
                 val decodedImg = Base64ToBitmaps(imgBase64)
                 allStoreData.add(StoreInfoSettingModel(storeEntity, decodedImg))
             }
-
-            _allStoreData.value = allStoreData
+            Log.d("MapFragmentLifeCycle", "fetchAllStoreFromRoom() ${allStoreData}")
+            _allStoreData.value = (allStoreData)
             _fetch.value = true
         }
 

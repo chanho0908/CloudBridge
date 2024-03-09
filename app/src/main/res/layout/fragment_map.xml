@@ -49,14 +49,74 @@
             android:name="com.naver.maps.map.MapFragment" />
     </LinearLayout>
 
-    <include
-        android:id="@+id/store_bottom_sheet"
-        layout="@layout/bottom_sheet"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+
+    <LinearLayout
+        android:id="@+id/bottomSheet"
         style="@style/Widget.Material3.BottomSheet"
-        app:layout_behavior="@string/bottom_sheet_behavior"
-        app:behavior_peekHeight="50dp" />
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:orientation="vertical"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        app:layout_behavior="@string/bottom_sheet_behavior">
+
+        <view
+            android:id="@+id/view"
+            class="com.google.android.material.bottomsheet.BottomSheetDragHandleView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/storeImageView"
+                android:layout_width="90dp"
+                android:layout_height="120dp"
+                android:layout_gravity="center"
+                android:scaleType="centerCrop"
+                android:layout_weight="1"
+                android:src="@drawable/insert_photo_256" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:layout_weight="3"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/storeName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/rubik_bold"
+                    android:textSize="17sp"
+                    android:text="찬호네 베이커리"
+                    />
+
+                <TextView
+                    android:id="@+id/addr"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/rubik"
+                    android:layout_marginTop="8dp"
+                    android:textSize="13sp"
+                    android:text="경기도 수원시 파달구 매향동"
+                    />
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_gravity="top|end" />
+
+        </LinearLayout>
+    </LinearLayout>
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
