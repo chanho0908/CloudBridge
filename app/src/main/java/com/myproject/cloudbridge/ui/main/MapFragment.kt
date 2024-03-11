@@ -89,6 +89,10 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             searchView.setOnClickListener{
                 startActivity(Intent(requireContext(), SearchActivity::class.java))
             }
+
+            starButton.setOnClickListener {
+
+            }
         }
     }
 
@@ -241,8 +245,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     private fun addMaker() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                val storeData = viewModel.allStoreData.value
-                Log.d("MapFragmentLifeCycle", "MapFragment initView() $storeData")
                 viewModel.allStoreData.value?.forEach { store ->
                     val marker = Marker()
                     with(marker){
@@ -271,7 +273,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         with(binding){
             Glide.with(binding.root)
                 .load(store.storeImage)
-                .into(storeImageView)
+                .into(storeImg)
             storeName.text = store.storeInfo.storeName
             addr.text = store.storeInfo.address
         }

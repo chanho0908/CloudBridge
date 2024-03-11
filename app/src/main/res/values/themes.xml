@@ -23,4 +23,12 @@
     </style>
 
     <style name="Theme.CloudBridge" parent="Base.Theme.CloudBridge" />
+
+    <style name="Theme.BottomSheet" parent="Widget.Material3.BottomSheet">
+        <item name="backgroundTint">@color/Tertiary_container</item>
+        <item name="android:paddingStart">15dp</item>
+        <item name="android:paddingEnd">15dp</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:paddingTop">20dp</item>
+    </style>
 </resources>

@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/bottomSheet"
-    style="@style/Widget.Material3.BottomSheet"
+    style="@style/Theme.BottomSheet"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -12,32 +14,100 @@
         android:id="@+id/view"
         class="com.google.android.material.bottomsheet.BottomSheetDragHandleView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="25dp" />
 
-    <Button
-        android:id="@+id/buttonBottom1"
-        style="@style/Widget.Material3.Button.TextButton.Icon"
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Button 1"
-        android:textAlignment="viewStart"
-         />
+        android:orientation="horizontal">
 
-    <Button
-        android:id="@+id/buttonBottom2"
-        style="@style/Widget.Material3.Button.TextButton.Icon"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Button 2"
-        android:textAlignment="viewStart"
-        />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:layout_gravity="center"
+            android:layout_marginEnd="4dp"
+            android:layout_weight="1"
+            android:background="@color/Tertiary" />
 
-    <Button
-        android:id="@+id/buttonBottom3"
-        style="@style/Widget.Material3.Button.TextButton.Icon"
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_mini_bread" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="4dp"
+            android:layout_weight="1"
+            android:background="@color/Tertiary" />
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Button 3"
-        android:textAlignment="viewStart"
-         />
+        android:layout_height="match_parent"
+        android:layout_marginBottom="5dp"
+        android:orientation="horizontal">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            app:cardCornerRadius="16dp">
+
+            <ImageView
+                android:id="@+id/store_img"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center_vertical"
+                android:scaleType="centerCrop" />
+        </androidx.cardview.widget.CardView>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_weight="3"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/storeName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/binggrae_bold"
+                android:text="찬호네 베이커리"
+                android:textColor="@color/On_tertiary_container"
+                android:textSize="17sp" />
+
+            <TextView
+                android:id="@+id/addr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/rubik"
+                android:text="경기도 수원시 파달구 매향동"
+                android:textColor="@color/Tertiary"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_kid_star_red"
+            />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:layout_weight="1"
+        android:background="@color/Tertiary" />
+
 </LinearLayout>
