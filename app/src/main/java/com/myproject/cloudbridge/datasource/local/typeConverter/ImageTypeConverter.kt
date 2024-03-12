@@ -1,4 +1,4 @@
-package com.myproject.cloudbridge.localDB.typeConverter
+package com.myproject.cloudbridge.datasource.local.typeConverter
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory

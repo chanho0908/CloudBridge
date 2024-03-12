@@ -1,4 +1,4 @@
-package com.myproject.cloudbridge.network.api
+package com.myproject.cloudbridge.datasource.remote.api
 
 import retrofit2.http.Multipart
 import retrofit2.http.POST

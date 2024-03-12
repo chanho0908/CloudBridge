@@ -1,13 +1,13 @@
-package com.myproject.cloudbridge.localDB
+package com.myproject.cloudbridge.datasource.local
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.myproject.cloudbridge.localDB.dao.StoreInfoDAO
-import com.myproject.cloudbridge.localDB.entity.StoreEntity
-import com.myproject.cloudbridge.localDB.typeConverter.ImageTypeConverter
+import com.myproject.cloudbridge.datasource.local.dao.StoreInfoDAO
+import com.myproject.cloudbridge.datasource.local.entity.StoreEntity
+import com.myproject.cloudbridge.datasource.local.typeConverter.ImageTypeConverter
 
 @Database(entities = [StoreEntity::class], version=4)
 @TypeConverters(ImageTypeConverter::class)
@@ -17,9 +17,9 @@ abstract class MainDatabase: RoomDatabase() {
     companion object{
 
         @Volatile
-        private var INSTANCE: MainDatabase ?= null
+        private var INSTANCE: MainDatabase?= null
 
-        fun getDatabase(context: Context): MainDatabase{
+        fun getDatabase(context: Context): MainDatabase {
             return INSTANCE ?: synchronized(this){
                 val instance = Room.databaseBuilder(
                     context.applicationContext,

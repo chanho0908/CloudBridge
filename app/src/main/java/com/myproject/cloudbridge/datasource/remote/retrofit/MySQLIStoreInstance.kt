@@ -1,9 +1,9 @@
-package com.myproject.cloudbridge.network.retrofit
+package com.myproject.cloudbridge.datasource.remote.retrofit
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.myproject.cloudbridge.network.api.StoreInfoApi
-import com.myproject.cloudbridge.network.api.StoreMenuApi
+import com.myproject.cloudbridge.datasource.remote.api.StoreInfoApi
+import com.myproject.cloudbridge.datasource.remote.api.StoreMenuApi
 import com.myproject.cloudbridge.util.singleton.MyOkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

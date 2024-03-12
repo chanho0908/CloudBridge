@@ -1,4 +1,4 @@
-package com.myproject.cloudbridge.localDB.entity
+package com.myproject.cloudbridge.datasource.local.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
