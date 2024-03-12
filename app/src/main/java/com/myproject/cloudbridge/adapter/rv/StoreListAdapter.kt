@@ -34,13 +34,16 @@ class StoreListAdapter: ListAdapter<StoreInfoSettingModel, StoreListAdapter.Main
     override fun onBindViewHolder(holder: MainViewHolder, position: Int) {
         val binding = holder.binding
         val item = getItem(position)
+        val address = item.storeInfo.address
+        val subAddress = address.substring( address.indexOf("도") + 1, address.length -1)
 
         with(binding){
             Glide.with(binding.root)
                 .load(item.storeImage)
-                .into(binding.storeImg)
+                .into(imageViewStoreImg)
 
-            storename.text = item.storeInfo.storeName
+            textviewStoreName.text = item.storeInfo.storeName
+            textviewAddr.text = subAddress
         }
 
 

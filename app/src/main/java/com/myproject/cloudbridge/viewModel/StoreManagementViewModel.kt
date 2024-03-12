@@ -38,14 +38,6 @@ class StoreManagementViewModel : ViewModel() {
 
     private val networkRepository = NetworkRepository()
     private val dbRepository = DBRepository()
-    init {
-        Log.d("MapFragmentLifeCycle", "viewModel Create")
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        Log.d("MapFragmentLifeCycle", "viewModel onCleared")
-    }
 
     // 사업자 등록번호 상태 조회
     private val _state = MutableStateFlow(CrnStateResponseModel(0, 0, "", emptyList()))
@@ -56,7 +48,7 @@ class StoreManagementViewModel : ViewModel() {
     val crnList = _crnList.asStateFlow()
 
     // 나의 매장 정보
-    private var _myStore: MutableStateFlow<StoreInfoSettingModel> = MutableStateFlow(initStoreData())
+    private val _myStore: MutableStateFlow<StoreInfoSettingModel> = MutableStateFlow(initStoreData())
     val myStore = _myStore.asStateFlow()
 
     // 나의 사업자 등록번호와 일치하는가 ?
@@ -66,11 +58,11 @@ class StoreManagementViewModel : ViewModel() {
     val isEqualCrn = _isEqualCrn.asStateFlow()
 
     // 모든 매장 정보
-    private var _allStoreData = MutableStateFlow<ArrayList<StoreInfoSettingModel>?>(null)
+    private val _allStoreData = MutableStateFlow<ArrayList<StoreInfoSettingModel>?>(null)
     val allStoreData = _allStoreData.asStateFlow()
 
     // 내 사업자 등록 번호
-    private var _myCompanyRegistrationNumber = MutableStateFlow<String?>(null)
+    private val _myCompanyRegistrationNumber = MutableStateFlow<String?>(null)
     val myCompanyRegistrationNumber = _myCompanyRegistrationNumber.asStateFlow()
 
     // 서버 작업이 완료 됐음을 알리는 flag
@@ -81,9 +73,9 @@ class StoreManagementViewModel : ViewModel() {
     private val _imgLoading = MutableStateFlow<Boolean?>(null)
     val imgLoading = _imgLoading.asStateFlow()
 
-    // 로컬 패치 완료 됐음을 알리는 flag
-    private val _fetch = MutableStateFlow<Boolean?>(null)
-    val fetch = _fetch.asStateFlow()
+    // 서버 작업이 완료 됐음을 알리는 flag
+    private val _fetched = MutableStateFlow<Boolean?>(null)
+    val fetched = _fetched.asStateFlow()
 
     init {
         viewModelScope.launch {
@@ -95,7 +87,7 @@ class StoreManagementViewModel : ViewModel() {
     }
 
     // 사업자 등록 번호 상태 조회
-    fun getCRNState(crn: String) = viewModelScope.launch(Dispatchers.IO) {
+    fun getCRNState(crn: String) = viewModelScope.launch {
         try {
             val response = networkRepository.getCRNState(CrnStateRequestModel(arrayOf(crn)))
             _state.value = response
@@ -105,7 +97,7 @@ class StoreManagementViewModel : ViewModel() {
     }
 
     // 서버에 있는 모든 사업자 등록 번호를 가져오는 메소드
-    fun getCompanyRegistrationNumberList() = viewModelScope.launch(Dispatchers.IO) {
+    fun getCompanyRegistrationNumberList() = viewModelScope.launch {
         try {
             val response = networkRepository.getCompanyRegistrationNumber()
             _crnList.value = response
@@ -115,7 +107,7 @@ class StoreManagementViewModel : ViewModel() {
         }
     }
 
-    fun getMyStoreInfo() = viewModelScope.launch(Dispatchers.IO) {
+    fun getMyStoreInfo() = viewModelScope.launch {
         try {
             myCompanyRegistrationNumber.collect{ myCompanyRegistrationNumber->
                 val response = dbRepository.getMyStoreInfo(myCompanyRegistrationNumber.toString())
@@ -130,7 +122,7 @@ class StoreManagementViewModel : ViewModel() {
         }
     }
 
-    fun requestImageFromServer(imagePath: String) = viewModelScope.launch(Dispatchers.IO) {
+    fun requestImageFromServer(imagePath: String) = viewModelScope.launch {
         try {
             val response = networkRepository.getMyStoreMainImage(imagePath)
             val decodeImage = Base64ToBitmaps(response)
@@ -143,7 +135,8 @@ class StoreManagementViewModel : ViewModel() {
 
     // 메장 정보 등록
     fun registrationStore(imgUrl: Uri, storeName: String, ceoName: String, crn: String,
-                          phone: String, addr: String, lat: String, lng: String, kind: String) = viewModelScope.launch(Dispatchers.IO) {
+        phone: String, addr: String, lat: String, lng: String, kind: String)
+    = viewModelScope.launch {
         try {
 
             val imgBody = makeStoreMainImage(imgUrl)
@@ -174,7 +167,8 @@ class StoreManagementViewModel : ViewModel() {
     }
 
     fun updateMyStore(imgBody: MultipartBody.Part? = null, storeName: String, ceoName: String, crn: String,
-                      phone: String, addr: String, lat: String, lng: String, kind: String) = viewModelScope.launch(Dispatchers.IO) {
+                      phone: String, addr: String, lat: String, lng: String, kind: String)
+    = viewModelScope.launch {
         try {
             myStoreInfoRequestModel = if (imgBody != null) {
                 // 매장 정보를 RequestBody Type으로 변환 후
@@ -215,7 +209,7 @@ class StoreManagementViewModel : ViewModel() {
     }
 
     // 매장 삭제
-    fun deleteMyStore() = viewModelScope.launch(Dispatchers.IO) {
+    fun deleteMyStore() = viewModelScope.launch {
         Log.d(TAG, "Delete Request")
         try{
             myCompanyRegistrationNumber.collect {
@@ -235,7 +229,7 @@ class StoreManagementViewModel : ViewModel() {
     }
 
     // Room에 서버 매장 데이터 저장
-    fun fromServerToRoomSetAllStoreList() = viewModelScope.launch(Dispatchers.IO) {
+    fun fromServerToRoomSetAllStoreList() = viewModelScope.launch {
         try {
             dbRepository.getAllStoreInfo().stateIn(viewModelScope).collect { storeEntities ->
 
@@ -296,9 +290,8 @@ class StoreManagementViewModel : ViewModel() {
                 val decodedImg = Base64ToBitmaps(imgBase64)
                 allStoreData.add(StoreInfoSettingModel(storeEntity, decodedImg))
             }
-            Log.d("MapFragmentLifeCycle", "fetchAllStoreFromRoom() ${allStoreData}")
-            _allStoreData.value = (allStoreData)
-            _fetch.value = true
+            _allStoreData.value = allStoreData
+            _fetched.value = true
         }
 
     }
