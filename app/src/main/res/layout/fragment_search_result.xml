@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/shrine_pink_50"
+    android:orientation="vertical"
+    tools:context="ui.search.SearchResultFragment">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar_search_result"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/Theme.Toolbar"
+        app:title="검색 결과"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerview_search_result"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="12dp"
+        android:layout_marginTop="16dp" />
+
+<!--    <com.facebook.shimmer.ShimmerFrameLayout-->
+<!--        android:id="@+id/shimmer_frame_layout_search_result"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginHorizontal="12dp"-->
+<!--        android:layout_marginTop="16dp">-->
+
+<!--        <GridLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:columnCount="2">-->
+
+<!--            <include layout="@layout/store_item_shimmer" />-->
+
+<!--            <include layout="@layout/store_item_shimmer" />-->
+
+<!--            <include layout="@layout/store_item_shimmer" />-->
+
+<!--            <include layout="@layout/store_item_shimmer" />-->
+
+<!--        </GridLayout>-->
+
+<!--    </com.facebook.shimmer.ShimmerFrameLayout>-->
+
+</LinearLayout>

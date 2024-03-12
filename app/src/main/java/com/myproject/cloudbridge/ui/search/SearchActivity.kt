@@ -10,12 +10,5 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        binding.apply {
-            toolbarSearch.setNavigationOnClickListener {
-                // 현재 Activity를 종료시킨다.
-                finish()
-            }
-        }
     }
 }
