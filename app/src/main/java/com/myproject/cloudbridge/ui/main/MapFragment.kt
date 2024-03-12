@@ -86,13 +86,20 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 progressBar.setProgressCompat(100, true)
             }
 
+            searchView.setOnFocusChangeListener { view, hasFocus ->
+                if (hasFocus) {
+                    // 포커스를 받았을 때 수행할 작업을 여기에 작성합니다.
+                    startActivity(Intent(requireContext(), SearchActivity::class.java))
+                    view.clearFocus()
+                } else {
+                    // 포커스를 잃었을 때 수행할 작업을 여기에 작성합니다.
+                }
+            }
+
             searchView.setOnClickListener{
                 startActivity(Intent(requireContext(), SearchActivity::class.java))
             }
 
-            starButton.setOnClickListener {
-
-            }
         }
     }
 

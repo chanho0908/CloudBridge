@@ -12,7 +12,7 @@ class SearchActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.apply {
-            materialToolbar.setNavigationOnClickListener {
+            toolbarSearch.setNavigationOnClickListener {
                 // 현재 Activity를 종료시킨다.
                 finish()
             }
