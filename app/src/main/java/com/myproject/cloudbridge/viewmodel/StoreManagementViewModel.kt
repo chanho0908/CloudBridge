@@ -1,17 +1,15 @@
-package com.myproject.cloudbridge.viewModel
+package com.myproject.cloudbridge.viewmodel
 
 import android.graphics.Bitmap
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.myproject.cloudbridge.dataStore.MainDataStore
+import com.myproject.cloudbridge.datasource.datastore.MainDataStore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import okhttp3.MultipartBody
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import com.myproject.cloudbridge.localDB.entity.StoreEntity
+import com.myproject.cloudbridge.datasource.local.entity.StoreEntity
 import com.myproject.cloudbridge.model.store.AllCrnResponseModel
 import com.myproject.cloudbridge.model.store.CrnStateResponseModel
 import com.myproject.cloudbridge.model.store.CrnStateRequestModel
@@ -23,14 +21,8 @@ import com.myproject.cloudbridge.util.singleton.Utils.Base64ToBitmaps
 import com.myproject.cloudbridge.util.singleton.Utils.createRequestBody
 import com.myproject.cloudbridge.util.singleton.Utils.makeStoreMainImage
 import kotlinx.coroutines.async
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.forEach
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
 class StoreManagementViewModel : ViewModel() {

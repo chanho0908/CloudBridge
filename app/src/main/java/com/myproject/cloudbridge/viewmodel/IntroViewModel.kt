@@ -1,12 +1,12 @@
-package com.myproject.cloudbridge.viewModel
+package com.myproject.cloudbridge.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.myproject.cloudbridge.dataStore.MainDataStore
-import com.myproject.cloudbridge.localDB.entity.UserEntity
+import com.myproject.cloudbridge.datasource.datastore.MainDataStore
+import com.myproject.cloudbridge.datasource.local.entity.UserEntity
 import com.myproject.cloudbridge.model.user.User
 import com.myproject.cloudbridge.repository.DBRepository
 import com.myproject.cloudbridge.util.App

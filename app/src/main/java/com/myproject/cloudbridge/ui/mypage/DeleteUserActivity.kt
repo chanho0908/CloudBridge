@@ -1,4 +1,4 @@
-package com.myproject.cloudbridge.ui.myPage
+package com.myproject.cloudbridge.ui.mypage
 
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP
@@ -11,8 +11,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.myproject.cloudbridge.databinding.ActivityDeleteUserBinding
-import com.myproject.cloudbridge.localDB.entity.UserEntity
-import com.myproject.cloudbridge.viewModel.UserManagementViewModel
+import com.myproject.cloudbridge.datasource.local.entity.UserEntity
+import com.myproject.cloudbridge.viewmodel.UserManagementViewModel
 import kotlinx.coroutines.launch
 
 class DeleteUserActivity : AppCompatActivity() {

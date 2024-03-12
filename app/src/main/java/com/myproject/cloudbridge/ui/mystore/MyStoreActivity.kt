@@ -1,4 +1,4 @@
-package com.myproject.cloudbridge.ui.myStore
+package com.myproject.cloudbridge.ui.mystore
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -14,7 +14,7 @@ import com.myproject.cloudbridge.R
 import com.myproject.cloudbridge.databinding.ActivityMyStoreBinding
 import com.myproject.cloudbridge.model.store.StoreInfoSettingModel
 import com.myproject.cloudbridge.ui.main.MainActivity
-import com.myproject.cloudbridge.viewModel.StoreManagementViewModel
+import com.myproject.cloudbridge.viewmodel.StoreManagementViewModel
 import kotlinx.coroutines.launch
 
 class MyStoreActivity : AppCompatActivity(), View.OnClickListener {
@@ -43,7 +43,6 @@ class MyStoreActivity : AppCompatActivity(), View.OnClickListener {
                 }
             }
         }
-
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {

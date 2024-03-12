@@ -1,4 +1,4 @@
-package com.myproject.cloudbridge.ui.myStore
+package com.myproject.cloudbridge.ui.mystore
 
 import android.content.res.ColorStateList
 import android.os.Bundle
@@ -19,7 +19,7 @@ import com.myproject.cloudbridge.util.setHelperTextGreenList
 import com.myproject.cloudbridge.util.setHelperTextRed
 import com.myproject.cloudbridge.util.setHelperTextRedList
 import com.myproject.cloudbridge.util.showSoftInput
-import com.myproject.cloudbridge.viewModel.StoreManagementViewModel
+import com.myproject.cloudbridge.viewmodel.StoreManagementViewModel
 import kotlinx.coroutines.launch
 
 class UpdateFragment1 : Fragment() {
@@ -50,8 +50,7 @@ class UpdateFragment1 : Fragment() {
                 viewModel.isEqualCrn.collect {
                     if (it == true) {
                         val crn = binding.cprEdit.text.toString()
-                        val action =
-                            UpdateFragment1Directions.actionUpdateFragment1ToUpdateFragment2(crn)
+                        val action = UpdateFragment1Directions.actionUpdateFragment1ToUpdateFragment2(crn)
                         Navigation.findNavController(view).navigate(action)
                     } else {
                         if (isSearched) {

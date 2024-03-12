@@ -1,4 +1,4 @@
-package com.myproject.cloudbridge.ui.myStore
+package com.myproject.cloudbridge.ui.mystore
 
 import android.content.Intent
 import android.net.Uri
@@ -26,9 +26,9 @@ import com.myproject.cloudbridge.util.singleton.Utils.requestPlzInputText
 import com.myproject.cloudbridge.util.hasImagePermission
 import com.myproject.cloudbridge.util.showPermissionSnackBar
 import com.myproject.cloudbridge.util.translateGeo
-import com.myproject.cloudbridge.ui.storeRegistration.AddressActivity
+import com.myproject.cloudbridge.ui.store_registration.AddressActivity
 import com.myproject.cloudbridge.util.singleton.Utils.ADDR_RESULT_RESULT_CODE
-import com.myproject.cloudbridge.viewModel.StoreManagementViewModel
+import com.myproject.cloudbridge.viewmodel.StoreManagementViewModel
 import kotlinx.coroutines.launch
 
 

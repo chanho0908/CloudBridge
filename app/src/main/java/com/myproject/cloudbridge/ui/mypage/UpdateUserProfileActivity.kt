@@ -1,4 +1,4 @@
-package com.myproject.cloudbridge.ui.myPage
+package com.myproject.cloudbridge.ui.mypage
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -9,10 +9,10 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.kakao.sdk.user.UserApiClient
-import com.myproject.cloudbridge.dataStore.MainDataStore
+import com.myproject.cloudbridge.datasource.datastore.MainDataStore
 import com.myproject.cloudbridge.databinding.ActivityUpdateUserProfileBinding
-import com.myproject.cloudbridge.localDB.entity.UserEntity
-import com.myproject.cloudbridge.viewModel.UserManagementViewModel
+import com.myproject.cloudbridge.datasource.local.entity.UserEntity
+import com.myproject.cloudbridge.viewmodel.UserManagementViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -96,7 +96,8 @@ class UpdateUserProfileActivity : AppCompatActivity() {
                                 userUpdatePassword,
                                 userName,
                                 userPhone
-                            ))
+                            )
+                            )
                         }
                     }
                     startActivity(Intent(this@UpdateUserProfileActivity, MyInfoActivity::class.java))

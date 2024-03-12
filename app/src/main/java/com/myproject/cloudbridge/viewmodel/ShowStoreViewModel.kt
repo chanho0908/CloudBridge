@@ -1,6 +1,7 @@
-package com.myproject.cloudbridge.viewModel
+package com.myproject.cloudbridge.viewmodel
 
 import androidx.lifecycle.ViewModel
+
 
 class ShowStoreViewModel: ViewModel() {
 

@@ -1,11 +1,11 @@
-package com.myproject.cloudbridge.ui.myPage
+package com.myproject.cloudbridge.ui.mypage
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import com.myproject.cloudbridge.databinding.ActivityFarewellBinding
-import com.myproject.cloudbridge.viewModel.UserManagementViewModel
+import com.myproject.cloudbridge.viewmodel.UserManagementViewModel
 import kotlin.system.exitProcess
 
 class FarewellActivity : AppCompatActivity() {

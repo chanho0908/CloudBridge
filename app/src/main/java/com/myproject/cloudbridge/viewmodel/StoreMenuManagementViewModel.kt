@@ -1,4 +1,4 @@
-package com.myproject.cloudbridge.viewModel
+package com.myproject.cloudbridge.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.myproject.cloudbridge.model.store.StoreMenuRvModel
