@@ -14,7 +14,7 @@ import com.kakao.sdk.user.UserApiClient
 import com.myproject.cloudbridge.databinding.ActivityStartBinding
 import com.myproject.cloudbridge.util.singleton.Utils
 import com.myproject.cloudbridge.ui.main.MainActivity
-import com.myproject.cloudbridge.viewModel.IntroViewModel
+import com.myproject.cloudbridge.viewmodel.IntroViewModel
 
 class StartActivity : AppCompatActivity() {
     private lateinit var binding: ActivityStartBinding

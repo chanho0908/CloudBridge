@@ -1,4 +1,4 @@
-package com.myproject.cloudbridge.ui.storeRegistration
+package com.myproject.cloudbridge.ui.store_registration
 
 import android.content.Intent
 import android.net.Uri
@@ -20,16 +20,16 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.myproject.cloudbridge.R
 import com.myproject.cloudbridge.databinding.FragmentStoreInfoRegistrationBinding
-import com.myproject.cloudbridge.ui.myStore.MyStoreActivity
-import com.myproject.cloudbridge.viewModel.StoreManagementViewModel
+import com.myproject.cloudbridge.ui.mystore.MyStoreActivity
+import com.myproject.cloudbridge.viewmodel.StoreManagementViewModel
 import kotlinx.coroutines.launch
-import com.myproject.cloudbridge.util.singleton.Utils.ADDR_RESULT
 import com.myproject.cloudbridge.util.singleton.Utils.REQUEST_IMAGE_PERMISSIONS
 import com.myproject.cloudbridge.util.singleton.Utils.accessGallery
 import com.myproject.cloudbridge.util.singleton.Utils.requestPlzInputText
 import com.myproject.cloudbridge.util.hasImagePermission
 import com.myproject.cloudbridge.util.showPermissionSnackBar
 import com.myproject.cloudbridge.util.showSoftInput
+import com.myproject.cloudbridge.util.singleton.Utils.ADDR_RESULT_RESULT_CODE
 import com.myproject.cloudbridge.util.translateGeo
 
 class StoreInfoRegistrationFragment : Fragment(), View.OnClickListener {
@@ -148,8 +148,6 @@ class StoreInfoRegistrationFragment : Fragment(), View.OnClickListener {
                             requireContext().showPermissionSnackBar(binding.root)
                         }
                     }
-
-                    //val context: Context = context ?: return@registerForActivityResult
                 }
             }
         }
@@ -159,7 +157,7 @@ class StoreInfoRegistrationFragment : Fragment(), View.OnClickListener {
             val callback = result.data
             if (callback != null)
                 when (result.resultCode) {
-                    ADDR_RESULT -> {
+                    ADDR_RESULT_RESULT_CODE  -> {
                         val data = callback.getStringExtra("data")
                         binding.addrEdit.setText(data)
                     }
@@ -175,9 +173,8 @@ class StoreInfoRegistrationFragment : Fragment(), View.OnClickListener {
                         binding.RequestImageTextView.visibility = View.INVISIBLE
                     }
                 }
+            }
         }
-
-    }
 
 
     override fun onClick(v: View?) {

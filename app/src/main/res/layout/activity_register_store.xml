@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.storeRegistration.RegisteStoreActivity">
+    tools:context=".ui.store_registration.RegisteStoreActivity">
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentContainerView"
@@ -12,6 +12,6 @@
         android:layout_height="match_parent"
         app:defaultNavHost="true"
         android:name="androidx.navigation.fragment.NavHostFragment"
-        app:navGraph="@navigation/store_registration_nav"
+        app:navGraph="@navigation/store_registration_graph"
         />
 </LinearLayout>

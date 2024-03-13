@@ -15,7 +15,7 @@ import com.myproject.cloudbridge.model.store.CrnStateResponseModel
 import com.myproject.cloudbridge.model.store.CrnStateRequestModel
 import com.myproject.cloudbridge.model.store.MyStoreInfoRequestModel
 import com.myproject.cloudbridge.model.store.StoreInfoSettingModel
-import com.myproject.cloudbridge.repository.DBRepository
+import com.myproject.cloudbridge.repository.LocalRepository
 import com.myproject.cloudbridge.repository.NetworkRepository
 import com.myproject.cloudbridge.util.singleton.Utils.Base64ToBitmaps
 import com.myproject.cloudbridge.util.singleton.Utils.createRequestBody
@@ -29,7 +29,7 @@ class StoreManagementViewModel : ViewModel() {
     private lateinit var myStoreInfoRequestModel: MyStoreInfoRequestModel
 
     private val networkRepository = NetworkRepository()
-    private val dbRepository = DBRepository()
+    private val localRepository = LocalRepository()
 
     // 사업자 등록번호 상태 조회
     private val _state = MutableStateFlow(CrnStateResponseModel(0, 0, "", emptyList()))
@@ -40,7 +40,8 @@ class StoreManagementViewModel : ViewModel() {
     val crnList = _crnList.asStateFlow()
 
     // 나의 매장 정보
-    private val _myStore: MutableStateFlow<StoreInfoSettingModel> = MutableStateFlow(initStoreData())
+    private val _myStore: MutableStateFlow<StoreInfoSettingModel> =
+        MutableStateFlow(initStoreData())
     val myStore = _myStore.asStateFlow()
 
     // 나의 사업자 등록번호와 일치하는가 ?
@@ -101,9 +102,9 @@ class StoreManagementViewModel : ViewModel() {
 
     fun getMyStoreInfo() = viewModelScope.launch {
         try {
-            myCompanyRegistrationNumber.collect{ myCompanyRegistrationNumber->
-                val response = dbRepository.getMyStoreInfo(myCompanyRegistrationNumber.toString())
-                response.stateIn(viewModelScope).collect {
+            myCompanyRegistrationNumber.collect { myCompanyRegistrationNumber ->
+                localRepository.getMyStoreInfo(myCompanyRegistrationNumber.toString())
+                    .stateIn(viewModelScope).collect {
                     _myStore.value.storeInfo = it
                     requestImageFromServer(it.imagePath)
                 }
@@ -126,9 +127,10 @@ class StoreManagementViewModel : ViewModel() {
     }
 
     // 메장 정보 등록
-    fun registrationStore(imgUrl: Uri, storeName: String, ceoName: String, crn: String,
-        phone: String, addr: String, lat: String, lng: String, kind: String)
-    = viewModelScope.launch {
+    fun registrationStore(
+        imgUrl: Uri, storeName: String, ceoName: String, crn: String,
+        phone: String, addr: String, lat: String, lng: String, kind: String
+    ) = viewModelScope.launch {
         try {
 
             val imgBody = makeStoreMainImage(imgUrl)
@@ -158,9 +160,10 @@ class StoreManagementViewModel : ViewModel() {
         }
     }
 
-    fun updateMyStore(imgBody: MultipartBody.Part? = null, storeName: String, ceoName: String, crn: String,
-                      phone: String, addr: String, lat: String, lng: String, kind: String)
-    = viewModelScope.launch {
+    fun updateMyStore(
+        imgBody: MultipartBody.Part? = null, storeName: String, ceoName: String, crn: String,
+        phone: String, addr: String, lat: String, lng: String, kind: String
+    ) = viewModelScope.launch {
         try {
             myStoreInfoRequestModel = if (imgBody != null) {
                 // 매장 정보를 RequestBody Type으로 변환 후
@@ -203,11 +206,11 @@ class StoreManagementViewModel : ViewModel() {
     // 매장 삭제
     fun deleteMyStore() = viewModelScope.launch {
         Log.d(TAG, "Delete Request")
-        try{
+        try {
             myCompanyRegistrationNumber.collect {
                 // Local DB 삭제
                 if (it != null) {
-                    dbRepository.deleteStoreInfo(it)
+                    localRepository.deleteStoreInfo(it)
                     MainDataStore.setCrn("")
 
                     // Remote DB 삭제
@@ -215,7 +218,7 @@ class StoreManagementViewModel : ViewModel() {
                     _flag.value = true
                 }
             }
-        }catch (e: Exception){
+        } catch (e: Exception) {
             Log.d(TAG, "deleteMyStore cause Error : $e")
         }
     }
@@ -223,7 +226,7 @@ class StoreManagementViewModel : ViewModel() {
     // Room에 서버 매장 데이터 저장
     fun fromServerToRoomSetAllStoreList() = viewModelScope.launch {
         try {
-            dbRepository.getAllStoreInfo().stateIn(viewModelScope).collect { storeEntities ->
+            localRepository.getAllStoreInfo().stateIn(viewModelScope).collect { storeEntities ->
 
                 // 서버에서 모든 매장 정보를 가져 오는 비동기 작업
                 val serverData = networkRepository.getAllStoreInfo()
@@ -255,10 +258,10 @@ class StoreManagementViewModel : ViewModel() {
 
                     if (findEntity != null) {
                         // Room 에 이미 있는 데이터면 업데이트
-                        dbRepository.updateStoreInfo(newStoreEntity)
+                        localRepository.updateStoreInfo(newStoreEntity)
                     } else {
                         // Room 에 없는 데이터면 추가
-                        dbRepository.insertStoreInfo(newStoreEntity)
+                        localRepository.insertStoreInfo(newStoreEntity)
                     }
                 }
                 _flag.value = true
@@ -272,11 +275,11 @@ class StoreManagementViewModel : ViewModel() {
     // 모든 매장 정보
     fun fetchAllStoreFromRoom() = viewModelScope.launch {
         fromServerToRoomSetAllStoreList()
-        val allStoreData =  ArrayList<StoreInfoSettingModel>()
+        val allStoreData = ArrayList<StoreInfoSettingModel>()
 
-        dbRepository.getAllStoreInfo().stateIn(viewModelScope).collect { storeEntities ->
+        localRepository.getAllStoreInfo().stateIn(viewModelScope).collect { storeEntities ->
 
-            storeEntities. forEach { storeEntity ->
+            storeEntities.forEach { storeEntity ->
                 val imagePath = storeEntity.imagePath
                 val imgBase64 = networkRepository.getMyStoreMainImage(imagePath)
                 val decodedImg = Base64ToBitmaps(imgBase64)
@@ -295,7 +298,13 @@ class StoreManagementViewModel : ViewModel() {
     }
 
     // 사용자 수정 데이터 업데이트
-    fun updateSavedData(storeName: String, ceoName: String, contact: String, address: String, kind: String) {
+    fun updateSavedData(
+        storeName: String,
+        ceoName: String,
+        contact: String,
+        address: String,
+        kind: String
+    ) {
         // 바뀌지 않은 값은 유지
         _myStore.value.storeInfo = _myStore.value.storeInfo.copy(
             storeName = storeName,

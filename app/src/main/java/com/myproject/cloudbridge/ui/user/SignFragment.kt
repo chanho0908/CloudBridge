@@ -9,9 +9,9 @@ import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import com.myproject.cloudbridge.databinding.FragmentSignBinding
-import com.myproject.cloudbridge.localDB.entity.UserEntity
+import com.myproject.cloudbridge.datasource.local.entity.UserEntity
 import com.myproject.cloudbridge.ui.main.MainActivity
-import com.myproject.cloudbridge.viewModel.IntroViewModel
+import com.myproject.cloudbridge.viewmodel.IntroViewModel
 
 class SignFragment : Fragment() {
     private var _binding: FragmentSignBinding ?= null

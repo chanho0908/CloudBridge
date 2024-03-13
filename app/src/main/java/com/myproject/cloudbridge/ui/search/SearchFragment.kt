@@ -12,7 +12,7 @@ import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.myproject.cloudbridge.R
-import com.myproject.cloudbridge.adapter.rv.RecentSearchAdapter
+import com.myproject.cloudbridge.ui.adapter.rv.RecentSearchAdapter
 import com.myproject.cloudbridge.databinding.FragmentSearchBinding
 import com.myproject.cloudbridge.ui.main.MainActivity
 
@@ -20,6 +20,7 @@ class SearchFragment : Fragment() {
     private var _binding : FragmentSearchBinding?= null
     private val binding get() = _binding!!
     val recentSearchesList = mutableListOf<String>()
+
     private lateinit var mView: View
     private val recentSearchAdapter by lazy {
         RecentSearchAdapter(

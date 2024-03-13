@@ -9,9 +9,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.myproject.cloudbridge.R
 import com.myproject.cloudbridge.databinding.FragmentMyPageBinding
-import com.myproject.cloudbridge.ui.myStore.NotRegistsedStoreActivity
-import com.myproject.cloudbridge.ui.myStore.MyStoreActivity
-import com.myproject.cloudbridge.viewModel.StoreManagementViewModel
+import com.myproject.cloudbridge.ui.mystore.NotRegistsedStoreActivity
+import com.myproject.cloudbridge.ui.mystore.MyStoreActivity
+import com.myproject.cloudbridge.viewmodel.StoreManagementViewModel
 
 class MyPageFragment : Fragment(), View.OnClickListener {
     private var _binding: FragmentMyPageBinding? = null

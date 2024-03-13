@@ -7,7 +7,7 @@ import com.google.firebase.firestore.DocumentReference
 import com.kakao.sdk.user.UserApiClient
 import com.myproject.cloudbridge.datasource.datastore.MainDataStore
 import com.myproject.cloudbridge.datasource.local.entity.UserEntity
-import com.myproject.cloudbridge.repository.DBRepository
+import com.myproject.cloudbridge.repository.LocalRepository
 import com.myproject.cloudbridge.repository.NetworkRepository
 import com.myproject.cloudbridge.util.App
 import kotlinx.coroutines.Dispatchers
@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 class UserManagementViewModel: ViewModel() {
 
     private val db = App.db
-    private val dbRepository = DBRepository()
+    private val localRepository = LocalRepository()
     private val networkRepository = NetworkRepository()
 
     lateinit var userProfile: StateFlow<List<UserEntity>>
@@ -27,7 +27,7 @@ class UserManagementViewModel: ViewModel() {
     }
 
     fun updateUserProfile(userEntity: UserEntity) = viewModelScope.launch(Dispatchers.IO) {
-        dbRepository.updateUserData(userEntity)
+        localRepository.updateUserData(userEntity)
         firebaseReference(0).update(
             mapOf(
                 "userName" to userEntity.userName,
@@ -46,7 +46,7 @@ class UserManagementViewModel: ViewModel() {
                 Log.i("MainViewModel", "로그아웃 성공. SDK에서 토큰 삭제됨")
             }
         }
-        dbRepository.deleteUserData(MainDataStore.getUserId())
+        localRepository.deleteUserData(MainDataStore.getUserId())
     }
 
     fun deleteUser() = viewModelScope.launch(Dispatchers.IO) {
@@ -60,7 +60,7 @@ class UserManagementViewModel: ViewModel() {
         }
 
         // Room Data Delete
-        dbRepository.deleteUserData(MainDataStore.getUserId())
+        localRepository.deleteUserData(MainDataStore.getUserId())
 
         // Firebase Data Delete
         firebaseReference(0).delete()

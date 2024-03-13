@@ -5,18 +5,15 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.UiThread
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.ColorUtils
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -24,16 +21,12 @@ import com.bumptech.glide.Glide
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.firebase.database.collection.LLRBNode.Color
 import com.myproject.cloudbridge.R
-import com.myproject.cloudbridge.databinding.BottomSheetBinding
 import com.myproject.cloudbridge.databinding.FragmentMapBinding
 import com.myproject.cloudbridge.model.store.StoreInfoSettingModel
 import com.myproject.cloudbridge.ui.search.SearchActivity
-import com.myproject.cloudbridge.util.setHelperBoxBlack
 import com.myproject.cloudbridge.util.singleton.Utils.LOCATION_PERMISSION_REQUEST_CODE
-import com.myproject.cloudbridge.util.singleton.Utils.REQUEST_LOCATION_PERMISSIONS
-import com.myproject.cloudbridge.viewModel.StoreManagementViewModel
+import com.myproject.cloudbridge.viewmodel.StoreManagementViewModel
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraAnimation
 import com.naver.maps.map.CameraPosition
@@ -44,8 +37,6 @@ import com.naver.maps.map.OnMapReadyCallback
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import com.naver.maps.map.MapFragment
-import com.naver.maps.map.NaverMapOptions
-import com.naver.maps.map.overlay.CircleOverlay
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.util.FusedLocationSource
@@ -79,6 +70,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             state = BottomSheetBehavior.STATE_HIDDEN
         }
 
+
         with(binding) {
             viewLifecycleOwner.lifecycleScope.launch {
                 progressBar.setProgressCompat(60, true)
@@ -95,11 +87,6 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                     // 포커스를 잃었을 때 수행할 작업을 여기에 작성합니다.
                 }
             }
-
-            searchView.setOnClickListener{
-                startActivity(Intent(requireContext(), SearchActivity::class.java))
-            }
-
         }
     }
 

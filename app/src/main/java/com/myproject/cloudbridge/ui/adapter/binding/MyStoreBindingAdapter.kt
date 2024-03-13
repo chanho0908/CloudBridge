@@ -1,10 +1,10 @@
-package com.myproject.cloudbridge.adapter.binding
+package com.myproject.cloudbridge.ui.adapter.binding
 
 import android.util.Log
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
-import com.myproject.cloudbridge.network.retrofit.MySQLIStoreInstance.BASE_URL
+import com.myproject.cloudbridge.datasource.remote.retrofit.MySQLIStoreInstance.BASE_URL
 
 //기존 뷰들에 없는 새로운 xml 속성을 연결하는 기능 메소드를 가지는 객체
 //보통 static 메소드를 가진 class로 사용

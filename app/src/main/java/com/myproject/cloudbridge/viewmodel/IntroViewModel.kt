@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.myproject.cloudbridge.datasource.datastore.MainDataStore
 import com.myproject.cloudbridge.datasource.local.entity.UserEntity
 import com.myproject.cloudbridge.model.user.User
-import com.myproject.cloudbridge.repository.DBRepository
+import com.myproject.cloudbridge.repository.LocalRepository
 import com.myproject.cloudbridge.util.App
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 
 class IntroViewModel: ViewModel() {
     val db = App.db
-    private val repo = DBRepository()
+    private val repo = LocalRepository()
 
     private val _first = MutableLiveData<Boolean>()
     val first: LiveData<Boolean>

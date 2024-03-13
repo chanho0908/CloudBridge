@@ -18,7 +18,13 @@
           <timeTargetWasSelectedWithDropDown value="2024-02-24T14:16:24.675870100Z" />
         </State>
       </entry>
+      <entry key="MenuManagementActivity">
+        <State />
+      </entry>
       <entry key="MyStoreActivity">
+        <State />
+      </entry>
+      <entry key="SearchActivity">
         <State />
       </entry>
       <entry key="app">

@@ -14,7 +14,7 @@ import com.kakao.sdk.user.UserApiClient
 import com.myproject.cloudbridge.databinding.FragmentJoinBinding
 import com.myproject.cloudbridge.model.user.User
 import com.myproject.cloudbridge.ui.main.MainActivity
-import com.myproject.cloudbridge.viewModel.IntroViewModel
+import com.myproject.cloudbridge.viewmodel.IntroViewModel
 import java.util.regex.Pattern
 
 

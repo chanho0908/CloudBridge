@@ -8,17 +8,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.myproject.cloudbridge.R
-import com.myproject.cloudbridge.adapter.rv.StoreListAdapter
+import com.myproject.cloudbridge.ui.adapter.rv.StoreListAdapter
 import com.myproject.cloudbridge.databinding.FragmentStoreListBinding
 import com.myproject.cloudbridge.ui.search.SearchActivity
-import com.myproject.cloudbridge.viewModel.StoreManagementViewModel
+import com.myproject.cloudbridge.viewmodel.StoreManagementViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 

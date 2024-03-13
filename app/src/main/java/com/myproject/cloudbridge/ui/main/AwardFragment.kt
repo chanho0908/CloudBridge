@@ -9,7 +9,7 @@ import com.google.android.material.carousel.CarouselLayoutManager
 import com.google.android.material.carousel.CarouselSnapHelper
 import com.google.android.material.carousel.MultiBrowseCarouselStrategy
 import com.myproject.cloudbridge.R
-import com.myproject.cloudbridge.adapter.rv.CarouselAdapter
+import com.myproject.cloudbridge.ui.adapter.rv.CarouselAdapter
 import com.myproject.cloudbridge.databinding.FragmentAwardBinding
 import com.myproject.cloudbridge.model.store.CarouselModel
 

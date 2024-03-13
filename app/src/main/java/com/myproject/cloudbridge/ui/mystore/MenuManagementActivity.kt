@@ -1,4 +1,4 @@
-package com.myproject.cloudbridge
+package com.myproject.cloudbridge.ui.mystore
 
 import android.content.Intent
 import android.graphics.Bitmap
@@ -6,13 +6,11 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.view.Menu
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.divider.MaterialDividerItemDecoration
-import com.myproject.cloudbridge.adapter.rv.MenuRvAdapter
+import com.myproject.cloudbridge.R
+import com.myproject.cloudbridge.ui.adapter.rv.MenuRvAdapter
 import com.myproject.cloudbridge.databinding.ActivityMenuManagementBinding
 import com.myproject.cloudbridge.model.store.StoreMenuRvModel
 import com.myproject.cloudbridge.util.singleton.Utils.REQUEST_IMAGE_PERMISSIONS
@@ -90,12 +88,10 @@ class MenuManagementActivity : AppCompatActivity() {
                 selectedItemPosition = position
             }
         ) { position ->
-            Log.d("CurrentMenRvAdapter", "target : ${menuList[position].productName}")
             menuList.removeAt(position)
 
             menuAdapter.notifyItemRemoved(position)
-            //menuAdapter.notifyItemRangeChanged(position, menuList.size)
-            Log.d("CurrentMenRvAdapter", "activity ${menuList.size}")
+            menuAdapter.notifyItemRangeChanged(position, menuList.size)
         }
 
         with(binding.rv){

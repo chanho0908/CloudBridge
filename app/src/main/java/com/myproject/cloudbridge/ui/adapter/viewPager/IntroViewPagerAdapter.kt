@@ -1,4 +1,4 @@
-package com.myproject.cloudbridge.adapter.viewPager
+package com.myproject.cloudbridge.ui.adapter.viewPager
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity

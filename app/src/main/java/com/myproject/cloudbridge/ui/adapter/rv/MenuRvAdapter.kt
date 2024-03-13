@@ -1,4 +1,4 @@
-package com.myproject.cloudbridge.adapter.rv
+package com.myproject.cloudbridge.ui.adapter.rv
 
 import android.content.Context
 import android.util.Log
@@ -8,7 +8,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.myproject.cloudbridge.databinding.StoreMenuItemBinding
+import com.myproject.cloudbridge.databinding.StoreItemMenuBinding
 import com.myproject.cloudbridge.model.store.StoreMenuRvModel
 import com.myproject.cloudbridge.util.setHelperBoxBlack
 import com.myproject.cloudbridge.util.setHelperTextRed
@@ -19,15 +19,13 @@ class MenuRvAdapter(
     private val imgClickListener: (Int) -> Unit,
     private val delButtonClickListener: (Int) -> Unit
 ) :
-    RecyclerView.Adapter<MenuRvAdapter.MenuRvViewHolder>() {
+    RecyclerView.Adapter<MenuRvViewHolder>() {
 
     var isDuplicatedName = false
 
-    inner class MenuRvViewHolder(val binding: StoreMenuItemBinding) : RecyclerView.ViewHolder(binding.root)
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MenuRvViewHolder {
         return MenuRvViewHolder(
-            StoreMenuItemBinding.inflate(
+            StoreItemMenuBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
@@ -36,7 +34,6 @@ class MenuRvAdapter(
     }
 
     override fun getItemCount(): Int {
-        menuList.map { Log.d("CurrentMenRvAdapter", it.productName) }
         return menuList.size
     }
 
@@ -70,7 +67,7 @@ class MenuRvAdapter(
                 } else {
                     productNameLayout.helperText = ""
                     productNameLayout.boxStrokeColor = context.setHelperBoxBlack()
-                    menuList[position].productName = input
+                    //menuList[position].productName = input
                     isDuplicatedName = false
                 }
             }
@@ -84,7 +81,7 @@ class MenuRvAdapter(
                 } else {
                     productQuantityLayout.helperText = ""
                     productQuantityLayout.boxStrokeColor = context.setHelperBoxBlack()
-                    menuList[position].productQuantity = it.toString().toInt()
+                    //menuList[position].productQuantity = it.toString().toInt()
                 }
             }
 
@@ -97,5 +94,5 @@ class MenuRvAdapter(
     fun getRvListData() = menuList
 }
 
-
+class MenuRvViewHolder(val binding: StoreItemMenuBinding) : RecyclerView.ViewHolder(binding.root)
 
