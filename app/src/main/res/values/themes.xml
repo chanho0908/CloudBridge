@@ -17,18 +17,43 @@
     </style>
 
     <!--activity_sign_or_login.xml!-->
-    <style name="Widget.App.MyTabLayout" parent="Widget.Material3.TabLayout">
+    <style name="Widget.App.MyTabLayout" parent="Widget.Material3.AppBarLayout">
         <item name="tabIndicatorColor">@color/shrine_pink_900</item>
         <item name="tabSelectedTextColor">@color/blue_grey</item>
     </style>
 
-    <style name="Theme.CloudBridge" parent="Base.Theme.CloudBridge" />
+    <style name="Theme.CloudBridge" parent="Base.Theme.CloudBridge"/>
 
+    <style name="Theme.Toolbar" parent="Widget.Material3.AppBarLayout">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="navigationIcon">@drawable/arrow_back_24px</item>
+        <item name="titleTextColor">@color/shrine_pink_900</item>
+        <item name="android:minHeight">?attr/actionBarSize</item>
+    </style>
+
+    <style name="Theme.SearchBar" parent="ThemeOverlay.Material3.TextInputEditText">
+        <item name="android:layout_marginStart">2dp</item>
+        <item name="android:layout_marginEnd">2dp</item>
+        <item name="android:layout_marginBottom">2dp</item>
+        <item name="boxBackgroundColor">@color/shrine_pink_50</item>
+        <item name="boxStrokeColor">@color/black</item>
+        <item name="startIconTint">@color/black</item>
+        <item name="startIconDrawable">@drawable/ic_search</item>
+    </style>
+
+    <!-- BottomSheet Design -->
     <style name="Theme.BottomSheet" parent="Widget.Material3.BottomSheet">
-        <item name="backgroundTint">@color/Tertiary_container</item>
+        <item name="backgroundTint">@color/tertiary_container</item>
+        <item name="android:orientation">vertical</item>
         <item name="android:paddingStart">15dp</item>
         <item name="android:paddingEnd">15dp</item>
         <item name="android:paddingBottom">10dp</item>
         <item name="android:paddingTop">20dp</item>
+    </style>
+
+    <style name="Theme.Divider" parent="Widget.Material3.MaterialDivider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">3dp</item>
+        <item name="dividerColor">@color/tertiary</item>
     </style>
 </resources>
