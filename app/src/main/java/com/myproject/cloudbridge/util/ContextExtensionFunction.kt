@@ -68,21 +68,17 @@ fun Context.translateGeo(address: String): Location = try {
 }
 
 fun Context.showSoftInput(focusView: TextInputEditText) {
-    CoroutineScope(Dispatchers.IO).launch {
-        delay(100)
-        val inputMethodManager = this@showSoftInput.getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE)
-                as InputMethodManager
-        inputMethodManager.showSoftInput(focusView, 0)
-    }
+    val inputMethodManager = this@showSoftInput.getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE)
+            as InputMethodManager
+    inputMethodManager.showSoftInput(focusView, 0)
+
 }
 
 fun Context.hideSoftInput(focusView: TextInputEditText) {
-    CoroutineScope(Dispatchers.IO).launch {
-        delay(100)
-        val inputMethodManager = this@hideSoftInput.getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE)
-                as InputMethodManager
-        inputMethodManager.hideSoftInputFromWindow(focusView.windowToken, 0)
-    }
+    val inputMethodManager = this@hideSoftInput.getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE)
+            as InputMethodManager
+    inputMethodManager.hideSoftInputFromWindow(focusView.windowToken, 0)
+
 }
 
 // 이미지를 리사이즈하는 함수
