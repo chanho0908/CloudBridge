@@ -11,6 +11,8 @@
 ### 1️⃣ Language & Libraries
 * Kotlin  
 * Android Studio
+* Docker
+* Nginx, NodeJS, MySQL
 
 ### 2️⃣ 사업자 등록 번호 API
 > 목적 : 허위 매장 등록을 방지하기 위해 사업자 등록 번호가 존재하는 매장만 등록이 가능하게 합니다.  
