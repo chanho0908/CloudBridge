@@ -12,9 +12,9 @@ import com.kakao.sdk.common.KakaoSdk
 import com.kakao.sdk.common.model.AuthErrorCause
 import com.kakao.sdk.user.UserApiClient
 import com.myproject.cloudbridge.databinding.ActivityStartBinding
-import com.myproject.cloudbridge.util.singleton.Utils
+import com.myproject.cloudbridge.utility.Utils
 import com.myproject.cloudbridge.ui.main.MainActivity
-import com.myproject.cloudbridge.viewmodel.IntroViewModel
+import com.myproject.cloudbridge.ui.user.vm.IntroViewModel
 
 class StartActivity : AppCompatActivity() {
     private lateinit var binding: ActivityStartBinding

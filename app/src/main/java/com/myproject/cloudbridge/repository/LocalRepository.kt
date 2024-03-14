@@ -5,7 +5,7 @@ import com.myproject.cloudbridge.datasource.local.entity.StoreEntity
 import com.myproject.cloudbridge.datasource.local.UserDatabase
 import com.myproject.cloudbridge.datasource.local.entity.RecentlySearchKeywordEntity
 import com.myproject.cloudbridge.datasource.local.entity.UserEntity
-import com.myproject.cloudbridge.util.App
+import com.myproject.cloudbridge.utility.App
 
 class LocalRepository {
     private val context = App.context()
@@ -24,7 +24,7 @@ class LocalRepository {
 
     suspend fun insertKeyword(keyword: RecentlySearchKeywordEntity) = userDatabase.RecentlySearchKeywordDAO().insertKeyword(keyword)
 
-    suspend fun deleteKeyword(keyword: String) = userDatabase.RecentlySearchKeywordDAO().deleteKeyword(keyword)
+    suspend fun deleteKeyword(keyword: RecentlySearchKeywordEntity) = userDatabase.RecentlySearchKeywordDAO().deleteKeyword(keyword)
 
     suspend fun deleteAllKeyword() = userDatabase.RecentlySearchKeywordDAO().deleteAllKeyword()
 

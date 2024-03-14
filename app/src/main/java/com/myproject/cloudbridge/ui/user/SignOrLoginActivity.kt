@@ -3,7 +3,6 @@ package com.myproject.cloudbridge.ui.user
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.google.android.material.tabs.TabLayoutMediator
-import com.myproject.cloudbridge.ui.adapter.viewPager.IntroViewPagerAdapter
 import com.myproject.cloudbridge.databinding.ActivitySignOrLoginBinding
 
 class SignOrLoginActivity : AppCompatActivity() {

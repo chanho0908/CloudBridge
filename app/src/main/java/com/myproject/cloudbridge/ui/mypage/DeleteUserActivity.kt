@@ -12,7 +12,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.myproject.cloudbridge.databinding.ActivityDeleteUserBinding
 import com.myproject.cloudbridge.datasource.local.entity.UserEntity
-import com.myproject.cloudbridge.viewmodel.UserManagementViewModel
 import kotlinx.coroutines.launch
 
 class DeleteUserActivity : AppCompatActivity() {

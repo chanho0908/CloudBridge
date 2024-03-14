@@ -11,7 +11,7 @@ import androidx.fragment.app.viewModels
 import com.myproject.cloudbridge.databinding.FragmentSignBinding
 import com.myproject.cloudbridge.datasource.local.entity.UserEntity
 import com.myproject.cloudbridge.ui.main.MainActivity
-import com.myproject.cloudbridge.viewmodel.IntroViewModel
+import com.myproject.cloudbridge.ui.user.vm.IntroViewModel
 
 class SignFragment : Fragment() {
     private var _binding: FragmentSignBinding ?= null

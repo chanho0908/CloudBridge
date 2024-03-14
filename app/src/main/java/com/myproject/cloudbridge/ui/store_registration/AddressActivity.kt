@@ -7,7 +7,7 @@ import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import com.myproject.cloudbridge.databinding.ActivityAddressBinding
-import com.myproject.cloudbridge.util.singleton.Utils.ADDR_RESULT_RESULT_CODE
+import com.myproject.cloudbridge.utility.Utils.ADDR_RESULT_RESULT_CODE
 
 class AddressActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAddressBinding

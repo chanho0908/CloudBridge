@@ -9,8 +9,8 @@ import com.myproject.cloudbridge.R
 import com.myproject.cloudbridge.databinding.ActivityMainBinding
 import com.myproject.cloudbridge.repository.LocalRepository
 import com.myproject.cloudbridge.repository.NetworkRepository
-import com.myproject.cloudbridge.viewmodel.StoreManagementViewModel
-import com.myproject.cloudbridge.viewmodel.viewmodelfactory.StoreManagementViewModelFactory
+import com.myproject.cloudbridge.ui.mystore.vm.StoreManagementViewModel
+import com.myproject.cloudbridge.ui.mystore.vm.StoreManagementViewModelFactory
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding

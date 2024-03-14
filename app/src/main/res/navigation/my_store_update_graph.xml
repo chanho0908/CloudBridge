@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/updateFragment1"
-        android:name="com.myproject.cloudbridge.ui.myStore.UpdateFragment1"
+        android:name="com.myproject.cloudbridge.ui.mystore.fragment.UpdateFragment1"
         android:label="fragment_update1"
         tools:layout="@layout/fragment_update1">
 
@@ -20,7 +20,7 @@
 
     <fragment
         android:id="@+id/updateFragment2"
-        android:name="com.myproject.cloudbridge.ui.myStore.UpdateFragment2"
+        android:name="com.myproject.cloudbridge.ui.mystore.fragment.UpdateFragment2"
         android:label="fragment_update2"
         tools:layout="@layout/fragment_update2">
         <action

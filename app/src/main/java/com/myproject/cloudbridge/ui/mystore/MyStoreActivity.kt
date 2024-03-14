@@ -16,8 +16,8 @@ import com.myproject.cloudbridge.model.store.StoreInfoSettingModel
 import com.myproject.cloudbridge.repository.LocalRepository
 import com.myproject.cloudbridge.repository.NetworkRepository
 import com.myproject.cloudbridge.ui.main.MainActivity
-import com.myproject.cloudbridge.viewmodel.StoreManagementViewModel
-import com.myproject.cloudbridge.viewmodel.viewmodelfactory.StoreManagementViewModelFactory
+import com.myproject.cloudbridge.ui.mystore.vm.StoreManagementViewModel
+import com.myproject.cloudbridge.ui.mystore.vm.StoreManagementViewModelFactory
 import kotlinx.coroutines.launch
 
 class MyStoreActivity : AppCompatActivity(), View.OnClickListener {

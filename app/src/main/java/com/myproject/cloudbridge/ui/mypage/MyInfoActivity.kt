@@ -13,7 +13,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.myproject.cloudbridge.R
 import com.myproject.cloudbridge.databinding.ActivityMyInfoBinding
 import com.myproject.cloudbridge.ui.user.SignOrLoginActivity
-import com.myproject.cloudbridge.viewmodel.UserManagementViewModel
 import kotlinx.coroutines.launch
 
 

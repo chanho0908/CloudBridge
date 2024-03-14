@@ -2,9 +2,9 @@ package com.myproject.cloudbridge.repository
 
 import com.myproject.cloudbridge.model.store.CrnStateRequestModel
 import com.myproject.cloudbridge.model.store.MyStoreInfoRequestModel
-import com.myproject.cloudbridge.network.retrofit.CRNRetrofitInstance
-import com.myproject.cloudbridge.network.retrofit.MySQLIStoreInstance
-import com.myproject.cloudbridge.util.singleton.Utils.SECRETE_KEY
+import com.myproject.cloudbridge.datasource.remote.retrofit.CRNRetrofitInstance
+import com.myproject.cloudbridge.datasource.remote.retrofit.MySQLIStoreInstance
+import com.myproject.cloudbridge.utility.Utils.SECRETE_KEY
 
 class NetworkRepository {
     private val storeInfoApiInstance = MySQLIStoreInstance.getStoreApiInstance()

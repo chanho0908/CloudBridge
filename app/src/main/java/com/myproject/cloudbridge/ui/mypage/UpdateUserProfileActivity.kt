@@ -12,7 +12,6 @@ import com.kakao.sdk.user.UserApiClient
 import com.myproject.cloudbridge.datasource.datastore.MainDataStore
 import com.myproject.cloudbridge.databinding.ActivityUpdateUserProfileBinding
 import com.myproject.cloudbridge.datasource.local.entity.UserEntity
-import com.myproject.cloudbridge.viewmodel.UserManagementViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

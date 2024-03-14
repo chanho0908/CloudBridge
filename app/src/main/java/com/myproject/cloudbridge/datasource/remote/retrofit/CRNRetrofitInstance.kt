@@ -1,7 +1,7 @@
 package com.myproject.cloudbridge.datasource.remote.retrofit
 
 import com.myproject.cloudbridge.datasource.remote.api.CompanyRegistrationNumberApi
-import com.myproject.cloudbridge.util.singleton.MyOkHttpClient
+import com.myproject.cloudbridge.utility.MyOkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 

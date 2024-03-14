@@ -8,21 +8,21 @@
 
     <fragment
         android:id="@+id/storeListFragment"
-        android:name="com.myproject.cloudbridge.ui.main.StoreListFragment"
+        android:name="com.myproject.cloudbridge.ui.main.fragment.StoreListFragment"
         android:label="fragment_award"
         tools:layout="@layout/fragment_store_list" />
     <fragment
         android:id="@+id/awardFragment"
-        android:name="com.myproject.cloudbridge.ui.main.AwardFragment"
+        android:name="com.myproject.cloudbridge.ui.main.fragment.AwardFragment"
         tools:layout="@layout/fragment_award"  />
     <fragment
         android:id="@+id/mapFragment"
-        android:name="com.myproject.cloudbridge.ui.main.MapFragment"
+        android:name="com.myproject.cloudbridge.ui.main.fragment.MapFragment"
         android:label="fragment_map"
         tools:layout="@layout/fragment_map" />
     <fragment
         android:id="@+id/myPageFragment"
-        android:name="com.myproject.cloudbridge.ui.main.MyPageFragment"
+        android:name="com.myproject.cloudbridge.ui.main.fragment.MyPageFragment"
         android:label="fragment_my_page"
         tools:layout="@layout/fragment_my_page" />
 
