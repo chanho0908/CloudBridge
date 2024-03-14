@@ -4,8 +4,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import androidx.activity.viewModels
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.bumptech.glide.Glide
@@ -13,14 +13,17 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.myproject.cloudbridge.R
 import com.myproject.cloudbridge.databinding.ActivityMyStoreBinding
 import com.myproject.cloudbridge.model.store.StoreInfoSettingModel
+import com.myproject.cloudbridge.repository.LocalRepository
+import com.myproject.cloudbridge.repository.NetworkRepository
 import com.myproject.cloudbridge.ui.main.MainActivity
 import com.myproject.cloudbridge.viewmodel.StoreManagementViewModel
-import kotlinx.coroutines.Dispatchers
+import com.myproject.cloudbridge.viewmodel.viewmodelfactory.StoreManagementViewModelFactory
 import kotlinx.coroutines.launch
 
 class MyStoreActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var binding: ActivityMyStoreBinding
-    private val viewModel: StoreManagementViewModel by viewModels()
+    private lateinit var viewModel: StoreManagementViewModel
+    private lateinit var viewModelFactory: StoreManagementViewModelFactory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,7 +52,7 @@ class MyStoreActivity : AppCompatActivity(), View.OnClickListener {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.flag.collect {
                     if (it == true) {
-                        val intent = Intent(this@MyStoreActivity, NotRegistsedStoreActivity::class.java)
+                        val intent = Intent(this@MyStoreActivity, NoRegisteredStoreActivity::class.java)
                         intent.putExtra("FLAG", "DELETE")
                         startActivity(intent)
                         finish()
@@ -60,6 +63,9 @@ class MyStoreActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun initView(myStore: StoreInfoSettingModel) {
+        viewModelFactory = StoreManagementViewModelFactory(NetworkRepository(), LocalRepository())
+        viewModel = ViewModelProvider(this, viewModelFactory)[StoreManagementViewModel::class.java]
+
         with(binding) {
             storeCeoNameTextView.text = myStore.storeInfo.ceoName
             storeNameTextView.text = myStore.storeInfo.storeName

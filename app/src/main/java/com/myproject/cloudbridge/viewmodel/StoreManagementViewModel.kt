@@ -25,11 +25,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 
-class StoreManagementViewModel : ViewModel() {
-    private lateinit var myStoreInfoRequestModel: MyStoreInfoRequestModel
+class StoreManagementViewModel(
+    private val networkRepository: NetworkRepository,
+    private val localRepository: LocalRepository
+) : ViewModel() {
 
-    private val networkRepository = NetworkRepository()
-    private val localRepository = LocalRepository()
+    private lateinit var myStoreInfoRequestModel: MyStoreInfoRequestModel
 
     // 사업자 등록번호 상태 조회
     private val _state = MutableStateFlow(CrnStateResponseModel(0, 0, "", emptyList()))
@@ -105,9 +106,9 @@ class StoreManagementViewModel : ViewModel() {
             myCompanyRegistrationNumber.collect { myCompanyRegistrationNumber ->
                 localRepository.getMyStoreInfo(myCompanyRegistrationNumber.toString())
                     .stateIn(viewModelScope).collect {
-                    _myStore.value.storeInfo = it
-                    requestImageFromServer(it.imagePath)
-                }
+                        _myStore.value.storeInfo = it
+                        requestImageFromServer(it.imagePath)
+                    }
             }
 
         } catch (e: Exception) {

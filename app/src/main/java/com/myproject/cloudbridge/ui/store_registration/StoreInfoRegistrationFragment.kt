@@ -12,6 +12,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.Navigation
@@ -20,6 +21,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.myproject.cloudbridge.R
 import com.myproject.cloudbridge.databinding.FragmentStoreInfoRegistrationBinding
+import com.myproject.cloudbridge.repository.LocalRepository
+import com.myproject.cloudbridge.repository.NetworkRepository
 import com.myproject.cloudbridge.ui.mystore.MyStoreActivity
 import com.myproject.cloudbridge.viewmodel.StoreManagementViewModel
 import kotlinx.coroutines.launch
@@ -31,6 +34,7 @@ import com.myproject.cloudbridge.util.showPermissionSnackBar
 import com.myproject.cloudbridge.util.showSoftInput
 import com.myproject.cloudbridge.util.singleton.Utils.ADDR_RESULT_RESULT_CODE
 import com.myproject.cloudbridge.util.translateGeo
+import com.myproject.cloudbridge.viewmodel.viewmodelfactory.StoreManagementViewModelFactory
 
 class StoreInfoRegistrationFragment : Fragment(), View.OnClickListener {
     private var _binding: FragmentStoreInfoRegistrationBinding? = null
@@ -39,24 +43,31 @@ class StoreInfoRegistrationFragment : Fragment(), View.OnClickListener {
     private lateinit var launcherForPermission: ActivityResultLauncher<Array<String>>
     private lateinit var launcherForActivity: ActivityResultLauncher<Intent>
 
-    private val viewModel: StoreManagementViewModel by viewModels()
+    private lateinit var viewModel: StoreManagementViewModel
+    private lateinit var viewModelFactory: StoreManagementViewModelFactory
     private var imgUrl: Uri = Uri.parse("")
 
     private val args: StoreInfoRegistrationFragmentArgs by navArgs()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         _binding = FragmentStoreInfoRegistrationBinding.inflate(inflater)
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+        initView()
         initActivityProcess()
         initListener()
         initObserveSate()
+        return binding.root
     }
 
-    private fun initObserveSate(){
+    private fun initView() {
+        viewModelFactory = StoreManagementViewModelFactory(NetworkRepository(), LocalRepository())
+        viewModel = ViewModelProvider(this, viewModelFactory)[StoreManagementViewModel::class.java]
+    }
+
+    private fun initObserveSate() {
 
         // viewLifeCycleOwner :
         // UI 요소에 대한이벤트를 처리하기 위해 사용
@@ -81,7 +92,6 @@ class StoreInfoRegistrationFragment : Fragment(), View.OnClickListener {
 
 
     private fun initListener() {
-
 
 
         with(binding) {
@@ -137,11 +147,13 @@ class StoreInfoRegistrationFragment : Fragment(), View.OnClickListener {
                             // 권한이 승인된 경우 처리할 작업
                             accessGallery(launcherForActivity)
                         }
+
                         !isGranted -> {
                             // 권한이 거부된 경우 처리할 작업
                             // 사용자에게 왜 권한이 필요한지 설명하는 다이얼로그 또는 메시지를 표시
                             requireContext().showPermissionSnackBar(binding.root)
                         }
+
                         else -> {
                             // 사용자가 "다시 묻지 않음"을 선택한 경우 처리할 작업
                             // 사용자에게 왜 권한이 필요한지 설명하는 다이얼로그 또는 메시지를 표시
@@ -157,10 +169,11 @@ class StoreInfoRegistrationFragment : Fragment(), View.OnClickListener {
             val callback = result.data
             if (callback != null)
                 when (result.resultCode) {
-                    ADDR_RESULT_RESULT_CODE  -> {
+                    ADDR_RESULT_RESULT_CODE -> {
                         val data = callback.getStringExtra("data")
                         binding.addrEdit.setText(data)
                     }
+
                     else -> {
                         imgUrl = callback.data ?: Uri.parse("")
 
@@ -173,8 +186,8 @@ class StoreInfoRegistrationFragment : Fragment(), View.OnClickListener {
                         binding.RequestImageTextView.visibility = View.INVISIBLE
                     }
                 }
-            }
         }
+    }
 
 
     override fun onClick(v: View?) {
@@ -213,7 +226,8 @@ class StoreInfoRegistrationFragment : Fragment(), View.OnClickListener {
                         if (lat == 0.0 || lng == 0.0) {
                             requestPlzInputText("올바른 주소를 입력해 주세요", addrLayout)
                         } else {
-                            viewModel.registrationStore(imgUrl, storeName, ceoName,
+                            viewModel.registrationStore(
+                                imgUrl, storeName, ceoName,
                                 crn, phone, addr, lat.toString(), lng.toString(), kind
                             )
                         }

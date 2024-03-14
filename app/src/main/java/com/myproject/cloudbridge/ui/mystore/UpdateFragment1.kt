@@ -7,19 +7,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.Navigation
 import com.myproject.cloudbridge.R
 import com.myproject.cloudbridge.databinding.FragmentUpdate1Binding
+import com.myproject.cloudbridge.repository.LocalRepository
+import com.myproject.cloudbridge.repository.NetworkRepository
 import com.myproject.cloudbridge.util.setHelperTextGreen
 import com.myproject.cloudbridge.util.setHelperTextGreenList
 import com.myproject.cloudbridge.util.setHelperTextRed
 import com.myproject.cloudbridge.util.setHelperTextRedList
 import com.myproject.cloudbridge.util.showSoftInput
 import com.myproject.cloudbridge.viewmodel.StoreManagementViewModel
+import com.myproject.cloudbridge.viewmodel.viewmodelfactory.StoreManagementViewModelFactory
 import kotlinx.coroutines.launch
 
 class UpdateFragment1 : Fragment() {
@@ -27,22 +30,18 @@ class UpdateFragment1 : Fragment() {
     private val binding: FragmentUpdate1Binding
         get() = _binding!!
 
-    private val viewModel: StoreManagementViewModel by viewModels()
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+    private lateinit var viewModel: StoreManagementViewModel
+    private lateinit var viewModelFactory: StoreManagementViewModelFactory
+    private var isSearched = false
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentUpdate1Binding.inflate(inflater, container, false)
+        initView()
         return binding.root
     }
 
-    private var isSearched = false
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initView()
 
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -63,7 +62,8 @@ class UpdateFragment1 : Fragment() {
     }
 
     private fun initView() {
-
+        viewModelFactory = StoreManagementViewModelFactory(NetworkRepository(), LocalRepository())
+        viewModel = ViewModelProvider(this, viewModelFactory)[StoreManagementViewModel::class.java]
         with(binding) {
 
             cprLayout.requestFocus()
@@ -116,8 +116,9 @@ class UpdateFragment1 : Fragment() {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
+
         _binding = null
     }
 }

@@ -8,29 +8,32 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.Navigation
 import com.myproject.cloudbridge.R
 import com.myproject.cloudbridge.databinding.FragmentCPRBinding
 import com.myproject.cloudbridge.model.store.AllCrnResponseModel
+import com.myproject.cloudbridge.repository.LocalRepository
+import com.myproject.cloudbridge.repository.NetworkRepository
+import com.myproject.cloudbridge.ui.mystore.NoRegisteredStoreActivity
 import com.myproject.cloudbridge.util.hideSoftInput
 import com.myproject.cloudbridge.util.setHelperTextGreen
 import com.myproject.cloudbridge.util.setHelperTextGreenList
 import com.myproject.cloudbridge.util.setHelperTextRed
 import com.myproject.cloudbridge.util.setHelperTextRedList
 import com.myproject.cloudbridge.util.showSoftInput
-import com.myproject.cloudbridge.ui.mystore.NotRegistsedStoreActivity
 import com.myproject.cloudbridge.viewmodel.StoreManagementViewModel
+import com.myproject.cloudbridge.viewmodel.viewmodelfactory.StoreManagementViewModelFactory
 import kotlinx.coroutines.launch
-
 
 class CPRFragment : Fragment() {
     private var _binding: FragmentCPRBinding ?= null
     private val binding : FragmentCPRBinding get() = _binding!!
-    private val viewModel: StoreManagementViewModel by viewModels()
+    private lateinit var viewModel: StoreManagementViewModel
+    private lateinit var viewModelFactory: StoreManagementViewModelFactory
 
     private var result = ""
 
@@ -46,6 +49,8 @@ class CPRFragment : Fragment() {
     }
 
     private fun initView(){
+        viewModelFactory = StoreManagementViewModelFactory(NetworkRepository(), LocalRepository())
+        viewModel = ViewModelProvider(this, viewModelFactory)[StoreManagementViewModel::class.java]
 
         with(binding){
 
@@ -53,7 +58,7 @@ class CPRFragment : Fragment() {
             requireContext().showSoftInput(cprEdit)
 
             materialToolbar.setNavigationOnClickListener {
-                val intent = Intent(requireContext(), NotRegistsedStoreActivity::class.java)
+                val intent = Intent(requireContext(), NoRegisteredStoreActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
                 startActivity(intent)
             }

@@ -127,7 +127,7 @@
                     android:layout_marginTop="5dp"
                     android:fontFamily="@font/rubik"
                     android:text="경기도 수원시 파달구 매향동"
-                    android:textColor="@color/Tertiary"
+                    android:textColor="@color/tertiary"
                     android:textSize="13sp"
                     android:textStyle="bold" />
             </LinearLayout>

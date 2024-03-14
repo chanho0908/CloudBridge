@@ -7,17 +7,20 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.myproject.cloudbridge.R
 import com.myproject.cloudbridge.databinding.ActivityMainBinding
+import com.myproject.cloudbridge.repository.LocalRepository
+import com.myproject.cloudbridge.repository.NetworkRepository
 import com.myproject.cloudbridge.viewmodel.StoreManagementViewModel
+import com.myproject.cloudbridge.viewmodel.viewmodelfactory.StoreManagementViewModelFactory
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-
-    lateinit var parentActivitySharedViewModel: StoreManagementViewModel
+    // 접근 제한자가 private 일 경우 Fragment에서 참조 불가
+    lateinit var viewModel: StoreManagementViewModel
+    lateinit var viewModelFactory: StoreManagementViewModelFactory
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        parentActivitySharedViewModel = ViewModelProvider(this)[StoreManagementViewModel::class.java]
         initFragment()
     }
 
@@ -25,8 +28,10 @@ class MainActivity : AppCompatActivity() {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragment_container) as NavHostFragment
         val navController = navHostFragment.navController
         NavigationUI.setupWithNavController(binding.navigationView, navController)
-        parentActivitySharedViewModel.fetchAllStoreFromRoom()
-    }
 
+        viewModelFactory = StoreManagementViewModelFactory(NetworkRepository(), LocalRepository())
+        viewModel = ViewModelProvider(this, viewModelFactory)[StoreManagementViewModel::class.java]
+        viewModel.fetchAllStoreFromRoom()
+    }
 }
 

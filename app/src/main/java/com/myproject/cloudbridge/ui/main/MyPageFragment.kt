@@ -6,18 +6,22 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import com.myproject.cloudbridge.R
 import com.myproject.cloudbridge.databinding.FragmentMyPageBinding
-import com.myproject.cloudbridge.ui.mystore.NotRegistsedStoreActivity
+import com.myproject.cloudbridge.repository.LocalRepository
+import com.myproject.cloudbridge.repository.NetworkRepository
 import com.myproject.cloudbridge.ui.mystore.MyStoreActivity
+import com.myproject.cloudbridge.ui.mystore.NoRegisteredStoreActivity
 import com.myproject.cloudbridge.viewmodel.StoreManagementViewModel
+import com.myproject.cloudbridge.viewmodel.viewmodelfactory.StoreManagementViewModelFactory
 
 class MyPageFragment : Fragment(), View.OnClickListener {
     private var _binding: FragmentMyPageBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: StoreManagementViewModel by viewModels()
+    private lateinit var viewModel: StoreManagementViewModel
+    private lateinit var viewModelFactory: StoreManagementViewModelFactory
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentMyPageBinding.inflate(inflater)
@@ -29,6 +33,9 @@ class MyPageFragment : Fragment(), View.OnClickListener {
     }
 
     private fun initView() {
+        viewModelFactory = StoreManagementViewModelFactory(NetworkRepository(), LocalRepository())
+        viewModel = ViewModelProvider(this, viewModelFactory)[StoreManagementViewModel::class.java]
+
         with(binding) {
             btnMyInfo.setOnClickListener(this@MyPageFragment)
             btnMyStoreInfo.setOnClickListener(this@MyPageFragment)
@@ -51,7 +58,7 @@ class MyPageFragment : Fragment(), View.OnClickListener {
                     startActivity(intent)
                 }
                 if (crn == "") {
-                    startActivity(Intent(requireContext(), NotRegistsedStoreActivity::class.java))
+                    startActivity(Intent(requireContext(), NoRegisteredStoreActivity::class.java))
                 }
             }
         }
