@@ -1,29 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginEnd="8dp"
-    android:background="@drawable/recent_search_box_background"
-    android:gravity="center"
+    android:background="@color/shrine_pink_50"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp"
     android:orientation="horizontal">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_search"
+        android:layout_gravity="center"
+        />
 
     <TextView
         android:id="@+id/textview_recent_search"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:fontFamily="@font/rubik"
-        android:textColor="@color/shrine_pink_50"
+        android:textColor="@color/shrine_pink_900"
+        android:textStyle="bold"
+        android:layout_gravity="center"
+        android:textSize="18sp"
+        android:layout_weight="10"
         android:layout_marginStart="8dp" />
 
     <ImageButton
         android:id="@+id/image_button_delete"
-        android:layout_width="24dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_marginHorizontal="4dp"
         android:backgroundTint="@android:color/transparent"
-        android:contentDescription="최근 검색어 삭제 아이콘"
+        android:layout_weight="1"
+        android:layout_gravity="end"
         android:src="@drawable/close_18px" />
 
 </LinearLayout>

@@ -25,27 +25,21 @@ class SearchViewModel(private val repository: LocalRepository) : ViewModel() {
     }
 
     private fun getAllKeyWord() = viewModelScope.launch {
-        repository.readAllKeyword().collect {
+        repository.readAllKeyword().stateIn(this).collect {
             _allKeyWord.value = it
         }
     }
-
     fun insertKeyword(keyword: RecentlySearchKeywordEntity) = viewModelScope.launch {
         val currentKeywords = allKeyWord.value
         if (currentKeywords.contains(keyword)){
-            deleteKeyword(keyword.keyword).join()
+            deleteKeyword(keyword.id).join()
         }
-        if (currentKeywords.size > 5){
-            val lastKeyword = allKeyWord.value[currentKeywords.size -1]
-            deleteKeyword(lastKeyword.keyword).join()
-        }
-
         repository.insertKeyword(keyword)
 
     }
 
-    fun deleteKeyword(keyword: String)  = viewModelScope.launch {
-        repository.deleteKeyword(keyword)
+    fun deleteKeyword(id: Long)  = viewModelScope.launch {
+        repository.deleteKeyword(id)
     }
 
     fun deleteAllKeyword() = viewModelScope.launch {

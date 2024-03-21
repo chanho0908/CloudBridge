@@ -35,7 +35,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/plz_enter_search"
-                android:inputType="text|textPersonName" />
+                android:inputType="text" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -45,6 +45,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:visibility="visible">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -53,8 +54,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="8dp"
+                android:paddingTop="16dp"
+                android:paddingBottom="8dp"
                 android:layout_weight="1"
                 android:text="@string/recently_search_keyword"
                 android:textSize="14sp"
@@ -63,8 +64,8 @@
                 android:id="@+id/textview_delete_all"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="8dp"
+                android:paddingTop="16dp"
+                android:paddingBottom="8dp"
                 android:layout_weight="1"
                 android:gravity="end"
                 android:text="@string/delete_all"
