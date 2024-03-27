@@ -146,7 +146,6 @@ class JoinFragment : Fragment() {
         else 2
 
 
-
     private fun isValidPhoneNumber(phone: String): Int =
         if (phone.isEmpty()) 0
         else if (!Pattern.matches("^01(?:0|1|[6-9])(?:\\d{4})\\d{4}$", phone)) 1
@@ -156,7 +155,5 @@ class JoinFragment : Fragment() {
     private fun checkFinalValid(userID: String, password: String, userName: String, phone: String): Boolean
     = (isValidUserID(userID) == 2 && isValidPassword(password) == 2 && userName.isNotEmpty()
                 && isValidPhoneNumber(phone) == 2)
-
-
 
 }

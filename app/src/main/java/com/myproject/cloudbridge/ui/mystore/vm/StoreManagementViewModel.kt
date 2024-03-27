@@ -299,12 +299,7 @@ class StoreManagementViewModel(
     }
 
     // 사용자 수정 데이터 업데이트
-    fun updateSavedData(
-        storeName: String,
-        ceoName: String,
-        contact: String,
-        address: String,
-        kind: String
+    fun updateSavedData(storeName: String, ceoName: String, contact: String, address: String, kind: String
     ) {
         // 바뀌지 않은 값은 유지
         _myStore.value.storeInfo = _myStore.value.storeInfo.copy(

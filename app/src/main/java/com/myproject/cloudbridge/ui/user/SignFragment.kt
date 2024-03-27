@@ -24,7 +24,7 @@ class SignFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
+        val x = "sdss".split("v")
         binding.userIdEdit.addTextChangedListener {userID->
             viewModel.findUserData(userID.toString())
         }

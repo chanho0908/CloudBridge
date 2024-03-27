@@ -35,7 +35,6 @@ class SearchViewModel(private val repository: LocalRepository) : ViewModel() {
             deleteKeyword(keyword.id).join()
         }
         repository.insertKeyword(keyword)
-
     }
 
     fun deleteKeyword(id: Long)  = viewModelScope.launch {

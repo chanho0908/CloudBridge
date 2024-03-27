@@ -8,6 +8,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.UiThread
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -15,6 +17,7 @@ import androidx.core.graphics.ColorUtils
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.bumptech.glide.Glide
@@ -27,6 +30,9 @@ import com.myproject.cloudbridge.model.store.StoreInfoSettingModel
 import com.myproject.cloudbridge.ui.search.SearchActivity
 import com.myproject.cloudbridge.utility.Utils.LOCATION_PERMISSION_REQUEST_CODE
 import com.myproject.cloudbridge.ui.mystore.vm.StoreManagementViewModel
+import com.myproject.cloudbridge.utility.Utils
+import com.myproject.cloudbridge.utility.Utils.REQUEST_LOCATION_PERMISSIONS
+import com.myproject.cloudbridge.utility.showPermissionSnackBar
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraAnimation
 import com.naver.maps.map.CameraPosition
@@ -44,6 +50,7 @@ import com.naver.maps.map.util.FusedLocationSource
 class MapFragment : Fragment(), OnMapReadyCallback {
     private var _binding: FragmentMapBinding? = null
     private val binding: FragmentMapBinding get() = _binding!!
+    private lateinit var launcherForPermission: ActivityResultLauncher<Array<String>>
     // 내장 위치 추적 기능 사용
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var mLocationSource: FusedLocationSource
@@ -53,6 +60,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentMapBinding.inflate(inflater, container, false)
+        initPermissionRequest()
         initMap()
         return binding.root
     }
@@ -63,13 +71,11 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun initView(view: View) {
-
         sheetBehavior = BottomSheetBehavior.from(view.findViewById(R.id.bottomSheet))
         with(sheetBehavior) {
             isHideable = true
             state = BottomSheetBehavior.STATE_HIDDEN
         }
-
 
         with(binding) {
             viewLifecycleOwner.lifecycleScope.launch {
@@ -118,7 +124,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            permissionDeniedMapUiSetting()
+            launcherForPermission.launch(REQUEST_LOCATION_PERMISSIONS)
         }else {
             permissionGrantedMapUiSetting()
 
@@ -274,5 +280,33 @@ class MapFragment : Fragment(), OnMapReadyCallback {
 
         // Behavior 상태 : 바텀 시트를 완전히 펼쳐진 상태
         sheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+    }
+
+    private fun initPermissionRequest() {
+        val contracts = ActivityResultContracts.RequestMultiplePermissions()
+        launcherForPermission = registerForActivityResult(contracts) { permissions ->
+            if (permissions.any { it.value }) {
+                permissionGrantedMapUiSetting()
+            } else {
+                // 하나 이상의 권한이 거부된 경우 처리할 작업
+                permissions.forEach { (permission, isGranted) ->
+                    when {
+                        !isGranted -> {
+                            if (!shouldShowRequestPermissionRationale(permission)) {
+
+                                permissionDeniedMapUiSetting()
+                                requireContext().showPermissionSnackBar(binding.root)
+                            }
+                        }
+
+                        else -> {
+                            permissionDeniedMapUiSetting()
+                            requireContext().showPermissionSnackBar(binding.root)
+                        }
+                    }
+                }
+
+            }
+        }
     }
 }

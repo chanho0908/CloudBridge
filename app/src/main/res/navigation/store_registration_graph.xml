@@ -10,7 +10,8 @@
         android:label="CPRFragment" >
         <action
             android:id="@+id/action_CPRFragment_to_storeInfoRegistrationFragment"
-            app:destination="@id/storeInfoRegistrationFragment" />
+            app:destination="@id/storeInfoRegistrationFragment"
+             />
     </fragment>
     <fragment
         android:id="@+id/storeInfoRegistrationFragment"
@@ -23,6 +24,7 @@
 
         <action
             android:id="@+id/action_storeInfoRegistrationFragment_to_CPRFragment"
-            app:destination="@id/CPRFragment" />
+            app:destination="@id/CPRFragment"
+             />
     </fragment>
 </navigation>

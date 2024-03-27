@@ -50,14 +50,12 @@ class UpdateFragment2 : Fragment(), View.OnClickListener {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentUpdate2Binding.inflate(inflater)
-        return binding.root
-    }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
         initView()
         initListener()
         initActivityProcess()
+
+        return binding.root
     }
 
     private fun initView() {
