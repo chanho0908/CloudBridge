@@ -11,6 +11,10 @@ import com.myproject.cloudbridge.repository.LocalRepository
 import com.myproject.cloudbridge.repository.NetworkRepository
 import com.myproject.cloudbridge.ui.mystore.vm.StoreManagementViewModel
 import com.myproject.cloudbridge.ui.mystore.vm.StoreManagementViewModelFactory
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding

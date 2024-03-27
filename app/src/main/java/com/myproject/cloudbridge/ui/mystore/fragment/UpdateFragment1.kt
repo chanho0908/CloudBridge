@@ -11,6 +11,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.Navigation
 import com.myproject.cloudbridge.R
 import com.myproject.cloudbridge.databinding.FragmentUpdate1Binding
 import com.myproject.cloudbridge.repository.LocalRepository
@@ -47,8 +48,8 @@ class UpdateFragment1 : Fragment() {
                 viewModel.isEqualCrn.collect {
                     if (it == true) {
                         val crn = binding.cprEdit.text.toString()
-                        //val action = UpdateFragment1Directions.actionUpdateFragment1ToUpdateFragment2(crn)
-                        //Navigation.findNavController(view).navigate(action)
+                        val action = UpdateFragment1Directions.actionUpdateFragment1ToUpdateFragment2(crn)
+                        Navigation.findNavController(view).navigate(action)
                     } else {
                         if (isSearched) {
                             setWarningBox("등록된 정보가 일치 하지 않습니다.")

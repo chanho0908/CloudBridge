@@ -29,7 +29,6 @@ class StoreListAdapter : ListAdapter<StoreInfoSettingModel, MainViewHolder>(Diff
 
         }
     }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainViewHolder {
         return MainViewHolder(
             StoreItemBinding.inflate(

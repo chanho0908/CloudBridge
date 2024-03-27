@@ -8,9 +8,13 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
+import android.os.SystemClock
 import android.provider.MediaStore
 import android.util.Base64
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.activity.result.ActivityResultLauncher
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.textfield.TextInputLayout
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -18,6 +22,7 @@ import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
+import kotlin.concurrent.thread
 
 object Utils {
 
@@ -91,5 +96,19 @@ object Utils {
         v.helperText = msg
         v.requestFocus()
     }
-    fun getContext(): Context = App.context()
+
+    fun showSoftInput(view: View){
+        // 뷰에 포커스를 준다.
+        view.requestFocus()
+        thread {
+            // 딜레이
+            SystemClock.sleep(200)
+            // 키보드 관리 객체를 가져온다.
+            val inputMethodManger = getContext().getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager
+            // 키보드를 올린다.
+            inputMethodManger.showSoftInput(view, 0)
+        }
+    }
+
+    private fun getContext(): Context = App.context()
 }

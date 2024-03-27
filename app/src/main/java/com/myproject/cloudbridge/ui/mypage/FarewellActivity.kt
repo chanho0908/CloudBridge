@@ -5,7 +5,6 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import com.myproject.cloudbridge.databinding.ActivityFarewellBinding
-import com.myproject.cloudbridge.viewmodel.UserManagementViewModel
 import kotlin.system.exitProcess
 
 class FarewellActivity : AppCompatActivity() {

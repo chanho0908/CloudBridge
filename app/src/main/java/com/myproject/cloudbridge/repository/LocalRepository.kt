@@ -24,7 +24,7 @@ class LocalRepository {
 
     suspend fun insertKeyword(keyword: RecentlySearchKeywordEntity) = userDatabase.RecentlySearchKeywordDAO().insertKeyword(keyword)
 
-    suspend fun deleteKeyword(keyword: RecentlySearchKeywordEntity) = userDatabase.RecentlySearchKeywordDAO().deleteKeyword(keyword)
+    suspend fun deleteKeyword(id: Long) = userDatabase.RecentlySearchKeywordDAO().deleteKeyword(id)
 
     suspend fun deleteAllKeyword() = userDatabase.RecentlySearchKeywordDAO().deleteAllKeyword()
 

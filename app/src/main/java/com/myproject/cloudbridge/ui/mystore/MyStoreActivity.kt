@@ -18,6 +18,7 @@ import com.myproject.cloudbridge.repository.NetworkRepository
 import com.myproject.cloudbridge.ui.main.MainActivity
 import com.myproject.cloudbridge.ui.mystore.vm.StoreManagementViewModel
 import com.myproject.cloudbridge.ui.mystore.vm.StoreManagementViewModelFactory
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MyStoreActivity : AppCompatActivity(), View.OnClickListener {
@@ -29,19 +30,34 @@ class MyStoreActivity : AppCompatActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         binding = ActivityMyStoreBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        initView()
+
         initToolbar()
-        initCoroutineProcess()
+
     }
 
-    private fun initCoroutineProcess() {
-        viewModel.getMyStoreInfo()
+    private fun initView() {
+        initViewModel()
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.imgLoading.collect { loading ->
                     if (loading == true) {
                         viewModel.myStore.collect { store ->
-                            initView(store)
+                            with(binding) {
+                                storeCeoNameTextView.text = store.storeInfo.ceoName
+                                storeNameTextView.text = store.storeInfo.storeName
+                                storePhoneTextView.text = store.storeInfo.contact
+                                storeAddrTextView.text = store.storeInfo.address
+                                storeKindTextView.text = store.storeInfo.kind
+
+                                Glide.with(this@MyStoreActivity)
+                                    .load(store.storeImage)
+                                    .into(storeMainImage)
+
+                                btnUpdate.setOnClickListener(this@MyStoreActivity)
+                                btnDelete.setOnClickListener(this@MyStoreActivity)
+                            }
                         }
                     }
                 }
@@ -60,26 +76,15 @@ class MyStoreActivity : AppCompatActivity(), View.OnClickListener {
                 }
             }
         }
+
+        initToolbar()
+        lifecycleScope.launch(Dispatchers.IO) {  }
     }
 
-    private fun initView(myStore: StoreInfoSettingModel) {
+    private fun initViewModel(){
         viewModelFactory = StoreManagementViewModelFactory(NetworkRepository(), LocalRepository())
         viewModel = ViewModelProvider(this, viewModelFactory)[StoreManagementViewModel::class.java]
-
-        with(binding) {
-            storeCeoNameTextView.text = myStore.storeInfo.ceoName
-            storeNameTextView.text = myStore.storeInfo.storeName
-            storePhoneTextView.text = myStore.storeInfo.contact
-            storeAddrTextView.text = myStore.storeInfo.address
-            storeKindTextView.text = myStore.storeInfo.kind
-
-            Glide.with(this@MyStoreActivity)
-                .load(myStore.storeImage)
-                .into(storeMainImage)
-
-            btnUpdate.setOnClickListener(this@MyStoreActivity)
-            btnDelete.setOnClickListener(this@MyStoreActivity)
-        }
+        viewModel.getMyStoreInfo()
     }
 
     private fun initToolbar() {

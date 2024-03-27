@@ -5,7 +5,6 @@
     android:id="@+id/update_store_nav"
     app:startDestination="@id/updateFragment1">
 
-
     <fragment
         android:id="@+id/updateFragment1"
         android:name="com.myproject.cloudbridge.ui.mystore.fragment.UpdateFragment1"

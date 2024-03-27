@@ -11,7 +11,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
-        android:name=".util.App"
+        android:name=".utility.App"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -24,17 +24,10 @@
         android:theme="@style/Theme.CloudBridge"
         android:usesCleartextTraffic="true"
         tools:targetApi="31" >
-        <activity
-            android:name=".ui.main.ShowStoreActivity"
-            android:exported="false" />
-        <activity
-            android:name=".MenuManagementActivity"
-            android:exported="true" />
 
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="c23ff52edb54dc254d59ac484a8d6a2f" />
-
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
             android:value="@string/naver_map_sdk_client_id" />
@@ -49,39 +42,42 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.myStore.NotRegistsedStoreActivity"
+            android:name=".ui.mystore.NoRegisteredStoreActivity"
             android:exported="true" />
         <activity
-            android:name=".ui.myStore.StoreUpdateActivity"
+            android:name=".ui.storemenu.MenuManagementActivity"
+            android:exported="true" />
+        <activity
+            android:name=".ui.mystore.StoreUpdateActivity"
             android:exported="true" />
         <activity
             android:name=".ui.search.SearchActivity"
             android:exported="true" />
         <activity
-            android:name=".ui.myStore.MyStoreActivity"
+            android:name=".ui.mystore.MyStoreActivity"
             android:exported="true" />
         <activity
-            android:name=".ui.myPage.FarewellActivity"
+            android:name=".ui.mypage.FarewellActivity"
             android:exported="true" />
         <activity
-            android:name=".ui.myPage.DeleteUserActivity"
+            android:name=".ui.mypage.DeleteUserActivity"
             android:exported="true" />
         <activity
-            android:name=".ui.myPage.UpdateUserProfileActivity"
+            android:name=".ui.mypage.UpdateUserProfileActivity"
             android:exported="true" />
         <activity
-            android:name=".ui.myPage.MyInfoActivity"
+            android:name=".ui.mypage.MyInfoActivity"
             android:exported="true" />
         <activity
             android:name=".ui.user.SignOrLoginActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".ui.storeRegistration.RegisteStoreActivity"
+            android:name=".ui.store_registration.RegisteStoreActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".ui.storeRegistration.AddressActivity"
+            android:name=".ui.store_registration.AddressActivity"
             android:exported="true" />
         <activity
             android:name=".ui.main.MainActivity"

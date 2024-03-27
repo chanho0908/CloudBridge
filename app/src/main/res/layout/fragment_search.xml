@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/shrine_pink_50"
     android:orientation="vertical"
-    tools:context=".ui.search.SearchFragment">
+    tools:context=".ui.search.fragment.SearchFragment">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar_search"
@@ -34,8 +34,8 @@
                 android:id="@+id/edittext_search"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="검색어를 입력하세요"
-                android:inputType="text|textPersonName" />
+                android:hint="@string/plz_enter_search"
+                android:inputType="text" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -45,6 +45,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:visibility="visible">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -53,20 +54,21 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="8dp"
+                android:paddingTop="16dp"
+                android:paddingBottom="8dp"
                 android:layout_weight="1"
-                android:text="최근 검색어"
+                android:text="@string/recently_search_keyword"
                 android:textSize="14sp"
                 android:textStyle="bold" />
             <TextView
+                android:id="@+id/textview_delete_all"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="8dp"
+                android:paddingTop="16dp"
+                android:paddingBottom="8dp"
                 android:layout_weight="1"
                 android:gravity="end"
-                android:text="전체 삭제"
+                android:text="@string/delete_all"
                 android:textSize="14sp"
                 android:textColor="@color/tertiary"
                 android:textStyle="bold" />
@@ -75,7 +77,6 @@
                 android:id="@+id/rv_recent_searches"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:isScrollContainer="true"
                 android:orientation="horizontal" />
 
         </LinearLayout>

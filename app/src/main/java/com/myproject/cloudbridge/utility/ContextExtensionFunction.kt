@@ -1,6 +1,7 @@
 package com.myproject.cloudbridge.utility
 
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -8,15 +9,18 @@ import android.graphics.BitmapFactory
 import android.location.Geocoder
 import android.location.Location
 import android.net.Uri
+import android.os.SystemClock
 import android.provider.Settings
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.myproject.cloudbridge.R
 import java.util.Locale
+import kotlin.concurrent.thread
 
 
 fun Context.hasPermission(permission: String): Boolean {
@@ -25,6 +29,17 @@ fun Context.hasPermission(permission: String): Boolean {
 fun Context.hasImagePermission(): Boolean = Utils.REQUEST_IMAGE_PERMISSIONS.any { this.hasPermission(it) }
 
 fun Context.hasLocationPermission(): Boolean = Utils.REQUEST_LOCATION_PERMISSIONS.any { this.hasPermission(it) }
+
+// 입력 요소가 비어있을때 보여줄 다이얼로그를 구성하는 메서드
+fun Context.showErrorDialog(view: View, title:String, message:String){
+    val materialAlertDialogBuilder = MaterialAlertDialogBuilder(this)
+    materialAlertDialogBuilder.setTitle(title)
+    materialAlertDialogBuilder.setMessage(message)
+    materialAlertDialogBuilder.setPositiveButton("확인"){ dialogInterface: DialogInterface, i: Int ->
+        Utils.showSoftInput(view)
+    }
+    materialAlertDialogBuilder.show()
+}
 
 fun Context.showPermissionSnackBar(view: View) {
     Snackbar.make(view, "권한이 거부 되었습니다. 설정(앱 정보)에서 권한을 확인해 주세요.",

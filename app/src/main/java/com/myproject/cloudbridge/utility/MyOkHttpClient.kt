@@ -16,8 +16,7 @@ object MyOkHttpClient {
     }
 
     private fun httpLoggingInterceptor(): Interceptor{
-        return HttpLoggingInterceptor { message -> Log.e("MyHTTPLog :", message + "") }
+        return HttpLoggingInterceptor { message -> Log.e("MyOkHttpClient :", message + "") }
             .setLevel(HttpLoggingInterceptor.Level.BODY)
     }
-
 }

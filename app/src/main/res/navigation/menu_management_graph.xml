@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/add_menu_graph"
+    app:startDestination="@id/menuListFragment">
+
+    <fragment
+        android:id="@+id/menuAddFragment"
+        android:name="com.myproject.cloudbridge.ui.storemenu.fragment.MenuAddFragment"
+        android:label="MenuAddFragment" >
+        <action
+            android:id="@+id/action_menuAddFragment_to_menuListFragment"
+            app:destination="@id/menuListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/menuListFragment"
+        android:name="com.myproject.cloudbridge.ui.storemenu.fragment.MenuListFragment"
+        android:label="fragment_menu_list"
+        tools:layout="@layout/fragment_menu_list" >
+        <action
+            android:id="@+id/action_menuListFragment_to_menuAddFragment"
+            app:destination="@id/menuAddFragment" />
+    </fragment>
+    <argument
+        android:name="menu"
+        app:argType="com.myproject.cloudbridge.model.store.StoreMenuRvModel"
+        app:nullable="true"
+        android:defaultValue="@null" />
+</navigation>

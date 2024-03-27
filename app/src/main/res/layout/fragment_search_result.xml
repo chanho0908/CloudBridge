@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/shrine_pink_50"
     android:orientation="vertical"
-    tools:context="ui.search.SearchResultFragment">
+    tools:context=".ui.search.fragment.SearchResultFragment">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar_search_result"
