@@ -1,6 +1,5 @@
 package com.myproject.cloudbridge.ui.search.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -12,25 +11,41 @@ import com.myproject.cloudbridge.datasource.local.entity.RecentlySearchKeywordEn
 class RecentSearchAdapter(
     private val rootClickListener: (String) -> Unit,
     private val delButtonClickListener: (Long) -> Unit
-): ListAdapter<RecentlySearchKeywordEntity, RecentSearchViewHolder>(diffUtil) {
+): ListAdapter<RecentlySearchKeywordEntity, RecentSearchAdapter.RecentSearchViewHolder>(diffUtil) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecentSearchViewHolder {
-        val binding = StoreItemRecentSearchedBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return RecentSearchViewHolder(binding)
+        val inflater = LayoutInflater.from(parent.context)
+
+        return RecentSearchViewHolder(
+            StoreItemRecentSearchedBinding.inflate(inflater, parent, false),
+            rootClickListener,
+            delButtonClickListener
+        )
     }
 
     override fun onBindViewHolder(holder: RecentSearchViewHolder, pos: Int) {
-        val binding = holder.binding
-        with(binding){
-            textviewRecentSearch.text = getItem(pos).keyword
-            root.setOnClickListener { rootClickListener.invoke(getSelectedItemKeyword(pos)) }
-            imageButtonDelete.setOnClickListener {
-                Log.d("sdsdass", "onBindViewHolder pos $pos: item ${getSelectedItemId(pos)}")
-                delButtonClickListener.invoke(getSelectedItemId(pos))
+        holder.bind(getItem(pos))
+    }
+
+    class RecentSearchViewHolder(
+        private val binding: StoreItemRecentSearchedBinding,
+        private val rootClickListener: (String) -> Unit,
+        private val delButtonClickListener: (Long) -> Unit
+    ) : RecyclerView.ViewHolder(binding.root){
+        fun bind(item: RecentlySearchKeywordEntity) {
+            with(binding){
+                textviewRecentSearch.text = item.keyword
+
+                root.setOnClickListener {
+                    rootClickListener.invoke(item.keyword)
+                }
+
+                imageButtonDelete.setOnClickListener {
+                    delButtonClickListener.invoke(item.id)
+                }
             }
         }
     }
-    private fun getSelectedItemKeyword(pos: Int) = getItem(pos).keyword
-    private fun getSelectedItemId(pos: Int) = getItem(pos).id
+
     companion object {
         val diffUtil = object : DiffUtil.ItemCallback<RecentlySearchKeywordEntity>() {
 
@@ -44,4 +59,3 @@ class RecentSearchAdapter(
         }
     }
 }
-class RecentSearchViewHolder(val binding: StoreItemRecentSearchedBinding) : RecyclerView.ViewHolder(binding.root)
