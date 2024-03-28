@@ -29,12 +29,15 @@ class SearchViewModel(private val repository: LocalRepository) : ViewModel() {
             _allKeyWord.value = it
         }
     }
-    fun insertKeyword(keyword: RecentlySearchKeywordEntity) = viewModelScope.launch {
+    fun insertKeyword(newKeyword: RecentlySearchKeywordEntity) = viewModelScope.launch {
         val currentKeywords = allKeyWord.value
-        if (currentKeywords.contains(keyword)){
-            deleteKeyword(keyword.id).join()
+        currentKeywords.forEach { oldKeyword->
+            if (oldKeyword.keyword == newKeyword.keyword){
+                deleteKeyword(oldKeyword.id).join()
+            }
         }
-        repository.insertKeyword(keyword)
+
+        repository.insertKeyword(newKeyword)
     }
 
     fun deleteKeyword(id: Long)  = viewModelScope.launch {

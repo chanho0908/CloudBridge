@@ -63,15 +63,6 @@ class SearchFragment : Fragment() {
                 insertKeyword()
             }
 
-            edittextSearch.setOnEditorActionListener { _, actionId, _ ->
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    insertKeyword()
-                    true
-                } else {
-                    false
-                }
-            }
-
             textviewDeleteAll.setOnClickListener {
                 showClearDialog()
             }
@@ -89,14 +80,8 @@ class SearchFragment : Fragment() {
         }
     }
 
-    private fun moveFragment(keyword :String ?= null){
-        val action = if (keyword != null){
-            SearchFragmentDirections.actionSearchFragmentToSearchResultFragment(keyword)
-        }else{
-            SearchFragmentDirections.actionSearchFragmentToSearchResultFragment()
-        }
-
-        Thread.sleep(300)
+    private fun moveFragment(keyword :String){
+        val action = SearchFragmentDirections.actionSearchFragmentToSearchResultFragment(keyword)
         Navigation.findNavController(mView).navigate(action)
     }
     private fun initRv(){
@@ -110,7 +95,6 @@ class SearchFragment : Fragment() {
                         Log.d("sdsdass", it.toString())
                         recentSearchAdapter.submitList(it)
                     }
-
                 }
             }
         }
