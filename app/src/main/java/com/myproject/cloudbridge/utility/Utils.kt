@@ -49,7 +49,6 @@ object Utils {
     // 사업자 등록 번호 API KEY
     val SECRETE_KEY by lazy { "t2ivQakqcZ/cvxzekT7Ra9Ja8J1N1lBKu6LqVkijMliEeoD1lLXU0Qei+V9AC8aMbNG+TjVkca70NqFB9akmSg==" }
 
-
     fun Base64ToBitmaps(image: String?): Bitmap {
         val encodedByte: ByteArray = Base64.decode(image, Base64.DEFAULT);
         return BitmapFactory.decodeByteArray(encodedByte, 0, encodedByte.size)

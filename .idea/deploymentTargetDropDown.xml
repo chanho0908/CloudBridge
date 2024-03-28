@@ -3,6 +3,15 @@
   <component name="deploymentTargetDropDown">
     <value>
       <entry key="MainActivity">
+        <State />
+      </entry>
+      <entry key="MenuManagementActivity">
+        <State />
+      </entry>
+      <entry key="RegisteStoreActivity">
+        <State />
+      </entry>
+      <entry key="SearchActivity">
         <State>
           <runningDeviceTargetSelectedWithDropDown>
             <Target>
@@ -15,14 +24,8 @@
               </deviceKey>
             </Target>
           </runningDeviceTargetSelectedWithDropDown>
-          <timeTargetWasSelectedWithDropDown value="2024-02-24T14:16:24.675870100Z" />
+          <timeTargetWasSelectedWithDropDown value="2024-03-28T16:22:44.012327300Z" />
         </State>
-      </entry>
-      <entry key="MenuManagementActivity">
-        <State />
-      </entry>
-      <entry key="SearchActivity">
-        <State />
       </entry>
       <entry key="TestActivity">
         <State />
