@@ -16,11 +16,7 @@ import com.myproject.cloudbridge.model.store.CarouselModel
 class AwardFragment : Fragment() {
     private var _binding: FragmentAwardBinding? = null
     private val binding: FragmentAwardBinding get() = _binding!!
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentAwardBinding.inflate(inflater)
         return binding.root
     }

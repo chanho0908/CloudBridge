@@ -31,13 +31,11 @@ class MyStoreActivity : AppCompatActivity(), View.OnClickListener {
         binding = ActivityMyStoreBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initView()
-
-        initToolbar()
-
     }
 
     private fun initView() {
         initViewModel()
+        initToolbar()
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -77,7 +75,6 @@ class MyStoreActivity : AppCompatActivity(), View.OnClickListener {
             }
         }
 
-        initToolbar()
         lifecycleScope.launch(Dispatchers.IO) {  }
     }
 

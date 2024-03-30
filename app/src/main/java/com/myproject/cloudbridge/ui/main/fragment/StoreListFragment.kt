@@ -25,17 +25,17 @@ class StoreListFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: StoreManagementViewModel by activityViewModels()
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentStoreListBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initView()
+    }
+
+    private fun initView(){
         initToolbar()
         initRv()
         showRvData()
@@ -61,8 +61,6 @@ class StoreListFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 val fetched = viewModel.fetched.value
-                Log.d("sdsdasdsa", fetched.toString())
-                delay(3000)
                 if (fetched != null) {
                     with(binding) {
                         if (fetched) {

@@ -49,10 +49,7 @@ class StoreInfoRegistrationFragment : Fragment(), View.OnClickListener {
 
     private val args: StoreInfoRegistrationFragmentArgs by navArgs()
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentStoreInfoRegistrationBinding.inflate(inflater)
         initView()
@@ -68,11 +65,6 @@ class StoreInfoRegistrationFragment : Fragment(), View.OnClickListener {
     }
 
     private fun initObserveSate() {
-
-        // viewLifeCycleOwner :
-        // UI 요소에 대한이벤트를 처리하기 위해 사용
-        // 프래그먼트 라이프 사이클  의 경우 프래그먼트의 인스턴스가 살아있음에도 불구하고
-        // 프래그먼트가 인플레이션한 뷰만 할당 해제되는 경우가 있을 수 있기 때문.
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.flag.collect {
@@ -82,7 +74,6 @@ class StoreInfoRegistrationFragment : Fragment(), View.OnClickListener {
                         intent.putExtra("crn", args.bno)
                         startActivity(intent)
 
-                        // 부모 액티비티 종료
                         activity?.finish()
                     }
                 }
@@ -136,27 +127,18 @@ class StoreInfoRegistrationFragment : Fragment(), View.OnClickListener {
             if (permissions.any { it.value }) {
                 accessGallery(launcherForActivity)
             } else {
-                // 하나 이상의 권한이 거부된 경우 처리할 작업
-                //  ActivityCompat.shouldShowRequestPermissionRationale
-                //  → 사용자가 권한 요청을 명시적으로 거부한 경우 true를 반환한다.
-                //	→ 사용자가 다시 묻지 않음 선택한 경우 false를 반환한다.
                 permissions.entries.forEach { (permission, isGranted) ->
 
                     when {
                         isGranted -> {
-                            // 권한이 승인된 경우 처리할 작업
                             accessGallery(launcherForActivity)
                         }
 
                         !isGranted -> {
-                            // 권한이 거부된 경우 처리할 작업
-                            // 사용자에게 왜 권한이 필요한지 설명하는 다이얼로그 또는 메시지를 표시
                             requireContext().showPermissionSnackBar(binding.root)
                         }
 
                         else -> {
-                            // 사용자가 "다시 묻지 않음"을 선택한 경우 처리할 작업
-                            // 사용자에게 왜 권한이 필요한지 설명하는 다이얼로그 또는 메시지를 표시
                             requireContext().showPermissionSnackBar(binding.root)
                         }
                     }
