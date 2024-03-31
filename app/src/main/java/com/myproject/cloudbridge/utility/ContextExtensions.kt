@@ -9,7 +9,6 @@ import android.graphics.BitmapFactory
 import android.location.Geocoder
 import android.location.Location
 import android.net.Uri
-import android.os.SystemClock
 import android.provider.Settings
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -20,7 +19,6 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.myproject.cloudbridge.R
 import java.util.Locale
-import kotlin.concurrent.thread
 
 
 fun Context.hasPermission(permission: String): Boolean {
