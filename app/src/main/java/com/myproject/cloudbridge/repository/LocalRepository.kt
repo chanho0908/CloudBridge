@@ -10,7 +10,7 @@ import com.myproject.cloudbridge.utility.App
 class LocalRepository {
     private val context = App.context()
     private val userDatabase = UserDatabase.getDatabase(context)
-    private val mainDB =  MainDatabase.getDatabase(context).storeInfoDao()
+    private val storeDatabase =  MainDatabase.getDatabase(context).storeInfoDao()
 
     fun getUserData() = userDatabase.UserDao().readUserData()
 
@@ -28,13 +28,15 @@ class LocalRepository {
 
     suspend fun deleteAllKeyword() = userDatabase.RecentlySearchKeywordDAO().deleteAllKeyword()
 
-    suspend fun insertStoreInfo(storeEntity: StoreEntity) = mainDB.insert(storeEntity)
+    suspend fun insertStoreInfo(storeEntity: StoreEntity) = storeDatabase.insert(storeEntity)
 
-    fun getAllStoreInfo() = mainDB.readAllStoreInfo()
+    fun getAllStoreInfo() = storeDatabase.readAllStoreInfo()
 
-    fun getMyStoreInfo(crn: String) = mainDB.readMyStoreInfo(crn)
+    fun getMyStoreInfo(crn: String) = storeDatabase.readMyStoreInfo(crn)
 
-    suspend fun updateStoreInfo(storeEntity: StoreEntity) = mainDB.update(storeEntity)
+    fun getAutoCompleteSearchResult(query: String) = storeDatabase.readAutoCompleteSearchKeyword(query)
 
-    suspend fun deleteStoreInfo(crn: String) = mainDB.deleteStoreData(crn)
+    suspend fun updateStoreInfo(storeEntity: StoreEntity) = storeDatabase.update(storeEntity)
+
+    suspend fun deleteStoreInfo(crn: String) = storeDatabase.deleteStoreData(crn)
 }

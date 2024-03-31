@@ -16,6 +16,14 @@ interface StoreInfoDAO {
     @Query("SELECT * FROM store_table WHERE company_registration_number = :crn")
     fun readMyStoreInfo(crn: String) : Flow<StoreEntity>
 
+    @Query(
+        """
+        SELECT DISTINCT store_name FROM store_table 
+        WHERE store_name LIKE '%' || :query || '%' 
+        ORDER BY store_name ASC
+        """)
+    fun readAutoCompleteSearchKeyword(query: String): Flow<List<String>>
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(store: StoreEntity)
 
