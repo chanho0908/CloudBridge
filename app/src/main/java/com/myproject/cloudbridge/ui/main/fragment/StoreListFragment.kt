@@ -24,6 +24,12 @@ class StoreListFragment : Fragment() {
     private var _binding: FragmentStoreListBinding? = null
     private val binding get() = _binding!!
     private val viewModel: StoreManagementViewModel by activityViewModels()
+    private val storeListAdapter by lazy {
+        StoreListAdapter(
+            itemClickListener = {
+
+            }
+        ) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentStoreListBinding.inflate(inflater, container, false)
@@ -38,43 +44,38 @@ class StoreListFragment : Fragment() {
     private fun initView(){
         initToolbar()
         initRv()
-        showRvData()
     }
 
     private fun initRv() {
         with(binding) {
+            rv.layoutManager = GridLayoutManager(requireContext(), 2)
+            rv.adapter = storeListAdapter
+
             viewLifecycleOwner.lifecycleScope.launch {
                 repeatOnLifecycle(Lifecycle.State.STARTED) {
                     viewModel.allStoreData.collect {
-                        val adapter = StoreListAdapter()
-                        adapter.submitList(it)
-                        rv.layoutManager = GridLayoutManager(requireContext(), 2)
-                        rv.adapter = adapter
-                    }
+                        storeListAdapter.submitList(it)
 
-                }
-            }
-        }
-    }
+                        val fetched = viewModel.fetched.value
 
-    private fun showRvData() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                val fetched = viewModel.fetched.value
-                if (fetched != null) {
-                    with(binding) {
-                        if (fetched) {
-                            shimmer.stopShimmer()
-                            shimmer.visibility = View.GONE
-                            rv.visibility = View.VISIBLE
-                        } else {
-                            shimmer.startShimmer()
-                            shimmer.visibility = View.VISIBLE
-                            rv.visibility = View.GONE
+                        if (fetched != null) {
+                            with(binding) {
+                                if (fetched) {
+                                    shimmer.stopShimmer()
+                                    shimmer.visibility = View.GONE
+                                    rv.visibility = View.VISIBLE
+                                } else {
+                                    shimmer.startShimmer()
+                                    shimmer.visibility = View.VISIBLE
+                                    rv.visibility = View.GONE
+                                }
+                            }
                         }
                     }
+
                 }
             }
+
         }
     }
 
