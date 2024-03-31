@@ -9,7 +9,7 @@ import com.myproject.cloudbridge.datasource.local.dao.StoreInfoDAO
 import com.myproject.cloudbridge.datasource.local.entity.StoreEntity
 import com.myproject.cloudbridge.datasource.local.typeConverter.ImageTypeConverter
 
-@Database(entities = [StoreEntity::class], version=4)
+@Database(entities = [StoreEntity::class], version=5)
 @TypeConverters(ImageTypeConverter::class)
 abstract class MainDatabase: RoomDatabase() {
     abstract fun storeInfoDao(): StoreInfoDAO
