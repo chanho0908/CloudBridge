@@ -13,22 +13,19 @@
       </entry>
       <entry key="SearchActivity">
         <State>
-          <runningDeviceTargetSelectedWithDropDown>
+          <targetSelectedWithDropDown>
             <Target>
-              <type value="RUNNING_DEVICE_TARGET" />
+              <type value="QUICK_BOOT_TARGET" />
               <deviceKey>
                 <Key>
-                  <type value="SERIAL_NUMBER" />
-                  <value value="52004b4cb4f815a9" />
+                  <type value="VIRTUAL_DEVICE_PATH" />
+                  <value value="C:\Users\82103\.android\avd\Medium_Phone_API_30.avd" />
                 </Key>
               </deviceKey>
             </Target>
-          </runningDeviceTargetSelectedWithDropDown>
-          <timeTargetWasSelectedWithDropDown value="2024-03-28T16:22:44.012327300Z" />
+          </targetSelectedWithDropDown>
+          <timeTargetWasSelectedWithDropDown value="2024-03-31T03:58:53.401562100Z" />
         </State>
-      </entry>
-      <entry key="TestActivity">
-        <State />
       </entry>
       <entry key="app">
         <State />

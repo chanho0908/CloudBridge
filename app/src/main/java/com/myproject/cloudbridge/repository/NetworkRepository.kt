@@ -52,7 +52,6 @@ class NetworkRepository {
         )
     }
 
-
     // 매장 삭제
     suspend fun deleteMyStoreInfo(crn: String) = storeInfoApiInstance.deleteMyStoreInfo(crn)
 
