@@ -1,4 +1,4 @@
-package com.myproject.cloudbridge.utility
+package com.myproject.cloudbridge.ext
 
 import android.content.Context
 import android.content.DialogInterface
@@ -18,6 +18,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.myproject.cloudbridge.R
+import com.myproject.cloudbridge.utility.Utils
 import java.util.Locale
 
 

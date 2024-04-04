@@ -1,4 +1,4 @@
-package com.myproject.cloudbridge.utility
+package com.myproject.cloudbridge.ext
 
 import android.view.View
 import kotlinx.coroutines.channels.awaitClose
