@@ -29,11 +29,11 @@ import kotlinx.coroutines.launch
 import com.myproject.cloudbridge.utility.Utils.REQUEST_IMAGE_PERMISSIONS
 import com.myproject.cloudbridge.utility.Utils.accessGallery
 import com.myproject.cloudbridge.utility.Utils.requestPlzInputText
-import com.myproject.cloudbridge.utility.hasImagePermission
-import com.myproject.cloudbridge.utility.showPermissionSnackBar
-import com.myproject.cloudbridge.utility.showSoftInput
+import com.myproject.cloudbridge.ext.hasImagePermission
+import com.myproject.cloudbridge.ext.showPermissionSnackBar
+import com.myproject.cloudbridge.ext.showSoftInput
 import com.myproject.cloudbridge.utility.Utils.ADDR_RESULT_RESULT_CODE
-import com.myproject.cloudbridge.utility.translateGeo
+import com.myproject.cloudbridge.ext.translateGeo
 import com.myproject.cloudbridge.ui.mystore.vm.StoreManagementViewModelFactory
 
 class StoreInfoRegistrationFragment : Fragment(), View.OnClickListener {
@@ -44,7 +44,6 @@ class StoreInfoRegistrationFragment : Fragment(), View.OnClickListener {
     private lateinit var launcherForActivity: ActivityResultLauncher<Intent>
 
     private lateinit var viewModel: StoreManagementViewModel
-    private lateinit var viewModelFactory: StoreManagementViewModelFactory
     private var imgUrl: Uri = Uri.parse("")
 
     private val args: StoreInfoRegistrationFragmentArgs by navArgs()
@@ -52,15 +51,15 @@ class StoreInfoRegistrationFragment : Fragment(), View.OnClickListener {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         _binding = FragmentStoreInfoRegistrationBinding.inflate(inflater)
-        initView()
+        initViewModel()
         initActivityProcess()
         initListener()
         initObserveSate()
         return binding.root
     }
 
-    private fun initView() {
-        viewModelFactory = StoreManagementViewModelFactory(NetworkRepository(), LocalRepository())
+    private fun initViewModel() {
+        val viewModelFactory = StoreManagementViewModelFactory()
         viewModel = ViewModelProvider(this, viewModelFactory)[StoreManagementViewModel::class.java]
     }
 
@@ -83,7 +82,6 @@ class StoreInfoRegistrationFragment : Fragment(), View.OnClickListener {
 
 
     private fun initListener() {
-
 
         with(binding) {
             submitButton.setOnClickListener(this@StoreInfoRegistrationFragment)

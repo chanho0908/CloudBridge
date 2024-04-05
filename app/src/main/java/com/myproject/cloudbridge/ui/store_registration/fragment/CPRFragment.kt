@@ -19,12 +19,12 @@ import com.myproject.cloudbridge.model.store.AllCrnResponseModel
 import com.myproject.cloudbridge.repository.LocalRepository
 import com.myproject.cloudbridge.repository.NetworkRepository
 import com.myproject.cloudbridge.ui.mystore.NoRegisteredStoreActivity
-import com.myproject.cloudbridge.utility.hideSoftInput
-import com.myproject.cloudbridge.utility.setHelperTextGreen
-import com.myproject.cloudbridge.utility.setHelperTextGreenList
-import com.myproject.cloudbridge.utility.setHelperTextRed
-import com.myproject.cloudbridge.utility.setHelperTextRedList
-import com.myproject.cloudbridge.utility.showSoftInput
+import com.myproject.cloudbridge.ext.hideSoftInput
+import com.myproject.cloudbridge.ext.setHelperTextGreen
+import com.myproject.cloudbridge.ext.setHelperTextGreenList
+import com.myproject.cloudbridge.ext.setHelperTextRed
+import com.myproject.cloudbridge.ext.setHelperTextRedList
+import com.myproject.cloudbridge.ext.showSoftInput
 import com.myproject.cloudbridge.ui.mystore.vm.StoreManagementViewModel
 import com.myproject.cloudbridge.ui.mystore.vm.StoreManagementViewModelFactory
 import kotlinx.coroutines.launch
@@ -33,7 +33,6 @@ class CPRFragment : Fragment() {
     private var _binding: FragmentCPRBinding ?= null
     private val binding : FragmentCPRBinding get() = _binding!!
     private lateinit var viewModel: StoreManagementViewModel
-    private lateinit var viewModelFactory: StoreManagementViewModelFactory
 
     private var result = ""
 
@@ -44,13 +43,16 @@ class CPRFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         initView()
+        initViewModel()
+    }
+
+    private fun initViewModel(){
+        val viewModelFactory = StoreManagementViewModelFactory()
+        viewModel = ViewModelProvider(this, viewModelFactory)[StoreManagementViewModel::class.java]
     }
 
     private fun initView(){
-        viewModelFactory = StoreManagementViewModelFactory(NetworkRepository(), LocalRepository())
-        viewModel = ViewModelProvider(this, viewModelFactory)[StoreManagementViewModel::class.java]
 
         with(binding){
 

@@ -18,22 +18,24 @@ import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    // 접근 제한자가 private 일 경우 Fragment에서 참조 불가
     lateinit var viewModel: StoreManagementViewModel
-    lateinit var viewModelFactory: StoreManagementViewModelFactory
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initFragment()
+        initViewModel()
     }
 
     private fun initFragment(){
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragment_container) as NavHostFragment
         val navController = navHostFragment.navController
         NavigationUI.setupWithNavController(binding.navigationView, navController)
+    }
 
-        viewModelFactory = StoreManagementViewModelFactory(NetworkRepository(), LocalRepository())
+    private fun initViewModel(){
+        val viewModelFactory = StoreManagementViewModelFactory()
         viewModel = ViewModelProvider(this, viewModelFactory)[StoreManagementViewModel::class.java]
         viewModel.fetchAllStoreFromRoom()
     }

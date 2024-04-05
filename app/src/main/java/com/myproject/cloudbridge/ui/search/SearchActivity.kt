@@ -12,7 +12,6 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySearchBinding
 
     lateinit var viewModel: SearchViewModel
-    lateinit var viewModelFactory: SearchViewModelFactory
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySearchBinding.inflate(layoutInflater)
@@ -22,7 +21,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun initViewModel(){
-        viewModelFactory = SearchViewModelFactory(LocalRepository())
+        val viewModelFactory = SearchViewModelFactory()
         viewModel = ViewModelProvider(this, viewModelFactory)[SearchViewModel::class.java]
     }
 }
