@@ -17,7 +17,6 @@ import androidx.core.graphics.ColorUtils
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.bumptech.glide.Glide
@@ -30,9 +29,8 @@ import com.myproject.cloudbridge.model.store.StoreInfoSettingModel
 import com.myproject.cloudbridge.ui.search.SearchActivity
 import com.myproject.cloudbridge.utility.Utils.LOCATION_PERMISSION_REQUEST_CODE
 import com.myproject.cloudbridge.ui.mystore.vm.StoreManagementViewModel
-import com.myproject.cloudbridge.utility.Utils
 import com.myproject.cloudbridge.utility.Utils.REQUEST_LOCATION_PERMISSIONS
-import com.myproject.cloudbridge.utility.showPermissionSnackBar
+import com.myproject.cloudbridge.ext.showPermissionSnackBar
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraAnimation
 import com.naver.maps.map.CameraPosition
