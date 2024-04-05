@@ -21,7 +21,6 @@ class MyPageFragment : Fragment(), View.OnClickListener {
     private val binding get() = _binding!!
 
     private lateinit var viewModel: StoreManagementViewModel
-    private lateinit var viewModelFactory: StoreManagementViewModelFactory
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentMyPageBinding.inflate(inflater)
@@ -30,12 +29,15 @@ class MyPageFragment : Fragment(), View.OnClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initView()
+        initViewModel()
+    }
+
+    private fun initViewModel(){
+        val viewModelFactory = StoreManagementViewModelFactory()
+        viewModel = ViewModelProvider(this, viewModelFactory)[StoreManagementViewModel::class.java]
     }
 
     private fun initView() {
-        viewModelFactory = StoreManagementViewModelFactory(NetworkRepository(), LocalRepository())
-        viewModel = ViewModelProvider(this, viewModelFactory)[StoreManagementViewModel::class.java]
-
         with(binding) {
             btnMyInfo.setOnClickListener(this@MyPageFragment)
             btnMyStoreInfo.setOnClickListener(this@MyPageFragment)

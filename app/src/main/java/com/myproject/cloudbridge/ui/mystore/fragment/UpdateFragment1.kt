@@ -14,13 +14,11 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.Navigation
 import com.myproject.cloudbridge.R
 import com.myproject.cloudbridge.databinding.FragmentUpdate1Binding
-import com.myproject.cloudbridge.repository.LocalRepository
-import com.myproject.cloudbridge.repository.NetworkRepository
-import com.myproject.cloudbridge.utility.setHelperTextGreen
-import com.myproject.cloudbridge.utility.setHelperTextGreenList
-import com.myproject.cloudbridge.utility.setHelperTextRed
-import com.myproject.cloudbridge.utility.setHelperTextRedList
-import com.myproject.cloudbridge.utility.showSoftInput
+import com.myproject.cloudbridge.ext.setHelperTextGreen
+import com.myproject.cloudbridge.ext.setHelperTextGreenList
+import com.myproject.cloudbridge.ext.setHelperTextRed
+import com.myproject.cloudbridge.ext.setHelperTextRedList
+import com.myproject.cloudbridge.ext.showSoftInput
 import com.myproject.cloudbridge.ui.mystore.vm.StoreManagementViewModel
 import com.myproject.cloudbridge.ui.mystore.vm.StoreManagementViewModelFactory
 import kotlinx.coroutines.launch
@@ -31,7 +29,6 @@ class UpdateFragment1 : Fragment() {
         get() = _binding!!
 
     private lateinit var viewModel: StoreManagementViewModel
-    private lateinit var viewModelFactory: StoreManagementViewModelFactory
     private var isSearched = false
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentUpdate1Binding.inflate(inflater, container, false)
@@ -61,7 +58,7 @@ class UpdateFragment1 : Fragment() {
     }
 
     private fun initView() {
-        viewModelFactory = StoreManagementViewModelFactory(NetworkRepository(), LocalRepository())
+        val viewModelFactory = StoreManagementViewModelFactory()
         viewModel = ViewModelProvider(this, viewModelFactory)[StoreManagementViewModel::class.java]
         with(binding) {
 

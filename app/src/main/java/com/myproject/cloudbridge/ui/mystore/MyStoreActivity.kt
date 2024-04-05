@@ -24,7 +24,6 @@ import kotlinx.coroutines.launch
 class MyStoreActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var binding: ActivityMyStoreBinding
     private lateinit var viewModel: StoreManagementViewModel
-    private lateinit var viewModelFactory: StoreManagementViewModelFactory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,12 +73,10 @@ class MyStoreActivity : AppCompatActivity(), View.OnClickListener {
                 }
             }
         }
-
-        lifecycleScope.launch(Dispatchers.IO) {  }
     }
 
     private fun initViewModel(){
-        viewModelFactory = StoreManagementViewModelFactory(NetworkRepository(), LocalRepository())
+        val viewModelFactory = StoreManagementViewModelFactory()
         viewModel = ViewModelProvider(this, viewModelFactory)[StoreManagementViewModel::class.java]
         viewModel.getMyStoreInfo()
     }
