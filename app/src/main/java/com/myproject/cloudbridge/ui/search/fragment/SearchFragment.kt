@@ -2,8 +2,6 @@ package com.myproject.cloudbridge.ui.search.fragment
 
 import android.content.DialogInterface
 import android.os.Bundle
-import android.util.Log
-import android.view.KeyEvent
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -22,19 +20,16 @@ import com.myproject.cloudbridge.datasource.local.entity.RecentlySearchKeywordEn
 import com.myproject.cloudbridge.ui.search.adapter.AutoCompleteKeywordAdapter
 import com.myproject.cloudbridge.ui.search.adapter.RecentSearchAdapter
 import com.myproject.cloudbridge.ui.search.vm.SearchViewModel
-import com.myproject.cloudbridge.utility.showSoftInput
-import kotlinx.coroutines.Dispatchers
+import com.myproject.cloudbridge.ext.showSoftInput
 import kotlinx.coroutines.launch
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.view.inputmethod.EditorInfo
-import android.widget.TextView
-import androidx.core.widget.doAfterTextChanged
+import com.myproject.cloudbridge.R
+import com.myproject.cloudbridge.ext.repeatOnViewStarted
+import com.myproject.cloudbridge.ui.search.vm.SearchViewModelFactory
 
-class SearchFragment : Fragment() {
-    private var _binding: FragmentSearchBinding? = null
-    private val binding get() = _binding!!
-    private val viewModel: SearchViewModel by activityViewModels()
+class SearchFragment : Fragment(R.layout.fragment_search) {
+    private val viewModel: SearchViewModel by activityViewModels{ SearchViewModelFactory() }
     private lateinit var mView: View
 
     private val recentSearchAdapter by lazy {
@@ -56,29 +51,26 @@ class SearchFragment : Fragment() {
         )
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentSearchBinding.inflate(inflater, container, false)
-        initView()
-        return binding.root
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val binding = FragmentSearchBinding.bind(view)
         mView = view
-    }
-
-    private fun initView() {
-        initRv()
 
         with(binding) {
             requireContext().showSoftInput(edittextSearch)
             edittextSearch.requestFocus()
 
             textinputlayoutSearch.setEndIconOnClickListener {
-                insertKeyword()
+                val keyword = edittextSearch.text.toString().trim()
+                if (keyword.isNotBlank()) {
+                    viewModel.insertKeyword(RecentlySearchKeywordEntity(keyword))
+                    moveFragment(keyword)
+                } else {
+                    Toast.makeText(requireContext(), "검색어를 입력해 주세요", Toast.LENGTH_SHORT).show()
+                }
             }
 
-            toolbarSearch.setNavigationOnClickListener {
+            btnBack.setOnClickListener {
                 activity?.finish()
             }
 
@@ -91,23 +83,22 @@ class SearchFragment : Fragment() {
 
                 viewModel.setSearchQuery(it.toString())
 
-                viewLifecycleOwner.lifecycleScope.launch {
-                    repeatOnLifecycle(Lifecycle.State.STARTED) {
-                        viewModel.autoCompleteKeywordResult.collect { autoCompleteKeywords ->
+                repeatOnViewStarted {
+                    viewModel.autoCompleteKeywordResult.collect { autoCompleteKeywords ->
 
-                            linearlayoutSearchRecentSearches.visibility = GONE
+                        linearlayoutSearchRecentSearches.visibility = GONE
 
-                            if (autoCompleteKeywords.isNotEmpty()) {
-                                autoCompleteSearchAdapter.submitList(autoCompleteKeywords)
-                                rvAutoCompleteSearches.visibility = VISIBLE
-                            }
+                        if (autoCompleteKeywords.isNotEmpty()) {
+                            autoCompleteSearchAdapter.submitList(autoCompleteKeywords)
+                            rvAutoCompleteSearches.visibility = VISIBLE
+                        }
 
-                            if (autoCompleteKeywords.isEmpty()) {
-                                rvAutoCompleteSearches.visibility = GONE
-                                textviewNoSearch.visibility = VISIBLE
-                            }
+                        if (autoCompleteKeywords.isEmpty()) {
+                            rvAutoCompleteSearches.visibility = GONE
+                            textviewNoSearch.visibility = VISIBLE
                         }
                     }
+
                 }
 
                 if (searchKeyword.isEmpty()) {
@@ -117,43 +108,26 @@ class SearchFragment : Fragment() {
                     linearlayoutSearchRecentSearches.visibility = VISIBLE
                 }
             }
-        }
-    }
 
-    private fun insertKeyword() {
-        val keyword = binding.edittextSearch.text.toString().trim()
-        if (keyword.isNotBlank()) {
-            viewModel.insertKeyword(RecentlySearchKeywordEntity(keyword))
-            moveFragment(keyword)
-        } else {
-            Toast.makeText(requireContext(), "검색어를 입력해 주세요", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    private fun moveFragment(keyword: String) {
-        val action = SearchFragmentDirections.actionSearchFragmentToSearchResultFragment(keyword)
-        Navigation.findNavController(mView).navigate(action)
-    }
-
-    private fun initRv() {
-        with(binding) {
             rvRecentSearches.adapter = recentSearchAdapter
-            rvRecentSearches.layoutManager =
-                LinearLayoutManager(context, LinearLayoutManager.VERTICAL, true)
+            rvRecentSearches.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, true)
             (rvRecentSearches.layoutManager as LinearLayoutManager).stackFromEnd = true
 
-            viewLifecycleOwner.lifecycleScope.launch {
-                repeatOnLifecycle(Lifecycle.State.STARTED) {
-                    viewModel.allKeyWord.collect {
-                        recentSearchAdapter.submitList(it)
-                    }
+            repeatOnViewStarted{
+                viewModel.allKeyWord.collect {
+                    recentSearchAdapter.submitList(it)
                 }
             }
 
             rvAutoCompleteSearches.adapter = autoCompleteSearchAdapter
-            rvAutoCompleteSearches.layoutManager =
-                LinearLayoutManager(context, LinearLayoutManager.VERTICAL, true)
+            rvAutoCompleteSearches.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, true)
         }
+    }
+
+
+    private fun moveFragment(keyword: String) {
+        val action = SearchFragmentDirections.actionSearchFragmentToSearchResultFragment(keyword)
+        Navigation.findNavController(mView).navigate(action)
     }
 
     private fun showClearDialog() {
@@ -170,8 +144,4 @@ class SearchFragment : Fragment() {
 
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
-    }
 }

@@ -8,27 +8,30 @@
     android:orientation="vertical"
     tools:context=".ui.search.fragment.SearchFragment">
 
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbar_search"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/Theme.Toolbar"
-        app:title="검색" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingHorizontal="16dp">
+        android:orientation="horizontal"
+        android:layout_marginTop="15dp">
+
+        <Button
+            android:id="@+id/btn_back"
+            style="@style/Widget.Material3.Button.Icon"
+            android:drawableLeft="@drawable/ic_arrow_back_ios"
+            android:layout_width="45dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:backgroundTint="@color/shrine_pink_50"
+            />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textinputlayout_search"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginEnd="10dp"
             app:endIconDrawable="@drawable/ic_search"
             app:endIconMode="custom"
-            app:hintEnabled="false">
+            android:layout_gravity="center_horizontal">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edittext_search"
@@ -38,13 +41,19 @@
                 android:inputType="text" />
 
         </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="16dp">
 
         <LinearLayout
             android:id="@+id/linearlayout_search_recent_searches"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="visible">
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -100,5 +109,11 @@
         android:layout_marginTop="16dp"
         android:visibility="gone" />
 
-
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_search_result"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="16dp"
+        android:visibility="gone" />
 </LinearLayout>

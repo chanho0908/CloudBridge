@@ -12,6 +12,7 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -33,12 +34,28 @@ class SearchViewModel(private val repository: LocalRepository) : ViewModel() {
 
     private val _searchQuery = MutableStateFlow("")
 
+    @FlowPreview
+    @ExperimentalCoroutinesApi
+    val autoCompleteKeywordResult = _searchQuery
+        .debounce(500)
+        .flatMapLatest { query ->
+            if (query.isNotBlank()) {
+                repository.getAutoCompleteSearchResult(query)
+            } else{
+                flowOf()
+            }
+        }
+        .flowOn(Dispatchers.IO)
+        .catch { e: Throwable ->
+            e.printStackTrace()
+        }
+
     init {
         getAllKeyWord()
     }
 
     private fun getAllKeyWord() = viewModelScope.launch {
-        repository.readAllKeyword().stateIn(this).collect {
+        repository.readAllKeyword().stateIn(this, SharingStarted.WhileSubscribed(5000), emptyList()).collect {
             _allKeyWord.value = it
         }
     }
@@ -66,19 +83,5 @@ class SearchViewModel(private val repository: LocalRepository) : ViewModel() {
         _searchQuery.value = query
     }
 
-    @FlowPreview
-    @ExperimentalCoroutinesApi
-    val autoCompleteKeywordResult = _searchQuery
-        .debounce(500)
-        .flatMapLatest { query ->
-            if (query.isNotBlank()) {
-                repository.getAutoCompleteSearchResult(query)
-            } else{
-                flowOf()
-            }
-        }
-        .flowOn(Dispatchers.IO)
-        .catch { e: Throwable ->
-            e.printStackTrace()
-        }
+
 }

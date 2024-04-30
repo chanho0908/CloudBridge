@@ -15,8 +15,8 @@ import androidx.navigation.Navigation
 import com.myproject.cloudbridge.R
 import com.myproject.cloudbridge.databinding.FragmentMenuAddBinding
 import com.myproject.cloudbridge.utility.Utils
-import com.myproject.cloudbridge.utility.showErrorDialog
-import com.myproject.cloudbridge.utility.showPermissionSnackBar
+import com.myproject.cloudbridge.ext.showErrorDialog
+import com.myproject.cloudbridge.ext.showPermissionSnackBar
 import java.io.InputStream
 
 class MenuAddFragment : Fragment() {
