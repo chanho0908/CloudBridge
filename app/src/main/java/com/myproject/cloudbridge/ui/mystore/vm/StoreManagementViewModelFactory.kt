@@ -6,10 +6,9 @@ import com.myproject.cloudbridge.repository.LocalRepository
 import com.myproject.cloudbridge.repository.NetworkRepository
 import java.lang.IllegalArgumentException
 
-class StoreManagementViewModelFactory(
-    private val networkRepository: NetworkRepository,
-    private val localRepository: LocalRepository
-): ViewModelProvider.Factory {
+class StoreManagementViewModelFactory: ViewModelProvider.Factory {
+    private val networkRepository = NetworkRepository()
+    private val localRepository = LocalRepository()
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
 
         if (modelClass.isAssignableFrom(StoreManagementViewModel::class.java)){

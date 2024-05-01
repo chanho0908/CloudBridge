@@ -26,9 +26,9 @@ import com.myproject.cloudbridge.utility.Utils.REQUEST_IMAGE_PERMISSIONS
 import com.myproject.cloudbridge.utility.Utils.accessGallery
 import com.myproject.cloudbridge.utility.Utils.makeStoreMainImage
 import com.myproject.cloudbridge.utility.Utils.requestPlzInputText
-import com.myproject.cloudbridge.utility.hasImagePermission
-import com.myproject.cloudbridge.utility.showPermissionSnackBar
-import com.myproject.cloudbridge.utility.translateGeo
+import com.myproject.cloudbridge.ext.hasImagePermission
+import com.myproject.cloudbridge.ext.showPermissionSnackBar
+import com.myproject.cloudbridge.ext.translateGeo
 import com.myproject.cloudbridge.ui.store_registration.AddressActivity
 import com.myproject.cloudbridge.utility.Utils.ADDR_RESULT_RESULT_CODE
 import com.myproject.cloudbridge.ui.mystore.vm.StoreManagementViewModel
@@ -40,7 +40,6 @@ class UpdateFragment2 : Fragment(), View.OnClickListener {
     private var _binding: FragmentUpdate2Binding? = null
     private val binding get() = _binding!!
     private lateinit var viewModel: StoreManagementViewModel
-    private lateinit var viewModelFactory: StoreManagementViewModelFactory
 
     private var imgUrl: Uri? = null
 
@@ -59,7 +58,7 @@ class UpdateFragment2 : Fragment(), View.OnClickListener {
     }
 
     private fun initView() {
-        viewModelFactory = StoreManagementViewModelFactory(NetworkRepository(), LocalRepository())
+        val viewModelFactory = StoreManagementViewModelFactory()
         viewModel = ViewModelProvider(this, viewModelFactory)[StoreManagementViewModel::class.java]
         viewModel.getMyStoreInfo()
 

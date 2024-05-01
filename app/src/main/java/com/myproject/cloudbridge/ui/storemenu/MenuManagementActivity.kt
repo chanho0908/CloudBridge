@@ -13,7 +13,7 @@ class MenuManagementActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMenuManagementBinding
 
     lateinit var viewModel: StoreMenuManagementViewModel
-    lateinit var viewModelFactory: StoreMenuManagementViewModelFactory
+    private lateinit var viewModelFactory: StoreMenuManagementViewModelFactory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,7 +23,7 @@ class MenuManagementActivity : AppCompatActivity() {
     }
 
     private fun initViewModel(){
-        viewModelFactory = StoreMenuManagementViewModelFactory(NetworkRepository())
+        viewModelFactory = StoreMenuManagementViewModelFactory()
         viewModel = ViewModelProvider(this, viewModelFactory)[StoreMenuManagementViewModel::class.java]
     }
 
